@@ -1,15 +1,16 @@
 package com.lizard.buzzard.web.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * TODO: introduced just for test of internationalization feature. Replace by full-fledged version of the controller
  */
-@Controller
+@RestController
 public class RegisterController {
 
-    @GetMapping("/login")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getInternationalPage() {
         return "login";
     }

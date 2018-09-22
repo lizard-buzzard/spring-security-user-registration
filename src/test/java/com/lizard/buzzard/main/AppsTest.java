@@ -1,5 +1,6 @@
 package com.lizard.buzzard.main;
 
+import com.lizard.buzzard.Apps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

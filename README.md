@@ -143,4 +143,5 @@ Commit-2 just fixes some inaccuracies in description of Commit-1.
 ## Commit-3 ##
 Internationalization. Pay attention at the link between 'lang_choosed' in html form and in LocaleChangeInterceptor, it's the same.
 
-
+## Commit-4 ##
+Commit-4: an initial _fake_ __registration.html__ addad; Apps moved to highest package to be reached from any test class; attention to two ways of tests: integration and local
