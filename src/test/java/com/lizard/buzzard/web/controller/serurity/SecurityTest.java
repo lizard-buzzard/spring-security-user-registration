@@ -16,6 +16,6 @@ public class SecurityTest extends AbstractControllerTest {
 
     @Test
     public void test() {
-        System.out.println("======> test is passed");
+//        System.out.println("======> test is passed");
     }
 }

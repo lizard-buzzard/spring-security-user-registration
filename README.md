@@ -13,9 +13,9 @@ Otherwise, you can first build a __jar__ file by
 ```text
 $ mvn clean package
 ```
-command, which builds target/persistent-token-rememberme-authentication-1.0-SNAPSHOT.jar, and then you can run this jar:
+command, which builds target/spring-security-registration-1.0-SNAPSHOT.jar, and then you can run this jar:
 ```text
-java -jar target/persistent-token-rememberme-authentication-1.0-SNAPSHOT.jar
+java -jar target/spring-security-registration-1.0-SNAPSHOT.jar
 
 ```
 Both the ways make Spring to start and to run the application:
@@ -29,9 +29,13 @@ Both the ways make Spring to start and to run the application:
  :: Spring Boot ::        (v2.0.4.RELEASE)
 
 ```
-After the server starts, you can enter in the browser's address bar __http://localhost:8761/__ and the applicaion should show its __login page__. It will start on __server.port=8761__.
+After the server starts, you can enter in the browser's address bar __http://localhost:8761/login__ and the applicaion should show its first __login page__. It will start on __server.port=8761__.
 
-## Environement ##
+## Application's landscape ##
+The application is developed on __Java__, it's web pages are developed on __HTML__ with tiny inclusions of __CSS__ and __Javascript__ fragments. 
+On the HTML pages CDN __Bootstrap__ v.4.1.3 stylesheets and __Thymeleaf-4__ templates are used. 
+
+### Environement ###
 An environment, used for the development, includes:
 * Ubuntu 18.04.1 LTS
 * java version "1.8.0_181"
@@ -39,6 +43,22 @@ An environment, used for the development, includes:
 * mysql  Ver 8.0.12 for Linux on x86_64 (MySQL Community Server - GPL)
 * Google Chrome Version 68.0.3440.106 (Official Build) (64-bit)
 * FireFox Quantrum 62.0 (64-bit)
+
+### Spring Boot Maven Project ### 
+Maven pom.xml refers to Spring Boot parent project version 2.0.4.RELEAS:
+```xml
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.4.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+</parent>
+```
+And then it uses following org.springframework.boot dependencies: __spring-boot-starter-web__, __spring-boot-starter-data-jpa__, __spring-boot-starter-security__. 
+
+This project uses [Thymeleaf](https://www.thymeleaf.org/) as a HTML pages template engine and includes __spring-boot-starter-thymeleaf__ in the dependencies.
+
+Also the project dependencies include mysql:mysql-connector-java:5.1.46 dependency.
 
 # Development Log #
 ## Commit-1 ##
@@ -65,52 +85,52 @@ There is a base repository (BaseRepository) which extends JpaRepository.
  
 ### MVC Configuration ###
 If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc should be set ([27. Developing Web Applications](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html)).
-```java
+```
 public class MvcConfig implements WebMvcConfigurer
 ``` 
 Do not use the src/main/webapp directory if your application is packaged as a jar.
 Although this directory is a common standard, it works only with war packaging, and it is silently ignored by most build tools if you generate a jar ([Chapter: 27.1.5 Static Content](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html)).
-```java
+```
 @Override
 public void addResourceHandlers(ResourceHandlerRegistry registry)
 ```
 Next bean helped me to show messages in different languages depending on language choosed: 
-```java
+```
 @Bean
 public MessageSource messageSource()
 ```
 ### PersistenceJPAConfig ###
 The  source for @Bean's definition used in Persistence JPA Repository
 * Path to BaseRepository, UserRepository, RoleRepository
-```java
+```
 @EnableJpaRepositories(basePackages = "com.lizard.buzzard.persistence.dao")
 ```
 * Works with persistence.properties from ./resource/ folder
-```java
+```
 @PropertySource({ "classpath:persistence.properties" })
 ```
 * Model's (database) entities (Role, User etc.). Used in JpaTransactionManager
-```java
+```
 @Bean
 public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 ```
 * Jdbc datasource object, used for LocalContainerEntityManagerFactoryBean
-```java
+```
 @Bean
 public  DataSource dataSource()
 ```
 * Transaction Manager for Jpa model entities, use LocalContainerEntityManagerFactoryBean
-```java
+```
 @Bean
 public JpaTransactionManager transactionManager()
 ```
 * Get properties from persistence.properties, used in @Bean public LocalContainerEntityManagerFactoryBean entityManagerFactory()
-```java
+```
 protected Properties additionalProperties()
 ```
 ### MySQLDialect ###
 Should be set for correct working with MySql version currently installed. Otherwise gives an error.
 Works in conjanction with __persistence.properties__'s __hibernate.dialect__=CustomMySQLDialect
-```java
+```
 public class CustomMySQLDialect extends MySQL57Dialect
 ```
