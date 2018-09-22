@@ -13,14 +13,14 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="row wrapper">
-        <h1 th:text="#{label.form.loginTitle}">Header</h1>
-        <a href="?lang_choosed=en" th:text="#{label.form.loginEnglish}">login</a> |
-        <a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>
+    <div class="container">
+        <div class="row wrapper">
+            <h1 th:text="#{label.form.loginTitle}">Header</h1>
+            <a href="?lang_choosed=en" th:text="#{label.form.loginEnglish}">login</a> |
+            <a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>
+        </div>
+        <br/>
+        <a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>
     </div>
-    <br/>
-    <a class="button" href="" th:text="#{label.form.signUp}">signup</a>
-</div>
 </body>
 </html>

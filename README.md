@@ -145,3 +145,15 @@ Internationalization. Pay attention at the link between 'lang_choosed' in html f
 
 ## Commit-4 ##
 Commit-4: an initial _fake_ __registration.html__ addad; Apps moved to highest package to be reached from any test class; attention to two ways of tests: integration and local
+
+## Commit-5 ##
+The registration form shows three fields, internationalized messages added in resource files. Remember @Controller vs. @RestController difference
+* __@Controller__ vs. __@RestController__ difference
+
+    NOTE: [Spring rest controller not returning html](https://stackoverflow.com/questions/43263667/spring-rest-controller-not-returning-html/43371228).
+
+    __RestController__ annotation returns the json from the method, not HTML or JSP. It is the combination of __@Controller__ and __@ResponseBody__ in one. The main purpose of __@RestController__ is to create __RESTful__ web services. For returning html or jsp, simply annotated the controller class with __@Controller__.
+
+
+
+
