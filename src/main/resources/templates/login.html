@@ -29,8 +29,28 @@
             <a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>
         </div>
         <br/>
+        <form action="#" th:action="@{/login}" th:object="${viewFormLogin}" method="post">
+            <!-- user's email-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.userEmail}">user email</label>
+                <span class="col-sm-5">
+                        <input type="text" class="form-control" th:field="*{email}" value=""/>
+                    </span>
+                <span id="emailError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span>
+            </div>
+            <!-- user's password-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.userPassword}">user password</label>
+                <span class="col-sm-5">
+                     <input type="text" class="form-control" th:field="*{password}" value=""/>
+                </span>
+                <span id="passwordError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
+        </form>
         <!-- /registration or /registration.html ? -->
-        <a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>
+        <a class="btn btn-default" th:href="@{/login}" th:text="#{label.form.signUp}">signup</a>
     </div>
 </body>
 

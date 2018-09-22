@@ -1,5 +1,6 @@
 package com.lizard.buzzard.web.controller;
 
+import com.lizard.buzzard.web.dto.ViewFormLogin;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,20 @@ import javax.validation.Valid;
 public class RegisterController {
     private final Logger LOGGER = LoggerFactory.getLogger(RegisterController.class);
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String getInternationalPage() {
+    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
+    public String getLoginPage(ViewFormLogin viewFormLogin, Model model) {
+        model.addAttribute("viewFormLogin", new ViewFormLogin());
         return "login";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String processLoginPage(@Valid @ModelAttribute("viewFormLogin") ViewFormLogin viewFormLogin, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "login";
+        }
+        // TODO: replace by real http://... page of APPLICATION START PAGE
+        String redirectUrl = "https://www.yandex.ru/";
+        return "redirect:" + redirectUrl;
     }
 
     /**

@@ -233,3 +233,6 @@ If __o.s.web.servlet.PageNotFound : No mapping found for HTTP request with URI i
 * [Why does Spring MVC respond with a 404 and report “No mapping found for HTTP request with URI […] in DispatcherServlet”?](https://stackoverflow.com/questions/41577234/why-does-spring-mvc-respond-with-a-404-and-report-no-mapping-found-for-http-req/42785538)
 * [Annotation Configuration Replacement for mvc:resources - Spring](https://stackoverflow.com/questions/14861720/annotation-configuration-replacement-for-mvcresources-spring)
 
+## --Commit-9-- ##
+The login form got new fields with Hibernate Validator-JSR 380 and test Thymeleaf messaging.
+
