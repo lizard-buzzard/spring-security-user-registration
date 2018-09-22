@@ -43,7 +43,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
+        localeChangeInterceptor.setParamName("lang_choosed");
         registry.addInterceptor(localeChangeInterceptor);
     }
 
@@ -59,6 +59,12 @@ public class MvcConfig implements WebMvcConfigurer {
         cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
         return cookieLocaleResolver;
     }
+//    @Bean
+//    public LocaleResolver localeResolver() {
+//        SessionLocaleResolver slr = new SessionLocaleResolver();
+//        slr.setDefaultLocale(Locale.ENGLISH);
+//        return slr;
+//    }
 
     @Bean
     public MessageSource messageSource() {

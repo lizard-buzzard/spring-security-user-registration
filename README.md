@@ -61,18 +61,20 @@ This project uses [Thymeleaf](https://www.thymeleaf.org/) as a HTML pages templa
 Also the project dependencies include mysql:mysql-connector-java:5.1.46 dependency.
 
 # Development Log #
+
 ## Commit-1 ##
+
 ### Thymleaf templates ###
 __Thymleaf__ will be used as html pages template engine and for internationalization support. To use __thymeleaf__ you need
 * to include dependency in pom.xml
-```html
+```
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-thymeleaf</artifactId>
 </dependency>
 ```
 * to define __th:__ namespace on *.html pages as follows:
-```html
+```
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 ```
@@ -134,3 +136,11 @@ Works in conjanction with __persistence.properties__'s __hibernate.dialect__=Cus
 ```
 public class CustomMySQLDialect extends MySQL57Dialect
 ```
+
+## Commit-2 ##
+Commit-2 just fixes some inaccuracies in description of Commit-1.
+
+## Commit-3 ##
+Internationalization. Pay attention at the link between 'lang_choosed' in html form and in LocaleChangeInterceptor, it's the same.
+
+
