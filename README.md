@@ -62,7 +62,7 @@ Also the project dependencies include mysql:mysql-connector-java:5.1.46 dependen
 
 # Development Log #
 
-## Commit-1 ##
+## --Commit-1-- ##
 
 ### Thymleaf templates ###
 __Thymleaf__ will be used as html pages template engine and for internationalization support. To use __thymeleaf__ you need
@@ -137,16 +137,16 @@ Works in conjanction with __persistence.properties__'s __hibernate.dialect__=Cus
 public class CustomMySQLDialect extends MySQL57Dialect
 ```
 
-## Commit-2 ##
+## --Commit-2-- ##
 Commit-2 just fixes some inaccuracies in description of Commit-1.
 
-## Commit-3 ##
+## --Commit-3-- ##
 Internationalization. Pay attention at the link between 'lang_choosed' in html form and in LocaleChangeInterceptor, it's the same.
 
-## Commit-4 ##
+## --Commit-4-- ##
 Commit-4: an initial _fake_ __registration.html__ addad; Apps moved to highest package to be reached from any test class; attention to two ways of tests: integration and local
 
-## Commit-5 ##
+## --Commit-5-- ##
 The registration form shows three fields, internationalized messages added in resource files. Remember @Controller vs. @RestController difference
 * __@Controller__ vs. __@RestController__ difference
 
@@ -154,7 +154,7 @@ The registration form shows three fields, internationalized messages added in re
 
     __RestController__ annotation returns the json from the method, not HTML or JSP. It is the combination of __@Controller__ and __@ResponseBody__ in one. The main purpose of __@RestController__ is to create __RESTful__ web services. For returning html or jsp, simply annotated the controller class with __@Controller__.
 
-## Commit-6 ##
+## --Commit-6-- ##
 A preparation for registration of a new user: 
 - ApplicationListener<ContextRefreshedEvent> to initialize DB entities; 
 - utility methods in BaseRepository for finding objects; 
@@ -170,4 +170,7 @@ A preparation for registration of a new user:
 ### DTO User class ViewFormUser ###
 Entity is class mapped to table. Dto is class mapped to "view" layer mostly. What needed to store is entity & which needed to 'show' on web page is DTO ([JAVA: Difference between Entity and DTO](https://stackoverflow.com/questions/39397147/java-difference-between-entity-and-dto)).
  
+## --Commit-7-- ##
+New fields and buttons on registration form were added
+
  
