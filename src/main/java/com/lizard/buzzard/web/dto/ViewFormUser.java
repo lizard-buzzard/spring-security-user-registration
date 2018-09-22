@@ -1,6 +1,8 @@
 package com.lizard.buzzard.web.dto;
 
-import javax.validation.constraints.Email;
+
+import com.lizard.buzzard.validation.EmailConstraintValidator;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -21,8 +23,9 @@ public class ViewFormUser {
     @Size(min = 1, message="{dto.user.size.passwordConfirmation}")
     private String passwordconfirmed;
 
-    @Email
+    @EmailConstraintValidator
     private String email;
+
     private Integer role;
 
     public ViewFormUser() {

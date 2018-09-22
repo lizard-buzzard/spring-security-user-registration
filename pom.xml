@@ -61,6 +61,12 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <!--to send emails from a Spring Boot application see: https://www.baeldung.com/spring-email-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-el</artifactId>

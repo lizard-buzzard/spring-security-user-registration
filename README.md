@@ -236,3 +236,27 @@ If __o.s.web.servlet.PageNotFound : No mapping found for HTTP request with URI i
 ## --Commit-9-- ##
 The login form got new fields with Hibernate Validator-JSR 380 and test Thymeleaf messaging.
 
+## --Commit-10-- ##
+Spring MVC Custom Validation of User's DTO Email field: on basis of ConstraintValidator interface implementation, Hibernate Validator-JSR 380, Thymeleaf for internationalized error messaging.
+
+Added dependency for e-mail sending (see [Guide to Spring Email](https://www.baeldung.com/spring-email) how to send emails from a Spring Boot application):
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+```
+### Spring MVC Custom Validation ###
+An examlpe of custom validation annotation is the __EmailConstraintValidator__ interface: 
+```
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = EmailConstraintValidatorImpl.class)
+public @interface EmailConstraintValidator {
+    String message() default "{constraint.validator.user.registration.email}";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+}
+```
+Normally error message keys are being searched in the file called __ValidationMessages.properties__ that should be available on the application class path (see [Custom validation annotation in Spring](http://dolszewski.com/spring/custom-validation-annotation-in-spring/)), but in our case it was sufficient to define message key in Thymeleaf's __messages_xx.properties__.
+Also see [Spring MVC Custom Validation](https://www.baeldung.com/spring-mvc-custom-validator).
