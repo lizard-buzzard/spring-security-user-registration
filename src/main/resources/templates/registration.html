@@ -1,64 +1,65 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <!-- Required meta tags -->
+        <!-- Required meta tags -->
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
+        <!-- Bootstrap CSS -->
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Registration</title>
 </head>
+
 <body>
     <div class="container">
         <div>
             <h1 th:text="#{label.form.registrationTitle}">NewUserRegistrationHeader</h1>
             <br/>
-            <form action="/" method="post" enctype="utf8">
+            <form action="#" th:action="@{/registration}" th:object="${viewFormUser}" method="post">
                 <!-- first name group-->
                 <div class="form-group row">
                     <label class="col-sm-3" th:text="#{label.form.firstName}">userFirstName</label>
                     <span class="col-sm-5">
                         <!-- https://www.tutorialspoint.com/html/html_input_tag.htm-->
-                        <input type="text" class="form-control" name="firstName" value="" required="required"/>
+                        <input type="text" class="form-control" th:field="*{firstname}" value=""/>
                     </span>
-                    <!-- TODO: span for ERROR message while input field check-->
+                    <span id="firstNameError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">first name error</span>
                 </div>
-                <!-- second name group-->
+                <!-- last name group-->
                 <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.secondName}">userSecondName</label>
+                    <label class="col-sm-3" th:text="#{label.form.lastName}">userFirstName</label>
                     <span class="col-sm-5">
-                        <input type="text" class="form-control" name="secondName" value="" required="required"/>
+                        <input type="text" class="form-control" th:field="*{lastname}" value=""/>
                     </span>
-                    <!-- TODO: span for ERROR message while input field check-->
-                </div>
-                <!-- user's e-mail group-->
-                <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.userEmail}">email</label>
-                    <span class="col-sm-5">
-                        <input type="text" class="form-control" name="userEmail" value="" required="required"/>
-                    </span>
-                    <!-- TODO: span for ERROR message while input field check-->
+                    <span id="lastNameError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">last name error</span>
                 </div>
                 <!-- user's password-->
                 <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.userPassword}">password</label>
+                    <label class="col-sm-3" th:text="#{label.form.userPassword}">user password</label>
                     <span class="col-sm-5">
-                        <input type="text" class="form-control" name="userPassword" value="" required="required"/>
+                         <input type="text" class="form-control" th:field="*{password}" value=""/>
                     </span>
-                    <!-- TODO: span-->
+                    <span id="passwordError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span>
                 </div>
                 <!-- user's password confirmation-->
                 <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.userPasswordConfirmation}">passwordConfirmation</label>
+                    <label class="col-sm-3" th:text="#{label.form.userPasswordConfirmation}">user passport confirmed</label>
                     <span class="col-sm-5">
-                        <input type="text" class="form-control" name="userPasswordConfirmation" value="" required="required"/>
+                        <input type="text" class="form-control" th:field="*{passwordconfirmed}" value=""/>
                     </span>
-                    <!-- TODO: span-->
+                    <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('passwordconfirmed')}" th:errors="*{passwordconfirmed}">confirmed password error</span>
+                </div>
+               <!-- user's email-->
+                <div class="form-group row">
+                    <label class="col-sm-3" th:text="#{label.form.userEmail}">user email</label>
+                    <span class="col-sm-5">
+                        <input type="text" class="form-control" th:field="*{email}" value=""/>
+                    </span>
+                    <span id="emailError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span>
                 </div>
                 <br/>
-                <!--<input type="button" /> buttons will not submit a form - they don't do anything by default.--> 
-                <!--They're generally used in conjunction with JavaScript-->
-                <!--<input type="submit"> buttons will submit the form they are in when the user clicks on them-->
                 <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
             </form>
             <br/>
@@ -66,4 +67,5 @@
         </div>
     </div>
 </body>
+
 </html>

@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -24,6 +26,7 @@ public class MvcConfig implements WebMvcConfigurer {
     }
 
     /**
+     * All others View Controller's pathes should be added here.
      * @param registry
      */
     @Override
@@ -77,4 +80,18 @@ public class MvcConfig implements WebMvcConfigurer {
         messageSource.setCacheSeconds(0);
         return messageSource;
     }
+
+    /**
+     * Provide a custom Validator instead of the one created by default. The default implementation, assuming JSR-303
+     * is on the classpath, is: OptionalValidatorFactoryBean.
+     * Should be set in order to show messages from message_en.properties/message_ru_RU.properties !!!
+     *
+     * @return
+     */
+//    @Override
+//    public Validator getValidator() {
+//        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+//        validator.setValidationMessageSource(messageSource());
+//        return validator;
+//    }
 }

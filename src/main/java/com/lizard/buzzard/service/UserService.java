@@ -1,10 +1,11 @@
 package com.lizard.buzzard.service;
 
+
 import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 
 /**
- * Provides service for registering account
+ * Provide service for registering account
  */
 public interface UserService {
 
@@ -12,6 +13,6 @@ public interface UserService {
 
     User save(User user);
 
-    User findByLogin(String login);
+    User findByLogin(String email);
 
 }

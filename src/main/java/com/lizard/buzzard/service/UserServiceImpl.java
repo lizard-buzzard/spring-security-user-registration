@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveRegisteredUser(ViewFormUser dtoUser) {
         User user = new User();
-        user.setLogin(dtoUser.getLogin());
+        user.setFirstname(dtoUser.getFirstname());
         user.setPassword(dtoUser.getPassword());
 //        user.set
 //        userRepository.save(user);
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByLogin(String login) {
+    public User findByLogin(String email) {
         return null;
     }
 }

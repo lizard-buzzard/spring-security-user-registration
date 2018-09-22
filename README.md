@@ -1,7 +1,7 @@
 # spring-security-user-registration
 
 ## Project development notes ##
-The README.md of the project will be in a form of __log of notes__ (see  [this chapter](#development-log).) made to remember some important features and to avoid and fix errors met on the project progress.
+The README.md of the project will be in a form of __log of notes__ (see [this chapter](#development-log).), made to remember some important features and to avoid and fix errors met on the project progress.
 The log will progress from commit to commit.
 
 ## How to run the Application ##
@@ -173,4 +173,63 @@ Entity is class mapped to table. Dto is class mapped to "view" layer mostly. Wha
 ## --Commit-7-- ##
 New fields and buttons on registration form were added
 
+## --Commit-8-- ##
+The commit works with the simple Hibernate Validator-JSR 380 and Thymeleaf template engine for internationalizing HTML forms' fields names and error messaging. __Neither BindingResult nor plain target object for bean name ‘mybean’ available as request attribute.__ error resolved.
+
+### Thymeleaf Java library ###
+__Thymeleaf__ is a Java library. It is an __XML/XHTML/HTML5 template engine__ able to apply a set of transformations to template files in order to display data and/or text produced by your applications.
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+```
+### JSR 380 specification, the validation-api dependency ###
+JSR 380 specification, the validation-api dependency
+* [java bean validation 2.0 vs hibernate validator](https://stackoverflow.com/questions/49606316/java-bean-validation-2-0-vs-hibernate-validator)
+* For html forms validation we use Thymeleaf views - see: <artifactId>spring-boot-starter-thymeleaf</artifactId>
+
+Hibernate Validator requires an implementation of the Unified Expression Language (JSR 341) for evaluating dynamic expressions in constraint violation messages (see Section 4.1, “Default message interpolation”).
+When your application runs in a Java EE container such as JBoss AS, an EL implementation is already provided by the container. In a Java SE environment, however, you have to add an implementation as dependency to your POM file.
+ ([Hibernate Validator 6.0.13.Final - JSR 380 Reference Implementation: Reference Guide](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/))
  
+__ViewFormUser__ uses Hibernate Validator annotations.
+
+### Exception: 'Neither BindingResult nor plain target object for bean name ‘mybean’ available as request attribute' ###
+If you are trying to bind a __Spring MVC form__ to a __bean__, then you might have come across the below exception.
+To solve this, you have to add a __@ModelAttribute annotation__ before your bean argument in the controller action with the __POST__ request method.
+
+Here is __viewFormUser__ object of the form:
+```html
+<form action="#" th:action="@{/registration}" th:object="${viewFormUser}" method="post">
+```
+In the controller we first have to initialize it by adding an __attribute__ with the same name (__viewFormUser__) to the __Model__ by 'empty' bean's (DTO) object. 
+```
+@RequestMapping(value = "/registration", method = RequestMethod.GET)
+public String showRegistrationForm(ViewFormUser viewFormUser, Model model) {
+    model.addAttribute("viewFormUser", new ViewFormUser());
+    return "registration";
+}
+```
+Then in the __RequestMethod.POST__ method we have to to add a __@ModelAttribute("viewFormUser")__ annotation before bean argument:
+```
+@RequestMapping(value = "/registration", method = RequestMethod.POST)
+public String checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser, BindingResult bindingResult) {...}
+```
+See also:
+ * [Neither BindingResult nor plain target object available as request attribute](https://codingexplained.com/coding/java/spring-framework/neither-bindingresult-nor-plain-target-object-available-as-request-attribute).
+ * [Neither BindingResult nor plain target object for bean name available as request attribute [duplicate]](https://stackoverflow.com/questions/8781558/neither-bindingresult-nor-plain-target-object-for-bean-name-available-as-request)
+ * [Spring MVC - Form Validation with JSR-349 Bean Validation](https://www.logicbig.com/tutorials/spring-framework/spring-web-mvc/spring-mvc-form-validation.html)
+
+### @Valid annotation before the parameter in controller's method ###
+__@Valid__ before __ViewFormUser viewFormUser__ means that __JSR-303__ bean validation with the Hibernate Validator implementation is used. If you do not, then you can simply remove the annotations from the bean class as well as the @Valid annotation in the arguments of the controller action.
+In order to provide validation in the __@Controller__ apply __@Valid__ annotation. This is __JSR-349__ specific annotation.
+The annotation __@Valid__ used on instance or parameter marks it to be validated by the framework. For __@Valid__ annotation see 
+[Hibernate Validator 6.0.12.Final - JSR 380 Reference Implementation: Reference Guide](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#preface)
+
+### No mapping found for HTTP request with URI in DispatcherServlet with name 'dispatcherServlet' ###
+If __o.s.web.servlet.PageNotFound : No mapping found for HTTP request with URI in DispatcherServlet with name 'dispatcherServlet'__ message appears in the Spring log then
+
+* [Why does Spring MVC respond with a 404 and report “No mapping found for HTTP request with URI […] in DispatcherServlet”?](https://stackoverflow.com/questions/41577234/why-does-spring-mvc-respond-with-a-404-and-report-no-mapping-found-for-http-req/42785538)
+* [Annotation Configuration Replacement for mvc:resources - Spring](https://stackoverflow.com/questions/14861720/annotation-configuration-replacement-for-mvcresources-spring)
+

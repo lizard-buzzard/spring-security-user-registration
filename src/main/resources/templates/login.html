@@ -1,5 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -8,10 +9,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Login and Registration</title>
     <style type="text/css">
-        .wrapper{width:500px;margin-left:auto;margin-right:auto}
-        label{padding-left:10 !important}
+    .wrapper {
+        width: 500px;
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    label {
+        padding-left: 10 !important
+    }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="row wrapper">
@@ -20,7 +29,9 @@
             <a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>
         </div>
         <br/>
+        <!-- /registration or /registration.html ? -->
         <a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>
     </div>
 </body>
+
 </html>

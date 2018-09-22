@@ -10,7 +10,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String login;
+
+    private String firstname;
+    private String lastname;
+
     private String password;
     @Transient
     private String passwordconfirmed;
@@ -39,12 +42,20 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lasttname) {
+        this.lastname = lasttname;
     }
 
     public String getPassword() {
@@ -86,7 +97,8 @@ public class User {
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getLogin(), user.getLogin()) &&
+                Objects.equals(getFirstname(), user.getFirstname()) &&
+                Objects.equals(getLastname(), user.getLastname()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
                 Objects.equals(getPasswordconfirmed(), user.getPasswordconfirmed()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&
@@ -95,14 +107,15 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLogin(), getPassword(), getPasswordconfirmed(), getEmail(), getRoles());
+        return Objects.hash(getId(), getFirstname(), getLastname(), getPassword(), getPasswordconfirmed(), getEmail(), getRoles());
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lasttname='" + lastname + '\'' +
                 ", password='" + password + '\'' +
                 ", passwordconfirmed='" + passwordconfirmed + '\'' +
                 ", email='" + email + '\'' +
