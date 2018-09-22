@@ -154,6 +154,20 @@ The registration form shows three fields, internationalized messages added in re
 
     __RestController__ annotation returns the json from the method, not HTML or JSP. It is the combination of __@Controller__ and __@ResponseBody__ in one. The main purpose of __@RestController__ is to create __RESTful__ web services. For returning html or jsp, simply annotated the controller class with __@Controller__.
 
+## Commit-6 ##
+A preparation for registration of a new user: 
+- ApplicationListener<ContextRefreshedEvent> to initialize DB entities; 
+- utility methods in BaseRepository for finding objects; 
+- new RolesPrivilege @Entity joined with Role @Entity; 
+- User @Entity extended by email field; 
+- first not working draft of UserService; 
+- separation of @Entity and DTO for User, ViewFormUser introduced for server-side fields check
 
+### ApplicationListener<ContextRefreshedEvent> ###
+ * ContextRefreshedEvent. This event is published when the ApplicationContext is either initialized or refreshed ([Event Handling in Spring](https://www.tutorialspoint.com/spring/event_handling_in_spring.htm)).
+ * We use this to create and populate DB tables
 
-
+### DTO User class ViewFormUser ###
+Entity is class mapped to table. Dto is class mapped to "view" layer mostly. What needed to store is entity & which needed to 'show' on web page is DTO ([JAVA: Difference between Entity and DTO](https://stackoverflow.com/questions/39397147/java-difference-between-entity-and-dto)).
+ 
+ 

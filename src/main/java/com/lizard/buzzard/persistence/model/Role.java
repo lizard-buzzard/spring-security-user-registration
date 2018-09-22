@@ -3,6 +3,7 @@ package com.lizard.buzzard.persistence.model;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,7 +25,20 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
+    @ManyToMany
+    @JoinTable(name="role_privilege",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "priv_id", referencedColumnName = "id"))
+    private List<RolesPrivilege> privileges;
+
     public Role() {
+        super();
+    }
+
+    public Role(String rolename, List<RolesPrivilege> privileges) {
+        super();
+        this.rolename = rolename;
+        this.privileges = privileges;
     }
 
     public Long getId() {
@@ -51,6 +65,14 @@ public class Role {
         this.users = users;
     }
 
+    public List<RolesPrivilege> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(List<RolesPrivilege> privileges) {
+        this.privileges = privileges;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,12 +80,14 @@ public class Role {
         Role role = (Role) o;
         return Objects.equals(getId(), role.getId()) &&
                 Objects.equals(getRolename(), role.getRolename()) &&
-                Objects.equals(getUsers(), role.getUsers());
+                Objects.equals(getUsers(), role.getUsers()) &&
+                Objects.equals(getPrivileges(), role.getPrivileges());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getRolename(), getUsers());
+
+        return Objects.hash(getId(), getRolename(), getUsers(), getPrivileges());
     }
 
     @Override
@@ -72,6 +96,7 @@ public class Role {
                 "id=" + id +
                 ", rolename='" + rolename + '\'' +
                 ", users=" + users +
+                ", privileges=" + privileges +
                 '}';
     }
 }

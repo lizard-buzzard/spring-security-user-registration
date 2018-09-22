@@ -14,6 +14,7 @@ public class User {
     private String password;
     @Transient
     private String passwordconfirmed;
+    private String email;
 
     /**
      * Persisting the User entities will persist the Role as well
@@ -22,7 +23,9 @@ public class User {
      * @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
      */
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
     public User() {
@@ -52,6 +55,14 @@ public class User {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Transient
     public String getPasswordconfirmed() {
         return passwordconfirmed;
@@ -61,11 +72,11 @@ public class User {
         this.passwordconfirmed = passwordconfirmed;
     }
 
-    public Set<Role> getUserroles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setUserroles(Set<Role> userroles) {
+    public void setRoles(Set<Role> userroles) {
         this.roles = userroles;
     }
 
@@ -78,12 +89,13 @@ public class User {
                 Objects.equals(getLogin(), user.getLogin()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
                 Objects.equals(getPasswordconfirmed(), user.getPasswordconfirmed()) &&
-                Objects.equals(getUserroles(), user.getUserroles());
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getRoles(), user.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLogin(), getPassword(), getPasswordconfirmed(), getUserroles());
+        return Objects.hash(getId(), getLogin(), getPassword(), getPasswordconfirmed(), getEmail(), getRoles());
     }
 
     @Override
@@ -93,7 +105,8 @@ public class User {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", passwordconfirmed='" + passwordconfirmed + '\'' +
-                ", userroles=" + roles +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }
