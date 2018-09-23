@@ -10,5 +10,5 @@ public interface UserService {
 
     User saveUserInRepository(ViewFormUser dtoUser);
 
-
+    void createUsersToken(User user, String token);
 }

@@ -18,11 +18,6 @@ public class User {
     @NotNull
     private String lastname;
 
-    /**
-     * be aware that the BCrypt algorithm generates a String of length 60, so we need to make sure that the password will
-     * be stored in a column that can accommodate it
-     * SEE: https://www.baeldung.com/spring-security-registration-password-encoding-bcrypt
-     */
     @NotNull
     @Column(length = 60)
     private String password;
@@ -35,7 +30,6 @@ public class User {
 
     /**
      * Initially is set to false. During the account verification process it will become true.
-     * SEE: https://www.baeldung.com/registration-verify-user-by-email
      */
     @Column
     private boolean enabled;
@@ -127,6 +121,10 @@ public class User {
         return Objects.hash(getEmail());
     }
 
+    /**
+     * SEE: https://github.com/rzwitserloot/lombok/issues/1007
+     * @return
+     */
     @Override
     public String toString() {
         return "User{" +
@@ -134,9 +132,9 @@ public class User {
                 ", firstname='" + firstname + '\'' +
                 ", lasttname='" + lastname + '\'' +
                 ", password='" + password + '\'' +
-                ", passwordconfirmed='" + passwordconfirmed + '\'' +
+//                ", passwordconfirmed='" + passwordconfirmed + '\'' +
                 ", email='" + email + '\'' +
-                ", roles=" + roles +
+//                ", roles=" + roles +
                 '}';
     }
 }

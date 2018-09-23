@@ -1,6 +1,6 @@
 package com.lizard.buzzard.persistence.model;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 
@@ -10,27 +10,25 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * A verification token is a key artifact through which a user is verified.
- * SEE: https://www.baeldung.com/registration-verify-user-by-email
- */
 @Entity
 @Table(name = "verification_property")
 @PropertySource("classpath:lizard.config.properties")
 @ConfigurationProperties(prefix = "lizard")
+@EqualsAndHashCode(exclude="user")
 public class VerificationToken {
 
-    @Transient
-    @Value("${lizard.verivication.token.expiration}")
-    private Long expirationInMinutes;
+//    @Transient
+//    @Value("${lizard.verivication.token.expiration}")
+//    private String test;
+    private Long expirationInMinutes = Long.valueOf(60 * 24);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @MapsId
-//    @JoinColumn(nullable = false, name = "user_id", foreignKey = @ForeignKey(name = "FK_VERIFY_USER"))
+//    @MapsId
+    @JoinColumn(nullable = false, name = "user_id", foreignKey = @ForeignKey(name = "FK_VERIFY_USER"))
     User user;
 
     @Column(name = "expiration_date")
@@ -120,11 +118,15 @@ public class VerificationToken {
         return Objects.hash(getUser(), getExpirationDate(), getToken());
     }
 
+    /**
+     * SEE: https://github.com/rzwitserloot/lombok/issues/1007
+     * @return
+     */
     @Override
     public String toString() {
         return "VerificationToken{" +
                 "id=" + id +
-                ", user=" + user +
+//                ", user=" + user +
                 ", expirationDate=" + expirationDate +
                 ", token='" + token + '\'' +
                 '}';

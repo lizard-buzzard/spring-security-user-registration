@@ -86,12 +86,16 @@ public class Role {
         return Objects.hash(getRolename());
     }
 
+    /**
+     * SEE: https://github.com/rzwitserloot/lombok/issues/1007
+     * @return
+     */
     @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
                 ", rolename='" + rolename + '\'' +
-                ", users=" + users +
+//                ", users=" + users +
                 ", privileges=" + privileges +
                 '}';
     }

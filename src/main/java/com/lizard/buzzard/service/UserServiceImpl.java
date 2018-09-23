@@ -1,8 +1,11 @@
 package com.lizard.buzzard.service;
 
+
 import com.lizard.buzzard.persistence.dao.RoleRepository;
+import com.lizard.buzzard.persistence.dao.TokenRepository;
 import com.lizard.buzzard.persistence.dao.UserRepository;
 import com.lizard.buzzard.persistence.model.User;
+import com.lizard.buzzard.persistence.model.VerificationToken;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 import com.lizard.buzzard.web.exception.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    TokenRepository tokenRepository;
+
     @Override
     public User saveUserInRepository(ViewFormUser dtoUser) {
         if (userRepository.isUserExists(dtoUser.getEmail())) {
@@ -42,6 +48,12 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Arrays.asList(roleRepository.findByRolename("USER")));
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public void createUsersToken(User user, String token) {
+        VerificationToken verificationToken = new VerificationToken(token, user);
+        tokenRepository.save(verificationToken);
     }
 
 

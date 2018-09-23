@@ -471,4 +471,31 @@ __BCryptPasswordEncoder__'s parameter is a strength - the log rounds to use, bet
 ## --Commit-17-- ##
 The fix of small bugs.
 
+## --Commit-18-- ##
+The implementation of ApplicationListener<AfterUserRegisteredEvent> and onApplicationEvent method. Created a method in UserService which calls TokenRepository to save new token for the user. 'java.lang.StackOverflowError exception. Cannot evaluate model object toString()' issue: solved by excluding mutual reference objects.
+Also I have solved an issue of '@Value from custom.property file isn't initialised'.
 
+In __public class Role__, __public String toString()__ I ought to comment the reference to __private Set<User> users;__
+```
+//                ", users=" + users +
+
+```
+The same issue is for __public class User__, __public String toString()__ method because of a cyclic structure, references to __private List<Role> roles;__:
+```html
+//                ", roles=" + roles +
+```
+And also for __public class VerificationToken__:
+```
+//                ", user=" + user +
+```
+
+### Lombok.hashCode issue with “java.lang.StackOverflowError: null” ###
+[Lombok.hashCode issue with “java.lang.StackOverflowError: null”](https://github.com/rzwitserloot/lombok/issues/1007)
+```
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.2</version>
+    <scope>provided</scope>
+</dependency>
+```
