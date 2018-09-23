@@ -47,7 +47,7 @@
                 <span id="passwordError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span>
             </div>
             <br/>
-            <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
+            <button type="submit" class="btn btn-primary" th:text="#{label.form.login}">submitButton</button>
         </form>
         <!-- /registration or /registration.html ? -->
         <a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>

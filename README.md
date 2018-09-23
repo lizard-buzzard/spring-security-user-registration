@@ -335,7 +335,8 @@ try {
 return resolver;
 }
 ```
-
+## --Commit-14-- ##
+Some clean up was done in the messages_en.properties, messages_ru_RU.properties and in templates/login.html.
 
 
 
