@@ -49,7 +49,7 @@
                     <span class="col-sm-5">
                         <input type="text" class="form-control" th:field="*{passwordconfirmed}" value=""/>
                     </span>
-                    <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('passwordconfirmed')}" th:errors="*{passwordconfirmed}">confirmed password error</span>
+                    <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span>
                 </div>
                <!-- user's email-->
                 <div class="form-group row">

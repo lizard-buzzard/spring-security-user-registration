@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,8 +59,15 @@ public class RegisterController {
      * @return
      */
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser, BindingResult bindingResult) {
+    public String checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            // NOTE: The code below is not used, it's an alternative to Thymeleaf's global-errors
+            // SEE: https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors
+            ObjectError confirmedPasswordErrMsg = bindingResult.getGlobalError();
+            if(confirmedPasswordErrMsg != null) {
+                LOGGER.debug("Global error (@PasswordConfirmationValidator) ==>" + confirmedPasswordErrMsg.getDefaultMessage());
+                model.addAttribute("confirmedPasswordError", confirmedPasswordErrMsg.getDefaultMessage());
+            }
             return "registration";
         }
         return "redirect:/login";

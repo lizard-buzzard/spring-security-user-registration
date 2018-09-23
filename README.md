@@ -33,7 +33,7 @@ After the server starts, you can enter in the browser's address bar __http://loc
 
 ## Application's landscape ##
 The application is developed on __Java__, it's web pages are developed on __HTML__ with tiny inclusions of __CSS__ and __Javascript__ fragments. 
-On the HTML pages CDN __Bootstrap__ v.4.1.3 stylesheets and __Thymeleaf-4__ templates are used. 
+For the HTML pages CDN __Bootstrap__ v.4.1.3 stylesheets and __Thymeleaf-4__ templates are used. 
 
 ### Environement ###
 An environment, used for the development, includes:
@@ -59,6 +59,41 @@ And then it uses following org.springframework.boot dependencies: __spring-boot-
 This project uses [Thymeleaf](https://www.thymeleaf.org/) as a HTML pages template engine and includes __spring-boot-starter-thymeleaf__ in the dependencies.
 
 Also the project dependencies include mysql:mysql-connector-java:5.1.46 dependency.
+
+
+## The Database configuration and creation ##
+To run the code you should have MySQL server installed. In order to install it please refer, for example, to [How To Install MySQL on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-14-04) and [B.5.3.2 How to Reset the Root Password](https://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html). After the server is installed you need to create a user to connect to the database:
+```sql
+mysql -u root -p 
+> CREATE USER 'user1'@'localhost' IDENTIFIED BY 'user123';
+> GRANT ALL PRIVILEGES ON *.* TO 'user1'@'localhost';
+> FLUSH PRIVILEGES;
+``` 
+__/resources/persistence.properties__ file contains properties which allow to create and to connect to the database with name of __'lizard_users_db'__: 
+```
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/lizard_users_db?createDatabaseIfNotExist=true
+jdbc.user=user1
+jdbc.pass=user123
+init-db=false
+################### Hibernate Configuration ##########################
+hibernate.dialect=com.lizard.buzzard.persistence.CustomMySQLDialect
+hibernate.show_sql=false
+hibernate.hbm2ddl.auto=update
+
+hibernate.id.new_generator_mappings = false
+```
+The database __'lizard_users_db'__ created (spring.jpa.hibernate.ddl-auto=update property) if it not yet exists and __'user1'__ has access to the database (see [81. Database Initialization](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html) and [Spring boot ddl auto generator](https://stackoverflow.com/questions/21113154/spring-boot-ddl-auto-generator)). 
+The property spring.jpa.properties.hibernate.dialect refers to CustomMySQLDialect class.
+```java
+public class CustomMySQLDialect extends MySQL57Dialect {
+    @Override
+    public boolean dropConstraints() {
+        return false;
+    }
+}
+``` 
+It's important to have this class corresponds to the dialect of the database you work with (see [SQL Dialects in Hibernate](https://www.javatpoint.com/dialects-in-hibernate)). As on the computer where the development was done 
 
 # Development Log #
 
@@ -132,7 +167,7 @@ protected Properties additionalProperties()
 ```
 ### MySQLDialect ###
 Should be set for correct working with MySql version currently installed. Otherwise gives an error.
-Works in conjanction with __persistence.properties__'s __hibernate.dialect__=CustomMySQLDialect
+It works together with __persistence.properties__'s __hibernate.dialect__=CustomMySQLDialect
 ```
 public class CustomMySQLDialect extends MySQL57Dialect
 ```
@@ -338,8 +373,37 @@ return resolver;
 ## --Commit-14-- ##
 Some clean up was done in the messages_en.properties, messages_ru_RU.properties and in templates/login.html.
 
+## --Commit-15-- ##
+The __password confirmation validator__ (the Validation on a Class object, not on a class's field !), Thymeleaf's __global errors__ processing were added.
 
+In order to be able to compare two fields of the same DTO class, we have to implement an annotation with __ElementType.TYPE__ argument in its __@Target__ annotation.
 
+The __PasswordConfirmationValidator__ annotation interface and __PasswordConfirmationValidatorImpl__ class were added, they implement the validation of that the __confirmed password__ field is the same as the __password__ field.
+For annotating of classes with this annotation, it has __ElementType.TYPE__ argument in its __@Target__ annotation:
+```
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+```
+In order to check whether the confirmed password field is the same as the password field, we have to annotate our __ViewFormUser__ DTO class with the annotation __@PasswordConfirmationValidator__:
+```
+@PasswordConfirmationValidator
+public class ViewFormUser {
+``` 
+For the sake of experiment, the following code was added in the __checkPersonInfo()__ method of the __RegisterController__ class:
+```
+ObjectError confirmedPasswordErrMsg = bindingResult.getGlobalError();
+if(confirmedPasswordErrMsg != null) {
+    LOGGER.debug("Global error (@PasswordConfirmationValidator) ==>" + confirmedPasswordErrMsg.getDefaultMessage());
+    model.addAttribute("confirmedPasswordError", confirmedPasswordErrMsg.getDefaultMessage());
+}
+```
+This code is not used, it's an alternative to __Thymeleaf__'s global-errors prosessing (see [Thymeleaf: 7.3 Global errors](https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors)).
+
+In html <form> of templates/registration.html this  __Thymeleaf__'s code checks for the global error and shows it in __<span id="confirmedPassportError" ...>__
+
+```html
+<span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span>
+
+```
 
 
 
