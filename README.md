@@ -262,4 +262,25 @@ Normally error message keys are being searched in the file called __ValidationMe
 Also see [Spring MVC Custom Validation](https://www.baeldung.com/spring-mvc-custom-validator).
 
 ## --Commit-11-- ##
-The commit supports Spring MVC Custom Validation of User's DTO Email field. ConstraintValidator interface was coded, it uses Hibernate Validator-JSR 380, Thymeleaf for internationalizing error messaging.
+The commit supports Spring MVC Custom Validation of User's DTO __Email__ field. __ConstraintValidator__ interface was implemented by __EmailConstraintValidatorImpl__ class, it uses __Hibernate Validator-JSR 380__, __Thymeleaf__ for internationalized __email__ field error message on registration form.
+
+## --Commit-12-- ##
+The commit supports Spring MVC Custom Validation of User's DTO __password__ field. __ConstraintValidator__ interface was implementated, Hibernate Validator-JSR 380, Thymeleaf are used for internationalized error messages.
+On how to implement the password validation see [Registration – Password Strength and Rules](https://www.baeldung.com/registration-password-strength-and-rules).
+
+Include this dependency in your pom.xml:
+```
+<dependency>
+    <groupId>org.passay</groupId>
+    <artifactId>passay</artifactId>
+    <version>${passay.version}</version>
+</dependency>
+```
+
+For implementation of __public void initialize(PasswordConstraintValidator constraintAnnotation)__ method of __PasswordConstraintValidatorImpl__ I recommend to refer to [Custom Password Constraint Validator Annotation Example](https://memorynotfound.com/custom-password-constraint-validator-annotation/).
+And for implementation of __public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext)__ method refer to [passay/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java](https://github.com/vt-middleware/passay/blob/master/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java).
+
+
+
+
+

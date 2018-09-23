@@ -1,7 +1,7 @@
 package com.lizard.buzzard.web.dto;
 
-
 import com.lizard.buzzard.validation.EmailConstraintValidator;
+import com.lizard.buzzard.validation.PasswordConstraintValidator;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -15,8 +15,7 @@ public class ViewFormUser {
     @Size(min=2, max=50, message="{dto.user.size.lastname}")
     private String lastname;
 
-    // TODO:     @ValidPassword
-    @NotNull
+    @PasswordConstraintValidator
     private String password;
 
     @NotNull
