@@ -467,3 +467,8 @@ public PasswordEncoder passwordEncoder() {
 }
 ```
 __BCryptPasswordEncoder__'s parameter is a strength - the log rounds to use, between 4 and 31, "strength" (a.k.a. log rounds in BCrypt) and a SecureRandom instance. The larger the strength parameter the more work will have to be done (exponentially) to hash the passwords.
+
+## --Commit-17-- ##
+The fix of small bugs.
+
+

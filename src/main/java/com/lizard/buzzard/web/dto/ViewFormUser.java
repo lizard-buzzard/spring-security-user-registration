@@ -10,11 +10,11 @@ import javax.validation.constraints.Size;
 @PasswordConfirmationValidator
 public class ViewFormUser {
     @NotNull
-    @Size(min=2, max=50, message="{dto.user.size.firstname}")
+    @Size(min=1, max=50, message="{dto.user.size.firstname}")
     private String firstname;
 
     @NotNull
-    @Size(min=2, max=50, message="{dto.user.size.lastname}")
+    @Size(min=1, max=50, message="{dto.user.size.lastname}")
     private String lastname;
 
     @PasswordConstraintValidator
