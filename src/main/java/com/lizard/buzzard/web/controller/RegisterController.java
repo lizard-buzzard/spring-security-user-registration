@@ -66,7 +66,6 @@ public class RegisterController {
     }
 
     /**
-     * @param viewFormUser
      * @param bindingResult
      * @return
      */
@@ -75,8 +74,9 @@ public class RegisterController {
                                   BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             // NOTE: The chank of the code below is not used, it's an alternative to Thymeleaf's global-errors
-            // in place next <form>'s code works:
+            // in place next form code works:
             // <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}"></span>
+            //
             ObjectError confirmedPasswordErrMsg = bindingResult.getGlobalError();
             if(confirmedPasswordErrMsg != null) {
                 LOGGER.debug("Global error (@PasswordConfirmationValidator) ==>" + confirmedPasswordErrMsg.getDefaultMessage());
@@ -89,7 +89,7 @@ public class RegisterController {
         ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, request.getLocale(), getAppUri(request));
         applicationEventPublisher.publishEvent(event);
 
-        model.addAttribute("registrationSuccessfullyCompleted", "Registration Successfully Completed!");
+        model.addAttribute("waitConfirm", "ok");
 
         return "registration";
 //        return "redirect:/login";

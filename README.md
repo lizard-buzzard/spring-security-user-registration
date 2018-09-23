@@ -499,3 +499,27 @@ And also for __public class VerificationToken__:
     <scope>provided</scope>
 </dependency>
 ```
+
+## --Commit-19-- ##
+The __ERROR__ which prevented to show original messages on the html forms was fixed. Before this fix in place of the messages I got the messages like
+```
+{dto.user.size.firstname}
+{dto.user.size.lastname}
+{constraint.validator.user.registration.email}
+```
+It was all about the __public Validator getValidator()__ method of __public class MvcConfig implements WebMvcConfigurer__:
+
+```
+@Override
+public Validator getValidator() {
+    LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+    validator.setValidationMessageSource(messageSource());
+    return validator;
+}
+```
+__It should be set in order to show messages from message_en.properties/message_ru_RU.properties__ !!!
+It provides a custom Validator instead of the one created by default. The default implementation, assuming JSR-303 is on the classpath, is: OptionalValidatorFactoryBean.
+
+The 'e-mail confirmation message' which shows on the registration form is added.
+
+

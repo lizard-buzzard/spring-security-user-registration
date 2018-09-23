@@ -49,6 +49,7 @@
                     <span class="col-sm-5">
                         <input type="text" class="form-control" th:field="*{passwordconfirmed}" value=""/>
                     </span>
+                    <!-- SEE: https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors -->
                     <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span>
                 </div>
                <!-- user's email-->
@@ -60,9 +61,16 @@
                     <span id="emailError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span>
                 </div>
                 <br/>
-                <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
+                <!-- <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button> -->            
+                <div class="container row">
+                    <span class="col-sm-3">
+                        <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
+                    </span>
+                    <span class="col-sm-5 alert alert-warning" th:text="#{message.registration.before.confirmation}" th:if="${waitConfirm} != null"></span>
+                    <span class="col-sm-4"></span>
+                </div>
             </form>
-            <br/>
+            <br />
             <a th:href="@{/login}" th:text="#{label.form.goBackToLogin}">goToLoginPage</a>
         </div>
     </div>
