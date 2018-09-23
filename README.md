@@ -280,6 +280,64 @@ Include this dependency in your pom.xml:
 For implementation of __public void initialize(PasswordConstraintValidator constraintAnnotation)__ method of __PasswordConstraintValidatorImpl__ I recommend to refer to [Custom Password Constraint Validator Annotation Example](https://memorynotfound.com/custom-password-constraint-validator-annotation/).
 And for implementation of __public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext)__ method refer to [passay/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java](https://github.com/vt-middleware/passay/blob/master/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java).
 
+## --Commit-13-- ##
+The commit supports Spring MVC Custom Validation of User's DTO 'password' field: passay.org library's custom Message Resolver for different languages, depending on __'lang_choosed'__ login.html HttpRequest parameter.
+
+In order to understand how it works, please refers to [Guide to Internationalization in Spring Boot](https://www.baeldung.com/spring-boot-internationalization)
+
+Pay attention to next pair of methods of the __MvcConfig__ class which implements __WebMvcConfigurer__ interface. The __addInterceptors()__ method adds the interceptor which will switch to a new locale based on the value of the __lang_choosed__ parameter appended to a request:
+```
+@Override
+public void addInterceptors(final InterceptorRegistry registry) {
+    final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+    localeChangeInterceptor.setParamName("lang_choosed");
+    registry.addInterceptor(localeChangeInterceptor);
+}
+```
+In order for our application to be able to determine which locale is currently being used, we need to add a __LocaleResolver__ bean:
+```
+@Bean
+public LocaleResolver localeResolver() {
+    final CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+    cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+    return cookieLocaleResolver;
+}	
+```
+The __@Autowired LocaleResolver__ 
+```
+@Autowired
+LocaleResolver localeResolver;
+```
+is used in __RegisterController__ class to print the Locale selected on login.html
+```
+@RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
+public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
+    LOGGER.debug("Locale selected on login.html ==>  " + localeResolver.resolveLocale(httpServletRequest).toString());
+```
+and it is used in __PasswordConstraintValidatorImpl__ class which implements __ConstraintValidator<PasswordConstraintValidator, String>__, in __MessageResolver getMessageResolver()__ method to get the name of a file with password's error messages:
+```
+String pattern = "loc-pass-messages/password_messages_%s.properties";
+HttpServletRequest httpServletRequest =
+        ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+String resourceName =
+        String.format(pattern,localeResolver.resolveLocale(httpServletRequest).toString());
+
+MessageResolver resolver = null;
+InputStream resourceInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
+InputStreamReader reader = new InputStreamReader(resourceInputStream, Charset.forName("UTF-8"));
+try {
+    Properties props = new Properties();
+    props.load(reader);
+    resolver = new PropertiesMessageResolver(props);
+} catch (IOException e) {
+    e.printStackTrace();
+}
+return resolver;
+}
+```
+
+
+
 
 
 
