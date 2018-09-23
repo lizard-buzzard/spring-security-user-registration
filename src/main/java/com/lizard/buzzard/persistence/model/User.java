@@ -18,6 +18,10 @@ public class User {
     @NotNull
     private String lastname;
 
+    /**
+     * be aware that the BCrypt algorithm generates a String of length 60, so we need to make sure that the password will
+     * be stored in a column that can accommodate it
+     */
     @NotNull
     @Column(length = 60)
     private String password;
@@ -108,6 +112,14 @@ public class User {
         this.roles = userroles;
     }
 
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,10 +133,6 @@ public class User {
         return Objects.hash(getEmail());
     }
 
-    /**
-     * SEE: https://github.com/rzwitserloot/lombok/issues/1007
-     * @return
-     */
     @Override
     public String toString() {
         return "User{" +

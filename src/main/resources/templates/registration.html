@@ -2,12 +2,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-        <!-- Required meta tags -->
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- Bootstrap CSS -->
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Registration</title>
 </head>
@@ -66,7 +62,7 @@
                     <span class="col-sm-3">
                         <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
                     </span>
-                    <span class="col-sm-5 alert alert-warning" th:text="#{message.registration.before.confirmation}" th:if="${waitConfirm} != null"></span>
+                    <span class="col-sm-5 alert alert-warning" th:text="#{registration.message.before.confirmation}" th:if="${waitConfirm} != null"></span>
                     <span class="col-sm-4"></span>
                 </div>
             </form>

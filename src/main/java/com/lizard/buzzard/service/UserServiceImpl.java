@@ -1,9 +1,9 @@
 package com.lizard.buzzard.service;
 
-
 import com.lizard.buzzard.persistence.dao.RoleRepository;
 import com.lizard.buzzard.persistence.dao.TokenRepository;
 import com.lizard.buzzard.persistence.dao.UserRepository;
+import com.lizard.buzzard.persistence.model.TokenStatus;
 import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.persistence.model.VerificationToken;
 import com.lizard.buzzard.web.dto.ViewFormUser;
@@ -13,7 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Optional;
+
+import static com.lizard.buzzard.persistence.model.TokenStatus.*;
 
 /**
  * Implementation of the service for registering account
@@ -54,6 +59,22 @@ public class UserServiceImpl implements UserService {
     public void createUsersToken(User user, String token) {
         VerificationToken verificationToken = new VerificationToken(token, user);
         tokenRepository.save(verificationToken);
+    }
+
+    @Override
+    public TokenStatus verifyConfirmationToken(String token) {
+        Optional<VerificationToken> dbToken = tokenRepository.findByToken(token);
+        TokenStatus tokenStatus = dbToken
+                .map(t -> t.getExpirationDate())
+                .map(d -> d.after(Date.from(Instant.now())))
+                .map(b -> b == true ? TOKEN_VALUD : TOKEN_EXPIRED).orElse(TOKEN_INVALID);
+
+        if (tokenStatus == TOKEN_VALUD) {
+            User user = dbToken.get().getUser();
+            user.setEnabled(true);
+            userRepository.save(user);
+        }
+        return tokenStatus;
     }
 
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title th:text="#{registration.result.page.header}">home</title>
+</head>
+
+<body>
+<div class="container">
+    <h1 th:text="#{registration.result.page.header}">registration status page header</h1>
+    <br/><br />
+    <span class="alert alert-success" th:if="${tokenValid != null}"
+          th:text="#{registration.confirmation.token.isValid}">m1</span>
+    <span class="alert alert-danger" th:if="${tokenInvalid != null}"
+          th:text="#{registration.confirmation.token.isInvalid}">m2</span>
+    <span class="alert alert-warning" th:if="${tokenExpired != null}"
+          th:text="#{registration.confirmation.token.isExpired}">m3</span>
+    <br/><br /><br />
+    <!-- <a class="btn btn-primary" th:href="@{/login}" th:text="#{label.form.login}">login</a> -->
+    <!--         <a th:href="@{/login}" th:text="#{label.form.goBackToLogin}">goToLoginPage</a> -->
+    <div class="container row">
+            <span class="col-sm-3">
+				<a th:href="@{/login}" th:text="#{label.form.goBackToLogin}">goToLoginPage</a>
+			</span>
+        <span class="col-sm-3">
+				<a th:href="@{/registration}" th:text="#{label.form.goBackToRegistration}">goToRegistrationPage</a>
+			</span>
+        <span class="col-sm-6"></span>
+    </div>
+</div>
+</body>
+
+</html>

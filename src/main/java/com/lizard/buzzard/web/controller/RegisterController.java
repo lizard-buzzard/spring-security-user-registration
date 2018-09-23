@@ -1,6 +1,7 @@
 package com.lizard.buzzard.web.controller;
 
 import com.lizard.buzzard.event.AfterUserRegisteredEvent;
+import com.lizard.buzzard.persistence.model.TokenStatus;
 import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.service.UserServiceImpl;
 import com.lizard.buzzard.web.dto.ViewFormLogin;
@@ -17,10 +18,13 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import static com.lizard.buzzard.persistence.model.TokenStatus.*;
 
 @Controller
 public class RegisterController {
@@ -66,6 +70,7 @@ public class RegisterController {
     }
 
     /**
+     * @param viewFormUser
      * @param bindingResult
      * @return
      */
@@ -73,10 +78,8 @@ public class RegisterController {
     public String checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
                                   BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            // NOTE: The chank of the code below is not used, it's an alternative to Thymeleaf's global-errors
-            // in place next form code works:
+            // NOTE: The chank of the code below is not used, it's an alternative to Thymeleaf's global-errors in place next form code works:
             // <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}"></span>
-            //
             ObjectError confirmedPasswordErrMsg = bindingResult.getGlobalError();
             if(confirmedPasswordErrMsg != null) {
                 LOGGER.debug("Global error (@PasswordConfirmationValidator) ==>" + confirmedPasswordErrMsg.getDefaultMessage());
@@ -86,7 +89,9 @@ public class RegisterController {
         }
 
         User newRegisteredUser = userService.saveUserInRepository(viewFormUser);
-        ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, request.getLocale(), getAppUri(request));
+
+//        Locale localeSelected = localeResolver.resolveLocale(request);
+        ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, /*localeSelected,*/ getAppUri(request));
         applicationEventPublisher.publishEvent(event);
 
         model.addAttribute("waitConfirm", "ok");
@@ -99,4 +104,16 @@ public class RegisterController {
         return "http://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
     }
 
+    @RequestMapping(value = "/registrationStatus", method = RequestMethod.GET)
+    public String checkConfirmationToken(@RequestParam("token") String token, Model model) {
+        TokenStatus status = userService.verifyConfirmationToken(token);
+        if(TOKEN_VALUD.equals(status)) {
+            model.addAttribute("tokenValid", "you are successfully registered");
+        } else if (TOKEN_EXPIRED.equals(status)) {
+            model.addAttribute("tokenExpired", "you are not registered because of late registration");
+        } else if (TOKEN_INVALID.equals(status)) {
+            model.addAttribute("tokenInvalid", "token you provided is invalid");
+        }
+        return "registrationStatus";
+    }
 }

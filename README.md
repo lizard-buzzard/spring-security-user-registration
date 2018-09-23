@@ -136,6 +136,10 @@ Next bean helped me to show messages in different languages depending on languag
 @Bean
 public MessageSource messageSource()
 ```
+It's a strategy interface for resolving messages, with support for the parameterization and internationalization of such messages.
+[Internationalization in Spring](https://www.logicbig.com/tutorials/spring-framework/spring-core/message-sources.html)
+[Interface MessageSource](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/MessageSource.html)
+
 ### PersistenceJPAConfig ###
 The  source for @Bean's definition used in Persistence JPA Repository
 * Path to BaseRepository, UserRepository, RoleRepository
@@ -406,7 +410,7 @@ In html <form> of templates/registration.html this  __Thymeleaf__'s code checks 
 ```
 ## --Commit-16-- ##
 An intermediate, not finished transition toward Spring security. The dependency is added:
-```html
+```
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
@@ -521,5 +525,45 @@ __It should be set in order to show messages from message_en.properties/message_
 It provides a custom Validator instead of the one created by default. The default implementation, assuming JSR-303 is on the classpath, is: OptionalValidatorFactoryBean.
 
 The 'e-mail confirmation message' which shows on the registration form is added.
+
+## --Commit-20-- ##
+The main changes are:
+* The __JavaMailSender__ in __ApplicationListener<AfterUserRegisteredEvent>__ which sends an e-mail with a randomly generated confirmation token;
+* __verifyConfirmationToken__ method of __UserService__. This method do search of the token in the database and qualifies it as VALID, INVALID or EXPIRED; 
+* __registrationStatus__ page for showing the result of the token validation.
+ 
+In order to send confirmation emails I use __postfix smtp server__ which is installed locally on my computer. I would recommend following articles on how to install __postfix__ on Ubuntu:
+* [How To Install and Configure Postfix as a Send-Only SMTP Server on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04)
+* [How To Install and Configure Postfix on Ubuntu 16.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-on-ubuntu-16-04)
+* [Setup Postfix to Login to Your Email Account and Deliver Mail](https://www.linuxjournal.com/content/setup-postfix-login-your-email-account-and-deliver-mail)
+* [16. SMTP Authentication for Mail servers](http://postfix.state-of-mind.de/patrick.koetter/smtpauth/smtp_auth_mailservers.html)
+My __/etc/hosts__ file has a line that assigns my computer's IP (below it's denoted as xx.xx.xx.xx) to the name I used for the tests:
+```
+xx.xx.xx.xx	grigmail.lizard.com
+```
+The fragment of __application.properties__ file which is responsible for smtp sending in my case is shown below:
+```
+################### JavaMail Configuration ##########################
+support.email=your.email@gmail.com
+spring.mail.host=grigmail.lizard.com
+spring.mail.port=25
+spring.mail.protocol=smtp
+#spring.mail.username=USERNAME@gmail.com
+#spring.mail.password=PASSWORD
+spring.mail.properties.mail.transport.protocol=smtps
+spring.mail.properties.mail.smtps.auth=false
+spring.mail.properties.mail.smtps.starttls.enable=false
+spring.mail.properties.mail.smtps.timeout=8000
+```
+Main work on how to send email is concentrated in
+```
+@Component
+public class NewUserRegisteredListener implements ApplicationListener<AfterUserRegisteredEvent> { ... }
+``` 
+For the details of the implementation pleas refer to [Guide to Spring Email](https://www.baeldung.com/spring-email)
+
+
+
+
 
 

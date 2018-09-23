@@ -20,7 +20,8 @@ public class VerificationToken {
 //    @Transient
 //    @Value("${lizard.verivication.token.expiration}")
 //    private String test;
-    private Long expirationInMinutes = Long.valueOf(60 * 24);
+//    private Long expirationInMinutes = Long.valueOf(60 * 24);
+    private Long expirationInMinutes = Long.valueOf(1);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -118,10 +119,6 @@ public class VerificationToken {
         return Objects.hash(getUser(), getExpirationDate(), getToken());
     }
 
-    /**
-     * SEE: https://github.com/rzwitserloot/lombok/issues/1007
-     * @return
-     */
     @Override
     public String toString() {
         return "VerificationToken{" +
