@@ -9,8 +9,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
- * Spring Data JPA contains some built-in Repository implemented some common functions to work with database: findOne, findAll, save,...
- * NOTE: should be annotated win @NoRepositoryBean, otherwise gives an BeanCreationException (Error creating bean with name 'baseRepository')
  * @param <T>
  * @param <ID>
  */
@@ -25,4 +23,6 @@ public interface BaseRepository<T, ID extends Serializable> extends JpaRepositor
         Optional<T> o = streamAll().filter(p).findFirst();
         return o.isPresent() ? o.get() : null;
     }
+
+
 }

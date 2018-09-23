@@ -86,6 +86,8 @@ public class PasswordConstraintValidatorImpl implements ConstraintValidator<Pass
         String pattern = "loc-pass-messages/password_messages_%s.properties";
         HttpServletRequest httpServletRequest =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        // an alternative way is: httpServletRequest.getLocale().toString();
         String resourceName =
                 String.format(pattern,localeResolver.resolveLocale(httpServletRequest).toString());
 

@@ -404,6 +404,66 @@ In html <form> of templates/registration.html this  __Thymeleaf__'s code checks 
 <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span>
 
 ```
+## --Commit-16-- ##
+An intermediate, not finished transition toward Spring security. The dependency is added:
+```html
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+The main code changes are in:
+- RegisterController: 
+    - call UserServiceImpl.saveUserInRepository(), 
+    - publish ApplicationEvent (AfterUserRegisteredEvent.class); 
+- SecurityConfig adds two methods for PasswordEncoder and configure(HttpSecurity http) to allow anonymous access to login.html; 
+- User class adds @Column private boolean enabled; 
+- VerificationToken @Entity joined @OneToOne to User.class holds Date expirationDate field; 
+- UserServiceImpl.class with saveUserInRepository(ViewFormUser dtoUser); 
+- class UserAlreadyExistException extends RuntimeException.
 
+Custom property __lizard.config.properties__ added.
+__UserAlreadyExistException extends RuntimeException__ added.
 
+On this step a development of a verification procedure with help of the link in the e-mail, which includes the verification token, started.
+Please refer to [Registration – Activate a New Account by Email](https://www.baeldung.com/registration-verify-user-by-email) for additional reading. 
 
+In the controller's __@RequestMapping(value = "/registration", method = RequestMethod.POST)__ method has the code for generating the event on basis of which an e-mail with verification token will be send:
+```
+User newRegisteredUser = userService.saveUserInRepository(viewFormUser);
+ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, request.getLocale(), getAppUri(request));
+applicationEventPublisher.publishEvent(event);
+```
+This code includes [Spring Events](https://www.baeldung.com/spring-events) (additional reading is [Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2))
+
+The new entity which is intended to store a verification token in the database is added. The verification token is a key artifact through which a user is verified ([Registration – Activate a New Account by Email](https://www.baeldung.com/registration-verify-user-by-email))
+```
+@Entity
+@Table(name = "verification_property")
+@PropertySource("classpath:lizard.config.properties")
+@ConfigurationProperties(prefix = "lizard")
+public class VerificationToken {
+```
+There are some changes for User class. The most important is: be aware that the BCrypt algorithm generates a String of length 60, so we need to make sure that the password will be stored in a column that can accommodate it
+([Registration with Spring Security – Password Encoding](https://www.baeldung.com/spring-security-registration-password-encoding-bcrypt)).
+```
+@NotNull
+@Column(length = 60)
+private String password;
+```
+A simple version of __class SecurityConfig extends WebSecurityConfigurerAdapter__ is started: 
+```
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+```
+The WebSecurityConfig class is annotated with __@EnableWebSecurity__ to enable Spring Security’s web security support and provide the __Spring MVC integration__. It also extends __WebSecurityConfigurerAdapter__ and overrides a couple of its methods to set some specifics of the web security configuration ([Securing a Web Application]https://spring.io/guides/gs/securing-web/).
+
+This class includes __@Bean public PasswordEncoder__ for encoding the users' passwords: 
+```
+@Bean
+public PasswordEncoder passwordEncoder() {
+  return new BCryptPasswordEncoder(17);
+}
+```
+__BCryptPasswordEncoder__'s parameter is a strength - the log rounds to use, between 4 and 31, "strength" (a.k.a. log rounds in BCrypt) and a SecureRandom instance. The larger the strength parameter the more work will have to be done (exponentially) to hash the passwords.

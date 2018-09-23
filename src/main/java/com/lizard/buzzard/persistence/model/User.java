@@ -1,8 +1,9 @@
 package com.lizard.buzzard.persistence.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name="user")
@@ -11,13 +12,33 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
     private String firstname;
+
+    @NotNull
     private String lastname;
 
+    /**
+     * be aware that the BCrypt algorithm generates a String of length 60, so we need to make sure that the password will
+     * be stored in a column that can accommodate it
+     * SEE: https://www.baeldung.com/spring-security-registration-password-encoding-bcrypt
+     */
+    @NotNull
+    @Column(length = 60)
     private String password;
+
     @Transient
     private String passwordconfirmed;
+
+    @NotNull
     private String email;
+
+    /**
+     * Initially is set to false. During the account verification process it will become true.
+     * SEE: https://www.baeldung.com/registration-verify-user-by-email
+     */
+    @Column
+    private boolean enabled;
 
     /**
      * Persisting the User entities will persist the Role as well
@@ -29,9 +50,11 @@ public class User {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Set<Role> roles;
+    private List<Role> roles;
 
     public User() {
+        super();
+        this.enabled = false;
     }
 
     public Long getId() {
@@ -83,11 +106,11 @@ public class User {
         this.passwordconfirmed = passwordconfirmed;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> userroles) {
+    public void setRoles(List<Role> userroles) {
         this.roles = userroles;
     }
 
@@ -96,18 +119,12 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getFirstname(), user.getFirstname()) &&
-                Objects.equals(getLastname(), user.getLastname()) &&
-                Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getPasswordconfirmed(), user.getPasswordconfirmed()) &&
-                Objects.equals(getEmail(), user.getEmail()) &&
-                Objects.equals(getRoles(), user.getRoles());
+        return Objects.equals(getEmail(), user.getEmail());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstname(), getLastname(), getPassword(), getPasswordconfirmed(), getEmail(), getRoles());
+        return Objects.hash(getEmail());
     }
 
     @Override

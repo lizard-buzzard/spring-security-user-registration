@@ -1,8 +1,8 @@
 package com.lizard.buzzard.persistence.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "privilege")
@@ -14,7 +14,7 @@ public class RolesPrivilege {
     private String name;
 
     @ManyToMany(mappedBy = "privileges")
-    private Set<Role> roles;
+    private List<Role> roles;
 
     public RolesPrivilege() {
         super();
@@ -41,11 +41,11 @@ public class RolesPrivilege {
         this.name = name;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
@@ -54,14 +54,13 @@ public class RolesPrivilege {
         if (this == o) return true;
         if (!(o instanceof RolesPrivilege)) return false;
         RolesPrivilege that = (RolesPrivilege) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getName(), that.getName()) &&
+        return Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getRoles(), that.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getRoles());
+        return Objects.hash(getName(), getRoles());
     }
 
     @Override

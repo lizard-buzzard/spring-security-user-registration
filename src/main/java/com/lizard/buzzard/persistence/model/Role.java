@@ -78,16 +78,12 @@ public class Role {
         if (this == o) return true;
         if (!(o instanceof Role)) return false;
         Role role = (Role) o;
-        return Objects.equals(getId(), role.getId()) &&
-                Objects.equals(getRolename(), role.getRolename()) &&
-                Objects.equals(getUsers(), role.getUsers()) &&
-                Objects.equals(getPrivileges(), role.getPrivileges());
+        return Objects.equals(getRolename(), role.getRolename());
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getId(), getRolename(), getUsers(), getPrivileges());
+        return Objects.hash(getRolename());
     }
 
     @Override
