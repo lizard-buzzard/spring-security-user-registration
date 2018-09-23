@@ -260,3 +260,6 @@ public @interface EmailConstraintValidator {
 ```
 Normally error message keys are being searched in the file called __ValidationMessages.properties__ that should be available on the application class path (see [Custom validation annotation in Spring](http://dolszewski.com/spring/custom-validation-annotation-in-spring/)), but in our case it was sufficient to define message key in Thymeleaf's __messages_xx.properties__.
 Also see [Spring MVC Custom Validation](https://www.baeldung.com/spring-mvc-custom-validator).
+
+## --Commit-11-- ##
+The commit supports Spring MVC Custom Validation of User's DTO Email field. ConstraintValidator interface was coded, it uses Hibernate Validator-JSR 380, Thymeleaf for internationalizing error messaging.
