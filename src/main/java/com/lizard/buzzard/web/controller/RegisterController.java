@@ -6,6 +6,7 @@ import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.service.UserServiceImpl;
 import com.lizard.buzzard.web.dto.ViewFormLogin;
 import com.lizard.buzzard.web.dto.ViewFormUser;
+import com.lizard.buzzard.web.exception.ErrorDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +40,7 @@ public class RegisterController {
 
     @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
     public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
+        // an alternative way is: httpServletRequest.getLocale().toString();
         LOGGER.debug("Locale selected on login.html ==>  " + localeResolver.resolveLocale(httpServletRequest).toString());
 
         model.addAttribute("viewFormLogin", new ViewFormLogin());
@@ -75,8 +74,9 @@ public class RegisterController {
      * @return
      */
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public String checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
-                                  BindingResult bindingResult, Model model, HttpServletRequest request) {
+    @ResponseBody
+    public ErrorDetails checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
+                                        BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             // NOTE: The chank of the code below is not used, it's an alternative to Thymeleaf's global-errors in place next form code works:
             // <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}"></span>
@@ -85,7 +85,8 @@ public class RegisterController {
                 LOGGER.debug("Global error (@PasswordConfirmationValidator) ==>" + confirmedPasswordErrMsg.getDefaultMessage());
                 model.addAttribute("confirmedPasswordError", confirmedPasswordErrMsg.getDefaultMessage());
             }
-            return "registration";
+            return new ErrorDetails("errors");
+//            return "registration";
         }
 
         User newRegisteredUser = userService.saveUserInRepository(viewFormUser);
@@ -96,8 +97,8 @@ public class RegisterController {
 
         model.addAttribute("waitConfirm", "ok");
 
-        return "registration";
-//        return "redirect:/login";
+        return  new ErrorDetails("success");
+//        return "registration";
     }
 
     private String getAppUri(HttpServletRequest req) {

@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
 
     @Value("${lizard.verivication.token.expiration}")
     private Long tokenExpiration;

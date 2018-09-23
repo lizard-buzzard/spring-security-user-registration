@@ -136,9 +136,9 @@ Next bean helped me to show messages in different languages depending on languag
 @Bean
 public MessageSource messageSource()
 ```
-It's a strategy interface for resolving messages, with support for the parameterization and internationalization of such messages.
-[Internationalization in Spring](https://www.logicbig.com/tutorials/spring-framework/spring-core/message-sources.html)
-[Interface MessageSource](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/MessageSource.html)
+It's a strategy interface for resolving messages, with support for the parameterization and internationalization of such messages:
+* [Internationalization in Spring](https://www.logicbig.com/tutorials/spring-framework/spring-core/message-sources.html)
+* [Interface MessageSource](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/MessageSource.html)
 
 ### PersistenceJPAConfig ###
 The  source for @Bean's definition used in Persistence JPA Repository
@@ -610,3 +610,29 @@ An explanation of this trick I found in
 * [How to import value from properties file and use it in annotation?](https://stackoverflow.com/questions/33586968/how-to-import-value-from-properties-file-and-use-it-in-annotation)
 * [Spring Property Injection in a final attribute @Value - Java](https://stackoverflow.com/questions/7130425/spring-property-injection-in-a-final-attribute-value-java)
 
+## --Commit-22-- ##
+An intermediate commit, transitional to replace the "html page with <form>'s with attributes" returned by the controller's method by response body object, which is processed by Javascript in the <form>.
+
+In this try we replace
+```
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
+                                  BindingResult bindingResult, Model model, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
+```
+by
+```
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @ResponseBody
+    public ErrorDetails checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
+                                        BindingResult bindingResult, Model model, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return new ErrorDetails("errors");
+        }
+```
+An object passed to <form> is an instance of __public class ErrorDetails__ and will contain all the errors found by server validation process.
+
+In this commit (because of the development is not complete), in place of registration.html page we get some JSON data in the browser.
+  

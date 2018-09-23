@@ -31,6 +31,9 @@ public class NewUserRegisteredListener implements ApplicationListener<AfterUserR
     @Autowired
     LocaleResolver localeResolver;
 
+//    @Autowired
+//    Locale localeSelected;
+
     @Override
     public void onApplicationEvent(AfterUserRegisteredEvent afterUserRegisteredEvent) {
         User user = afterUserRegisteredEvent.getUser();

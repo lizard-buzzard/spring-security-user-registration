@@ -24,11 +24,13 @@ import java.util.stream.Collectors;
 
 public class PasswordConstraintValidatorImpl implements ConstraintValidator<PasswordConstraintValidator, String> {
 
-    // SEE: MvcConfig @Configuration, LocaleResolver @Bean and also addInterceptors(...) method
     @Autowired
     LocaleResolver localeResolver;
 
     private DictionaryRule dictionaryRule;
+
+//    @Autowired
+//    Locale localeSelected;
 
     @Override
     public void initialize(PasswordConstraintValidator constraintAnnotation) {
@@ -86,10 +88,10 @@ public class PasswordConstraintValidatorImpl implements ConstraintValidator<Pass
         String pattern = "loc-pass-messages/password_messages_%s.properties";
         HttpServletRequest httpServletRequest =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
-        // an alternative way is: httpServletRequest.getLocale().toString();
         String resourceName =
                 String.format(pattern,localeResolver.resolveLocale(httpServletRequest).toString());
+
+//        String resourceName = String.format(pattern, localeSelected.toString());
 
         MessageResolver resolver = null;
         InputStream resourceInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
