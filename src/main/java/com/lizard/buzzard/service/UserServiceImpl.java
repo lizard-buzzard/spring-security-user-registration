@@ -9,6 +9,7 @@ import com.lizard.buzzard.persistence.model.VerificationToken;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 import com.lizard.buzzard.web.exception.UserAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     TokenRepository tokenRepository;
 
+    @Value("${lizard.verivication.token.expiration}")
+    private Long tokenExpiration;
+
     @Override
     public User saveUserInRepository(ViewFormUser dtoUser) {
         if (userRepository.isUserExists(dtoUser.getEmail())) {
@@ -57,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUsersToken(User user, String token) {
-        VerificationToken verificationToken = new VerificationToken(token, user);
+        VerificationToken verificationToken = new VerificationToken(token, user, this.tokenExpiration);
         tokenRepository.save(verificationToken);
     }
 

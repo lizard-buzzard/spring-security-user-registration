@@ -562,8 +562,51 @@ public class NewUserRegisteredListener implements ApplicationListener<AfterUserR
 ``` 
 For the details of the implementation pleas refer to [Guide to Spring Email](https://www.baeldung.com/spring-email)
 
+## --Commit-21-- ##
+In __public class VerificationToken__ I met an __"${} is not working in @Value"__ issue. I was not able to bound the value of  __lizard.verivication.token.expiration__ from __lizard.config.properties__ configuration file to __rivate Long expirationInMinutes__ field and pass it to the constructor as __this__ field.
+```
+@Value("${lizard.verivication.token.expiration}")
+private Long expirationInMinutes;
+```
+Here are the articles which explain how to solve it:
+* [${... } placeholders support in @Value annotations in Spring](http://blog.codeleak.pl/2015/09/placeholders-support-in-value.html);
+* [Spring – ${} is not working in @Value](https://www.mkyong.com/spring/spring-is-not-working-in-value/)
+* [Spring @PropertySource & @Value annotations example](http://websystique.com/spring/spring-propertysource-value-annotations-example/)
+In order to fix the issue I created a configure class __public class ValuePropertiesConfig__ which configures the Property Sources to "lizard.config.properties":
+```
+@Bean
+public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+    PropertySourcesPlaceholderConfigurer c = new PropertySourcesPlaceholderConfigurer();
+    c.setLocation(new ClassPathResource("lizard.config.properties"));
+    return c;
+}
+```
+And then in place of
+```
+@Value("${lizard.verivication.token.expiration}")
+private Long expirationInMinutes;
+```
+I did the constructor's injection of __Long expirationInMinutes__ as a parameter of VerificationToken constructor:
+```
+public VerificationToken(final String token, final User user, Long expirationInMinutes) {
+    super();
+    this.token = token;
+    this.user = user;
+    this.expirationDate = calculateExpiryDate(expirationInMinutes);
+}
+```
+An object of __VerificationToken__ class is created in __UserServiceImpl__ class, where it gets the __tokenExpiration__ parameter which bounds to __@Value("${lizard.verivication.token.expiration}")__. 
+```
+@Value("${lizard.verivication.token.expiration}")
+private Long tokenExpiration;
 
-
-
-
+@Override
+public void createUsersToken(User user, String token) {
+    VerificationToken verificationToken = new VerificationToken(token, user, this.tokenExpiration);
+    tokenRepository.save(verificationToken);
+}
+```
+An explanation of this trick I found in
+* [How to import value from properties file and use it in annotation?](https://stackoverflow.com/questions/33586968/how-to-import-value-from-properties-file-and-use-it-in-annotation)
+* [Spring Property Injection in a final attribute @Value - Java](https://stackoverflow.com/questions/7130425/spring-property-injection-in-a-final-attribute-value-java)
 

@@ -1,8 +1,6 @@
 package com.lizard.buzzard.persistence.model;
 
 import lombok.EqualsAndHashCode;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -12,16 +10,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "verification_property")
-@PropertySource("classpath:lizard.config.properties")
-@ConfigurationProperties(prefix = "lizard")
 @EqualsAndHashCode(exclude="user")
 public class VerificationToken {
-
-//    @Transient
-//    @Value("${lizard.verivication.token.expiration}")
-//    private String test;
-//    private Long expirationInMinutes = Long.valueOf(60 * 24);
-    private Long expirationInMinutes = Long.valueOf(1);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,14 +32,18 @@ public class VerificationToken {
         super();
     }
 
-    public VerificationToken(final String token) {
-        super();
-
-        this.token = token;
-        this.expirationDate = calculateExpiryDate(expirationInMinutes);
-    }
-
-    public VerificationToken(final String token, final User user) {
+    /**
+     * In order to inject a value from properties file and use it in annotation, you have to use constructor injection.
+     * Here it's about Long expirationInMinutes property. Direct @Value("${lizard.verivication.token.expiration}") injection doesn't work
+     * A solution is to inject @Value("${lizard.verivication.token.expiration}") in @Service (UserService) and pass it as the parameter in
+     * VerificationToken constructor.
+     * SEE: https://stackoverflow.com/questions/33586968/how-to-import-value-from-properties-file-and-use-it-in-annotation
+     *
+     * @param token
+     * @param user
+     * @param expirationInMinutes
+     */
+    public VerificationToken(final String token, final User user, Long expirationInMinutes) {
         super();
 
         this.token = token;
@@ -62,14 +56,6 @@ public class VerificationToken {
         Duration expirationPeriod = Duration.ofMinutes(expirationInMinutes);
         Instant expiredAt = now.plus(expirationPeriod);
         return Date.from(expiredAt);
-    }
-
-    public Long getExpirationInMinutes() {
-        return expirationInMinutes;
-    }
-
-    public void setExpirationInMinutes(Long expirationInMinutes) {
-        this.expirationInMinutes = expirationInMinutes;
     }
 
     public Long getId() {
