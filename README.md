@@ -661,3 +661,34 @@ tag. This code proccesses Json representation of response body object (__Respons
 
 ## --Commit-24-- ##
 The transition to Object @ResponseBody which contains a Map of messages for @RequestMapping("/registration") is finished. @ExceptionHandler(value = {UserAlreadyExistException.class}) returns localized message inside ResponseEntity<Object>
+
+## --Commit-25-- ##
+A customization of TomCat in order to solve __'Invalid character found in the request target'__ issue. 
+
+The Server throws an error stack because of inappropriate characters in the request's link. 
+This issue and the way of how to fix it described, for example, in
+* [Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986](https://github.com/bohnman/squiggly-java/issues/42)
+* [Invalid character found in the request target in spring boot](http://1.yqwk.win/?questions/46251131/invalid-character-found-in-the-request-target-in-spring-boot)
+* [Setting 'relaxedQueryChars' for embedded Tomcat](https://stackoverflow.com/questions/51703746/setting-relaxedquerychars-for-embedded-tomcat)
+
+In order to fix the issue the __MyTomcatWebServerCustomizer__ class which implements __WebServerFactoryCustomizer<TomcatServletWebServerFactory>__ was developed.
+```
+@Component
+public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
+
+	@Override
+	public void customize(TomcatServletWebServerFactory factory) {
+		// customize the factory here
+		factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
+			@Override
+			public void customize(Connector connector) {
+				connector.setAttribute("relaxedQueryChars", "|{}[]");
+			}
+		});
+	}
+}
+```
+
+
+
+
