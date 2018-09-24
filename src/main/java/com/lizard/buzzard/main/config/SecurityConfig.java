@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
 
+    @Autowired
+    @Qualifier("myLogoutSuccessHandler")
+    private LogoutSuccessHandler myLogoutSuccessHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -82,9 +86,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
             .logout()
-                .logoutSuccessUrl("/login.html")
+                .logoutUrl("/mylogout")                             // is not the same as default /logout; triggers logout process
+//                .logoutSuccessUrl("/login?logoutSuccess=true")    // ignored in case when logoutSuccessHandler is specified
+                .logoutSuccessHandler(myLogoutSuccessHandler)
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)                        // is the same as default setup
                 .permitAll();
-        httpSecurity.csrf().disable();  // NOTE: it's highly important !!!
+
+        httpSecurity.csrf().disable();                              // NOTE: it's highly important !!!
 //        httpSecurity.headers().frameOptions().disable();
     }
 

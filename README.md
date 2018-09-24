@@ -782,4 +782,5 @@ Until I haven't implemented __AuthenticationSuccessHandler__ I experienced with 
 * [Login twice ?](http://forum.spring.io/forum/spring-projects/security/90069-login-twice)
 * [ProviderManager.authenticate called twice for BadCredentialsException](https://stackoverflow.com/questions/33788120/providermanager-authenticate-called-twice-for-badcredentialsexception)
 
-
+## --Commit-28-- ##
+The parameter __.logoutUrl("/mylogout")__ for HttpSecurity security configuration which triggers logout process set up. The message shows on top of "/login" page by analysing of __"?logoutSuccess=true"__ parameter.
