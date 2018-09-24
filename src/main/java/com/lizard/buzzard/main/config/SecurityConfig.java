@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -25,8 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     AuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
+    @Qualifier("authenticationSuccessHandler")
+    AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,28 +70,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         , "/registration*"
                         , "/registrationStatus")
                 .permitAll()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
+                .anyRequest().hasAuthority("READ_PRIVILEGE")
             .and()
             .formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/homepage.html")
-                .failureUrl("/login?error=true")
+                .failureUrl("/login?badcredentialerror=true")
+                .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll()
             .and()
             .logout()
                 .logoutSuccessUrl("/login.html")
-                .permitAll()
-        ;
-
-        httpSecurity.csrf().disable();                      // NOTE: High importance !!!
+                .permitAll();
+        httpSecurity.csrf().disable();  // NOTE: it's highly important !!!
 //        httpSecurity.headers().frameOptions().disable();
     }
 
-//    @Override
-//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(daoAuthenticationProvider());
-//    }
+    @Override
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(daoAuthenticationProvider());
+    }
 
     public SecurityConfig() {
         super();

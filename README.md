@@ -745,3 +745,41 @@ Unlike most of the other authentication providers that leverage __UserDetailsSer
   - Converter<User, UserDetails>;
 * Be aware of implementing of the __httpSecurity.csrf().disable();__ configuration both in __login.html__ and in the class which extends __WebSecurityConfigurerAdapter__.
 
+## --Commit-27-- ##
+The development of __SecurityConfig__, __MyCustomAuthenticationFailureHandler__ and __MyCustomAuthenticationSuccessHandler__ classes, "badcredentialerror" parameter of login page was done.
+
+My implementation was in the development of __MyCustomAuthenticationFailureHandler__ @Component("authenticationFailureHandler"):
+```
+@Component("authenticationFailureHandler")
+public class MyCustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+}
+```
+It uses __SimpleUrlAuthenticationFailureHandler.setDefaultFailureUrl()__ method to set up redirection page in case of an authentication error:
+```
+setDefaultFailureUrl("/login?badcredentialerror=true");
+```     
+__Note__, that __?badcredentialerror=true__ parameter for /login.html page is a flag which shows that an error occurs (th:if="${param.badcredentialerror != null}"). And errorMessage
+```
+String errorMessage = messages.getMessage("login.bad.credentials", null, locale);
+
+request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
+```
+is processed on /login.html page as follows:
+```
+<div th:if="${param.badcredentialerror != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">login bad credentials error</div>
+```
+And then we develop __MyCustomAuthenticationSuccessHandler__ class which implements __AuthenticationSuccessHandler__:
+```
+@Component("authenticationSuccessHandler")
+public class MyCustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+```
+The main purpose of the __onAuthenticationSuccess()__ method is to set up an URL where the control is passed in case of successful authentication:
+```
+String targetUrl = "/homepage.html?user=" + authentication.getName();
+redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
+```
+Until I haven't implemented __AuthenticationSuccessHandler__ I experienced with a __"login twice"__ issue/ The similar issue discussed on
+* [Login twice ?](http://forum.spring.io/forum/spring-projects/security/90069-login-twice)
+* [ProviderManager.authenticate called twice for BadCredentialsException](https://stackoverflow.com/questions/33788120/providermanager-authenticate-called-twice-for-badcredentialsexception)
+
+

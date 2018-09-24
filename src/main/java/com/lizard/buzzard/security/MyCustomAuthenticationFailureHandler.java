@@ -29,7 +29,7 @@ public class MyCustomAuthenticationFailureHandler extends SimpleUrlAuthenticatio
                                         final AuthenticationException exception)
             throws IOException, ServletException {
 
-        setDefaultFailureUrl("/login?error=true");
+        setDefaultFailureUrl("/login?badcredentialerror=true");
 
         super.onAuthenticationFailure(request, response, exception);
 

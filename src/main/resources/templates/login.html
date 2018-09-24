@@ -26,7 +26,7 @@
 
 <body>
 
-    <div th:if="${param.error != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</div>
+    <div th:if="${param.badcredentialerror != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">login bad credentials error</div>
 
     <div class="container">
         <div class="row wrapper">
@@ -36,7 +36,7 @@
         </div>
         <br/>
         <!-- <form name='myform' action="#" th:action="@{/login}" th:object="${viewFormLogin}" method="POST"> -->
-        <!-- <form name='myform' action="login" method='POST' onsubmit="return validateFormFields();"> -->
+<!--         <form name='myform' action="login" method='POST' onsubmit="return validateFormFields();"> -->
         <form name="myform" th:action="@{/login}" method="POST" onsubmit="return validateFormFields();">
 
             <!-- user's email-->
@@ -72,7 +72,6 @@
     </div>
     <script th:inline="javascript">
         /*<![CDATA[*/
-
         function validateFormFields() {
             if(document.myform.username.value == "") {
                 $("#loginEmailError").show().html(/*[[#{login.message.username}]]*/);
@@ -88,32 +87,6 @@
                 $("#loginPasswordError").hide();
             }
             return true;
-        }
-
-        var serverContext = [[@{/}]];
-
-        // in case of success window.location.href = serverContext + "homepage.html";
-        // helps us to prevent to login twice every time to get past the security
-        $(document).ready(function() {
-            $('myform').submit(function(event) {
-                responseProcessor(event);
-            });
-        });
-
-        function responseProcessor(event){
-            event.preventDefault();
-            var formData = $('form').serialize();
-
-            $.ajax({
-                type: "POST",
-                url: serverContext + "login",
-                success:function(data) {
-                            window.location.href = serverContext + "homepage.html";
-                        },
-                error:  function(errorResponse) {
-                        }
-            });
-
         }
         /*]]>*/
     </script>
