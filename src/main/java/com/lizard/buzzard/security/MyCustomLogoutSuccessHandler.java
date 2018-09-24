@@ -18,7 +18,10 @@ public class MyCustomLogoutSuccessHandler implements LogoutSuccessHandler {
             HttpServletResponse httpServletResponse,
             Authentication authentication) throws IOException, ServletException {
 
+        // TODO: delete user and its token from JdbcTokenRepository
+
         // TODO: delete User (UserDetails, principal) information from custom registry of active sessions)
+
         httpServletResponse.sendRedirect("/login?logoutSuccess=true");
     }
 }

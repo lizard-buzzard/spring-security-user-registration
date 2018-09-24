@@ -1,6 +1,9 @@
 package com.lizard.buzzard.main.config;
 
+import com.lizard.buzzard.security.CustomRememberMeServices;
 import com.lizard.buzzard.security.DaoAuthenticationProviderExtended;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,27 +20,38 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Autowired
     @Qualifier("authenticationFailureHandler")
-    AuthenticationFailureHandler authenticationFailureHandler;
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
     @Qualifier("authenticationSuccessHandler")
-    AuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    @Autowired
-    @Qualifier("userDetailsService")
-    UserDetailsService userDetailsService;
+//    @Autowired
+//    @Qualifier("userDetailsService")
+//    private UserDetailsService userDetailsService;
 
     @Autowired
     @Qualifier("myLogoutSuccessHandler")
     private LogoutSuccessHandler myLogoutSuccessHandler;
+
+//    @Autowired
+//    private DataSource dataSource;
+
+//    @Autowired
+//    private MyJdbcTokenRepositoryImpl myJdbcTokenRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -57,12 +71,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
+    public DaoAuthenticationProvider daoAuthenticationProvider(@Qualifier("userDetailsService") UserDetailsService userDetailsService) {
         final DaoAuthenticationProviderExtended authProvider = new DaoAuthenticationProviderExtended();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
+        MyJdbcTokenRepositoryImpl repo = new MyJdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        repo.setCreateTableOnStartup(true);
+        return repo;
+    }
+
+    @Autowired
+    PersistentTokenRepository persistentTokenRepository;// for sake of an experiment, bound to .tokenRepository(persistentTokenRepository)
+
+    // NOTE: uncomment two definitions below if one definition above is commented
+    @Bean
+    public RememberMeServices rememberMeServices(
+            @Qualifier("userDetailsService") UserDetailsService userDetailsService,
+            @Qualifier("persistentTokenRepository")PersistentTokenRepository persistentTokenRepository) {
+        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, persistentTokenRepository);
+        return rememberMeServices;
+    }
+    @Autowired
+    CustomRememberMeServices rememberMeServices;
 
     // Configuration section
     @Override
@@ -92,16 +128,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .logoutSuccessUrl("/login?logoutSuccess=true")   // ignored in case when logoutSuccessHandler is specified
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
-                .invalidateHttpSession(true)                        // is the same as default setup
-                .permitAll();
+                .invalidateHttpSession(false)                        // is the same as default setup
+                .permitAll()
+            .and().rememberMe()
+//                .key("uniqueAndSecret")
+//                .rememberMeCookieName("example-app-remember-me")
+
+                .tokenRepository(persistentTokenRepository)       // part of @Autowired PersistentTokenRepository persistentTokenRepository;
+                .tokenValiditySeconds(24 * 60 * 60)
+
+                .rememberMeServices(rememberMeServices).key("theKey");
+        ;
 
         httpSecurity.csrf().disable();                              // NOTE: it's highly important !!!
 //        httpSecurity.headers().frameOptions().disable();
     }
 
+    @Autowired
+    DaoAuthenticationProvider daoAuthenticationProvider;
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
+        auth.authenticationProvider(daoAuthenticationProvider);
     }
 
     public SecurityConfig() {
@@ -145,5 +192,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    public void configureAuthManager(AuthenticationManagerBuilder authenticationManagerBuilder){
 //        authenticationManagerBuilder.authenticationProvider(authenticationProvider);
 //    }
-
 }

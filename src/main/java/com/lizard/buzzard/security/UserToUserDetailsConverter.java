@@ -1,10 +1,10 @@
 package com.lizard.buzzard.security;
 
 import com.lizard.buzzard.persistence.model.User;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.core.convert.converter.Converter;
 
 import java.util.ArrayList;
 import java.util.Collection;

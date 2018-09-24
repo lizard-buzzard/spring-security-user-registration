@@ -64,9 +64,17 @@
 
             <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> -->
 
-            <button type="submit" class="btn btn-primary" th:text="#{label.form.login}">submitButton</button>
-
+            <div class="form-group row">
+                <button type="submit" class="btn btn-primary" th:text="#{label.form.login}">submitButton</button>
+            </div>
             <!-- <input class="btn btn-primary" name="submit" type="submit" th:value="#{label.form.login}" /> -->
+
+            <div class="form-group row">
+                <span class="col-sm-1">
+                    <input type="checkbox" name="remember-me">
+                </span>
+                <label class="col-sm-5" th:text="#{label.form.rememberMe}">remember me</label>
+            </div>
         </form>
         <!-- /registration or /registration.html ? -->
         <a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>

@@ -790,5 +790,32 @@ Added some elements of the session management for security configuration:
 - 'invalidSession.html', 
 - session.setMaxInactiveInterval() in implementation of AuthenticationSuccessHandler.
 
+## --Commit-30-- ##
+An intermediate, draft variant of __Remember Me__ configuration.
+
+Remember Me configuration is quite straightforward and consists of next steps:
+1. first, all the time we refer to __@Bean DataSource__ which is defined in __PersistenceJPAConfig__ and should be autowired it in SecurityConfig (which )extends WebSecurityConfigurerAdapter).
+2. define Token Repository based on DataSource as follows
+3. in __HttpSecurity config()__ add code concerning of remember me configuration
+
+The class __MyJdbcTokenRepositoryImpl__ which extends __JdbcTokenRepositoryImpl__ is developed.  It overrides __initDao()__ method to be able to create __persistent_logins__ table which keeps security tokens.
+```
+public static final String CREATE_TABLE_SQL =
+        "create table persistent_logins (" +
+                "username varchar(100) not null, " +
+                "series varchar(64) primary key, " +
+                "token varchar(100) not null, " +
+                "last_used timestamp not null)";
+
+@Override
+protected void initDao() {
+    try {
+        super.getJdbcTemplate().execute(CREATE_TABLE_SQL);
+    } catch (DataAccessException e) {
+        LOGGER.info("table persistent_logins have been already created");
+    }
+}
+```
+
 
 
