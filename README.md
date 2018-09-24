@@ -689,6 +689,59 @@ public class MyTomcatWebServerCustomizer implements WebServerFactoryCustomizer<T
 }
 ```
 
+## --Commit-26-- ##
+**_This commit starts Spring Security implementation_**. In order to implement login/authentication with Spring Security, we need to implement **_org.springframework.security.core.userdetails.UserDetailsService_** interface.
 
+"The __UserDetailsService__ interface is used to retrieve user-related data. It has one method named __loadUserByUsername()__ which finds a user entity based on the username and can be overridden to customize the process of finding the user. It is used by the __DaoAuthenticationProvider__ to load details about the user during authentication." (the quotation from [Spring Security: Authentication with a Database-backed UserDetailsService](https://www.baeldung.com/spring-security-authentication-with-a-database)).
 
+### UserDetailsService ###
+Implemented by __UserDetailsServiceImpl__. We need to provide an implementation of the __loadUserByUsername()__ method of __UserDetailsService__. But the challenge is
+that the __findByUsername()__ method of our __UserService__ returns a __User__ entity, while **_Spring Security expects_** a
+__UserDetails__ object from the __loadUserByUsername()__ method. We will create a converter for this to convert __User__ to __UserDetails__ implementation. 
+
+The user's email serves as the user name in this example:  
+```
+@Override
+public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+    User user = userRepository.findByEmail(userEmail)
+            .orElseThrow(()->new UsernameNotFoundException(
+                    String.format("User identified by e-mail %s is not found", userEmail)));
+    UserDetails userdetails = converter.convert(user);
+    return userdetails;
+}
+```
+
+### UserDetails implementation ###
+__public class UserSecurityDetailsImpl__ implements __UserDetails__. [Interface UserDetails](https://docs.spring.io/autorepo/docs/spring-security/4.2.x-SNAPSHOT/apidocs/org/springframework/security/core/userdetails/UserDetails.html)
+Provides core user information. Implementations are not used directly by Spring Security for security purposes. They simply store user information which is later encapsulated into Authentication objects. This allows non-security related user information (such as email addresses, telephone numbers etc) to be stored in a convenient location.
+
+In my case the __username__ field of __UserSecurityDetailsImpl__ keeps user's email (and serves as user identifier field):
+```
+private String username; // email serves as a username
+```
+### Converter<User, UserDetails> ###
+This class makes conversion from the __User__ object (entity) to the __UserDetails__ object:
+```
+@Component("userToUserDetailsConverter")
+public class UserToUserDetailsConverter implements Converter<User, UserDetails>
+```
+
+### DaoAuthenticationProvider ###
+__public class DaoAuthenticationProviderExtended__ extends __DaoAuthenticationProvider__.
+
+__Spring Security__ includes a production-quality __AuthenticationProvider__ implementation called __DaoAuthenticationProvider__. 
+This authentication provider is compatible with all of the authentication mechanisms that generate a __UsernamePasswordAuthenticationToken__, 
+and is probably the most commonly used provider in the framework. 
+
+Like most of the other authentication providers, the __DaoAuthenticationProvider__ leverages a __UserDetailsService__ in order to lookup the __username__, __password__ and __GrantedAuthority__. 
+Unlike most of the other authentication providers that leverage __UserDetailsService__, this authentication provider actually requires the password to be presented, and the provider will actually evaluate the validity or otherwise of the password presented in an authentication request object [DAO Authentication Provider](https://docs.spring.io/spring-security/site/docs/2.0.x/reference/html/dao-provider.html).
+
+* The security configuration for __/login__ page was developed; 
+* @RequestMapping(value = {"/login", "/"}... for RequestMethod.GET/POST removed and replaced by __WebSecurityConfigurerAdapter__'s configuration, in particular by __protected void configure(HttpSecurity httpSecurity)__ method; 
+* This changes caused __login.html__ changes and development of a whole bunch of classes which extends or implements: 
+  - DaoAuthenticationProvider, 
+  - UserDetailsService, 
+  - UserDetails, 
+  - Converter<User, UserDetails>;
+* Be aware of implementing of the __httpSecurity.csrf().disable();__ configuration both in __login.html__ and in the class which extends __WebSecurityConfigurerAdapter__.
 

@@ -4,7 +4,6 @@ import com.lizard.buzzard.event.AfterUserRegisteredEvent;
 import com.lizard.buzzard.persistence.model.TokenStatus;
 import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.service.UserServiceImpl;
-import com.lizard.buzzard.web.dto.ViewFormLogin;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 import com.lizard.buzzard.web.exception.ResponseDetails;
 import org.slf4j.Logger;
@@ -47,25 +46,24 @@ public class RegisterController {
     @Autowired
     MessageSource messageSource;
 
+//    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
+//    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
+//        // an alternative way is: httpServletRequest.getLocale().toString();
+//        LOGGER.debug("Locale selected on login.html ==>  " + localeResolver.resolveLocale(httpServletRequest).toString());
+//
+//        model.addAttribute("viewFormLogin", new ViewFormLogin());
+//        return "login";
+//    }
 
-    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
-    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
-        // an alternative way is: httpServletRequest.getLocale().toString();
-        LOGGER.debug("Locale selected on login.html ==>  " + localeResolver.resolveLocale(httpServletRequest).toString());
-
-        model.addAttribute("viewFormLogin", new ViewFormLogin());
-        return "login";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String processLoginPage(@Valid @ModelAttribute("viewFormLogin") ViewFormLogin viewFormLogin, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "login";
-        }
-        // TODO: replace by real http://... page of APPLICATION START PAGE
-        String redirectUrl = "https://www.yandex.ru/";
-        return "redirect:" + redirectUrl;
-    }
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//    public String processLoginPage(@Valid @ModelAttribute("viewFormLogin") ViewFormLogin viewFormLogin, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return "login";
+//        }
+//        // TODO: replace by real http://... page of AVIDA APPLICATION START PAGE
+//        String redirectUrl = "https://www.yandex.ru/";
+//        return "redirect:" + redirectUrl;
+//    }
 
     /**
      * @param viewFormUser
