@@ -402,7 +402,7 @@ if(confirmedPasswordErrMsg != null) {
 ```
 This code is not used, it's an alternative to __Thymeleaf__'s global-errors prosessing (see [Thymeleaf: 7.3 Global errors](https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors)).
 
-In html <form> of templates/registration.html this  __Thymeleaf__'s code checks for the global error and shows it in __<span id="confirmedPassportError" ...>__
+In html "form" of templates/registration.html this  __Thymeleaf__'s code checks for the global error and shows it in __<span id="confirmedPassportError" ...>__
 
 ```html
 <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span>
@@ -611,7 +611,7 @@ An explanation of this trick I found in
 * [Spring Property Injection in a final attribute @Value - Java](https://stackoverflow.com/questions/7130425/spring-property-injection-in-a-final-attribute-value-java)
 
 ## --Commit-22-- ##
-An intermediate commit, transitional to replace the "html page with <form>'s with attributes" returned by the controller's method by response body object, which is processed by Javascript in the <form>.
+An intermediate commit, transitional to replace the "html page with "form"'s with attributes" returned by the controller's method by response body object, which is processed by Javascript in the "form".
 
 In this try we replace
 ```
@@ -632,7 +632,29 @@ by
             return new ErrorDetails("errors");
         }
 ```
-An object passed to <form> is an instance of __public class ErrorDetails__ and will contain all the errors found by server validation process.
+An object passed to "form" is an instance of __public class ErrorDetails__ and will contain all the errors found by server validation process.
 
 In this commit (because of the development is not complete), in place of registration.html page we get some JSON data in the browser.
-  
+
+## --Commit-23-- ##
+On a way to replace the html-page name with Object @ResponseBody which contains Map of messages for <span id="xxxError"...> tags of html-form.
+ErrorDetails class is replaced by __ResponseDetails__ class. This class contains next two fields:
+``` 
+private String indicator;
+private Map<String, String> messages; 
+```    
+The first one serves for carrying over the result of server validation process, and it can be either "error" or "success".
+The second one is a map of
+* key - id (without suffix 'Error') of an attribute in "errors" tags like 'email' in
+```
+<span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>                    
+```
+on the registration.html page
+* value - message which should be displayed in these tags in case of error or other information event detected
+
+The processing of __ResponseDetails__ is executed in a Javascript in
+```
+<script th:inline="javascript">
+
+```
+tag. This code proccesses Json representation of response body object (__ResponseDetails__ ), extracts messages and shows these messages in errors span tags on the html page.

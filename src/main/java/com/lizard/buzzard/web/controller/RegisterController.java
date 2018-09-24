@@ -6,21 +6,27 @@ import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.service.UserServiceImpl;
 import com.lizard.buzzard.web.dto.ViewFormLogin;
 import com.lizard.buzzard.web.dto.ViewFormUser;
-import com.lizard.buzzard.web.exception.ErrorDetails;
+import com.lizard.buzzard.web.exception.ResponseDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.LocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.lizard.buzzard.persistence.model.TokenStatus.*;
 
@@ -37,6 +43,9 @@ public class RegisterController {
     // Spring Event to Create the Token and Send the Verification Email
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
+    MessageSource messageSource;
 
     @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
     public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
@@ -73,42 +82,45 @@ public class RegisterController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @RequestMapping(value = "/registration", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public ErrorDetails checkPersonInfo(@Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
-                                        BindingResult bindingResult, Model model, HttpServletRequest request) {
+    public ResponseEntity<Object> checkPersonInfo(@RequestBody @Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
+                                  BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            // NOTE: The chank of the code below is not used, it's an alternative to Thymeleaf's global-errors in place next form code works:
-            // <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}"></span>
-            ObjectError confirmedPasswordErrMsg = bindingResult.getGlobalError();
-            if(confirmedPasswordErrMsg != null) {
-                LOGGER.debug("Global error (@PasswordConfirmationValidator) ==>" + confirmedPasswordErrMsg.getDefaultMessage());
-                model.addAttribute("confirmedPasswordError", confirmedPasswordErrMsg.getDefaultMessage());
-            }
-            return new ErrorDetails("errors");
-//            return "registration";
+            Map<String, String> map = new HashMap<>();
+            bindingResult.getAllErrors().forEach(
+                    e -> map.put(
+                            ((DefaultMessageSourceResolvable) e.getArguments()[0]).getDefaultMessage(),
+                            e.getDefaultMessage()
+                    )
+            );
+
+            ResponseDetails responseDetailsBody = new ResponseDetails("error", map);
+            return new ResponseEntity<Object>(responseDetailsBody, new HttpHeaders(), HttpStatus.CONFLICT);
         }
 
         User newRegisteredUser = userService.saveUserInRepository(viewFormUser);
 
-//        Locale localeSelected = localeResolver.resolveLocale(request);
         ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, /*localeSelected,*/ getAppUri(request));
         applicationEventPublisher.publishEvent(event);
 
         model.addAttribute("waitConfirm", "ok");
 
-        return  new ErrorDetails("success");
-//        return "registration";
-    }
+        String confirmMsg = messageSource.getMessage("registration.message.before.confirmation", new Object[]{}, localeResolver.resolveLocale(request));
+        System.out.println(confirmMsg);
 
-    private String getAppUri(HttpServletRequest req) {
-        return "http://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
+        Map<String, String> map = new HashMap<>();
+        map.put("confirmMsg", confirmMsg);
+
+//        return "registration";
+        ResponseDetails responseDetailsBody = new ResponseDetails("success", map);
+        return new ResponseEntity<Object>(responseDetailsBody, new HttpHeaders(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/registrationStatus", method = RequestMethod.GET)
     public String checkConfirmationToken(@RequestParam("token") String token, Model model) {
         TokenStatus status = userService.verifyConfirmationToken(token);
-        if(TOKEN_VALUD.equals(status)) {
+        if (TOKEN_VALUD.equals(status)) {
             model.addAttribute("tokenValid", "you are successfully registered");
         } else if (TOKEN_EXPIRED.equals(status)) {
             model.addAttribute("tokenExpired", "you are not registered because of late registration");
@@ -117,4 +129,26 @@ public class RegisterController {
         }
         return "registrationStatus";
     }
+
+    // Auxiliary methods
+
+    private String getAppUri(HttpServletRequest req) {
+        return "http://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
+    }
+
+    private ResponseEntity<Object> getResponseEntity(String indicator, HttpStatus httpStatus, BindingResult bindingResult) {
+        Map<String, String> map = new HashMap<>();
+        if(bindingResult != null) {
+            bindingResult.getAllErrors().forEach(
+                    e -> map.put(
+                            ((DefaultMessageSourceResolvable) e.getArguments()[0]).getDefaultMessage(),
+                            e.getDefaultMessage()
+                    )
+            );
+        }
+        ResponseDetails responseDetailsBody = new ResponseDetails(indicator, map);
+        return new ResponseEntity<Object>(responseDetailsBody, new HttpHeaders(), httpStatus);
+    }
+
+
 }
