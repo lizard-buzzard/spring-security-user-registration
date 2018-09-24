@@ -784,3 +784,11 @@ Until I haven't implemented __AuthenticationSuccessHandler__ I experienced with 
 
 ## --Commit-28-- ##
 The parameter __.logoutUrl("/mylogout")__ for HttpSecurity security configuration which triggers logout process set up. The message shows on top of "/login" page by analysing of __"?logoutSuccess=true"__ parameter.
+
+## --Commit-29-- ##
+Added some elements of the session management for security configuration: 
+- 'invalidSession.html', 
+- session.setMaxInactiveInterval() in implementation of AuthenticationSuccessHandler.
+
+
+

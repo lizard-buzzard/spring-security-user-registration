@@ -72,22 +72,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/login*"
                         , "/registration*"
-                        , "/registrationStatus")
-                .permitAll()
+                        , "/registrationStatus").permitAll()
+                .antMatchers("/invalidSession*").anonymous()
 //                .anyRequest().authenticated()
                 .anyRequest().hasAuthority("READ_PRIVILEGE")
-            .and()
-            .formLogin()
+            .and().formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/homepage.html")
                 .failureUrl("/login?badcredentialerror=true")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll()
-            .and()
-            .logout()
+            .and().sessionManagement()
+                .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
+                .invalidSessionUrl("/invalidSession.html")
+                .sessionFixation().none()                           // .newSession(), .migrateSession()
+            .and().logout()
                 .logoutUrl("/mylogout")                             // is not the same as default /logout; triggers logout process
-//                .logoutSuccessUrl("/login?logoutSuccess=true")    // ignored in case when logoutSuccessHandler is specified
+                // .logoutSuccessUrl("/login?logoutSuccess=true")   // ignored in case when logoutSuccessHandler is specified
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)                        // is the same as default setup

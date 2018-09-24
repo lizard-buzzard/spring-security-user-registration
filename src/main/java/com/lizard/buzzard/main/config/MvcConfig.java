@@ -35,6 +35,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/registration");
         registry.addViewController("/registrationStatus.html");
         registry.addViewController("/homepage.html");
+        registry.addViewController("/invalidSession.html");
 
     }
 

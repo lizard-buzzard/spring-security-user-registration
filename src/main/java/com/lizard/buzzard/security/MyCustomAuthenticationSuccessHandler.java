@@ -2,6 +2,7 @@ package com.lizard.buzzard.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
@@ -19,6 +20,9 @@ import java.io.IOException;
 public class MyCustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final Logger logger = LoggerFactory.getLogger(MyCustomAuthenticationSuccessHandler.class);
 
+    @Value("${lizard.session.max.inactive.interval}")
+    private Integer sessionMaxInactiveInterval;
+
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
@@ -34,6 +38,8 @@ public class MyCustomAuthenticationSuccessHandler implements AuthenticationSucce
 
         final HttpSession session = httpServletRequest.getSession(false);
         if (session != null) {
+            // inactive interval in minutes between client requests before the servlet container will invalidate this session
+            session.setMaxInactiveInterval(sessionMaxInactiveInterval * 60);
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         }
     }
