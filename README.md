@@ -816,6 +816,16 @@ protected void initDao() {
     }
 }
 ```
+## --Commit-31-- ##
+Step by step trails in order to implement __Remember Me__ configuration. The routine procedure for finding the right solution. This trial was not successful. 
+
+**_IMPORTANT NOTE:_** In order to find the right solution, I had to create a separate small project. This project was successful and after the research I implemented its code in the current project.
+I put the code of this project and detailed description to it in github.com.
+Here is a link to this project: [lizard-buzzard/persistent-token-rememberme-authentication](https://github.com/lizard-buzzard/persistent-token-rememberme-authentication)
+
+
+
+
 
 
 

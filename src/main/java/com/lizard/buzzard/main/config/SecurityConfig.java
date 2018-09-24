@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -30,6 +31,9 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
+
+    @Value("${lizard.remember.me.token.validity.hours}")
+    private Integer rememberMeTokenValidityHours;
 
     @Autowired
     @Qualifier("authenticationFailureHandler")
@@ -86,8 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return repo;
     }
 
-    @Autowired
-    PersistentTokenRepository persistentTokenRepository;// for sake of an experiment, bound to .tokenRepository(persistentTokenRepository)
+//    @Autowired
+//    PersistentTokenRepository persistentTokenRepository;// for sake of an experiment, bound to .tokenRepository(persistentTokenRepository)
 
     // NOTE: uncomment two definitions below if one definition above is commented
     @Bean
@@ -131,13 +135,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(false)                        // is the same as default setup
                 .permitAll()
             .and().rememberMe()
-//                .key("uniqueAndSecret")
-//                .rememberMeCookieName("example-app-remember-me")
-
-                .tokenRepository(persistentTokenRepository)       // part of @Autowired PersistentTokenRepository persistentTokenRepository;
-                .tokenValiditySeconds(24 * 60 * 60)
-
-                .rememberMeServices(rememberMeServices).key("theKey");
+                .rememberMeServices(rememberMeServices)
+                .tokenValiditySeconds(rememberMeTokenValidityHours.intValue() * 60 * 60)
+                .key("uniqueAndSecret")
         ;
 
         httpSecurity.csrf().disable();                              // NOTE: it's highly important !!!
