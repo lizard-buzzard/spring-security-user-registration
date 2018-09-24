@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         user.setLastname(dtoUser.getLastname());
         user.setEmail(dtoUser.getEmail());
         user.setPassword(passwordEncoder.encode(dtoUser.getPassword()));
-        user.setRoles(Arrays.asList(roleRepository.findByRolename("USER")));
+        user.setRoles(Arrays.asList(roleRepository.findByRolename("ROLE_USER")));
         userRepository.save(user);
         return user;
     }
@@ -81,6 +81,4 @@ public class UserServiceImpl implements UserService {
         }
         return tokenStatus;
     }
-
-
 }

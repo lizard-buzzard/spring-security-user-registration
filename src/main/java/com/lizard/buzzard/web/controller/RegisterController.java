@@ -3,7 +3,9 @@ package com.lizard.buzzard.web.controller;
 import com.lizard.buzzard.event.AfterUserRegisteredEvent;
 import com.lizard.buzzard.persistence.model.TokenStatus;
 import com.lizard.buzzard.persistence.model.User;
+import com.lizard.buzzard.service.AdminServiceImpl;
 import com.lizard.buzzard.service.UserServiceImpl;
+import com.lizard.buzzard.web.dto.UserWithAuthorityRights;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 import com.lizard.buzzard.web.exception.ResponseDetails;
 import org.slf4j.Logger;
@@ -16,6 +18,8 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +29,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.lizard.buzzard.persistence.model.TokenStatus.*;
@@ -46,6 +51,8 @@ public class RegisterController {
     @Autowired
     MessageSource messageSource;
 
+    @Autowired
+    private AdminServiceImpl adminService;
 
 //    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
 //    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
@@ -85,7 +92,7 @@ public class RegisterController {
     @RequestMapping(value = "/registration", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public ResponseEntity<Object> checkPersonInfo(@RequestBody @Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
-                                  BindingResult bindingResult, Model model, HttpServletRequest request) {
+                                                  BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return getResponseEntity("error", HttpStatus.CONFLICT, bindingResultMsgMap(bindingResult));
         }
@@ -118,6 +125,56 @@ public class RegisterController {
         return "registrationStatus";
     }
 
+
+    /**
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/homepage/{role}", method = RequestMethod.GET)
+    public String getHomePage(Model model, @PathVariable("role") String role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
+
+        if (role.equals("admin")) {
+            List<UserWithAuthorityRights> userWithAuthorityRights = adminService.getUsersList();
+            model.addAttribute("listOfUsers", userWithAuthorityRights);
+        }
+        return role.equals("user") ? "homepage" : "adminConsolePage";
+    }
+
+    @RequestMapping("/accessDenied")
+    public String authorizationErrorPage() {
+        return "authorizationError";
+    }
+
+
+//    @RequestMapping(value = "/homepage/user", method = RequestMethod.GET)
+//    public String getUserHomePage(Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User user = (User) authentication.getPrincipal();
+//        model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
+//        return "homepage";
+//    }
+//
+//    @RequestMapping(value = "/homepage/admin", method = RequestMethod.GET)
+//    public String getAdminHomePage(Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        User user = (User) authentication.getPrincipal();
+//        model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
+//        return "adminConsolePage";
+//    }
+
+
+
+
+
+    @RequestMapping("/redirect")
+    public String redirectPage() {
+        return "redirect:https://www.w3.org/";
+    }
+
     // Auxiliary methods
 
     private String getAppUri(HttpServletRequest req) {
@@ -131,7 +188,7 @@ public class RegisterController {
 
     private Map<String, String> bindingResultMsgMap(BindingResult bindingResult) {
         Map<String, String> map = new HashMap<>();
-        if(bindingResult != null) {
+        if (bindingResult != null) {
             bindingResult.getAllErrors().forEach(
                     e -> map.put(
                             ((DefaultMessageSourceResolvable) e.getArguments()[0]).getDefaultMessage(),

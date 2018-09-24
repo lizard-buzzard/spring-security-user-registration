@@ -828,7 +828,7 @@ This commit is a continuation of the previous commit and it finishes the sequenc
 
 Some interesting (at least for me) remarks:
 
-1. In case of set at the same time
+1. In case of if to set at the same time
     ```
     .rememberMeServices(rememberMeServices)
     .rememberMeCookieName("my-remember-me-cookie")
@@ -898,6 +898,25 @@ Some interesting (at least for me) remarks:
     httpSecurity.rememberMe()
             .rememberMeParameter("my-remember-me-checkbox")
     ```
+
+## --Commit-33-- ##
+In this commit a redirection depending on the role of the user who logged in is developed:
+- __HttpSecurity__: __exceptionHandling().accessDeniedPage__, __.hasAuthority("ADMIN_PAGE_PRIVILEGE")__, __.hasAuthority("USER_PAGE_PRIVILEGE")__ are added; 
+- __AuthenticationSuccessHandler__: redirects to /admin or /user paths depending on privileges of the user logged in; 
+- __RegisterController__: @RequestMapping(value = "/homepage/{role}") displays either __user page__ or __admin console page__ depending on the role of the user who logged in; 
+- __AdminService__ class is developed to prepare users' list information for administrator's page;
+- __ResourceHandlerRegistry__: "classpath:/static/images/" is added. 
+
+The redirection depending on the role of the user works according to the next code fragment. The logged users with __ADMIN_PAGE_PRIVILEGE__ are redirected to __/homepage/admin__ path and the users with __USER_PAGE_PRIVILEGE__ are redirected to __/homepage/user__ path:
+```
+if(sup.get().anyMatch(a->(((GrantedAuthority) a).getAuthority().equals("ADMIN_PAGE_PRIVILEGE")))) {
+    targetUrl = "/homepage/admin?user=" + auth.getName();
+} else if(sup.get().anyMatch(a->(((GrantedAuthority) a).getAuthority().equals("USER_PAGE_PRIVILEGE")))) {
+    targetUrl = "/homepage/user?user=" + auth.getName();
+} else {
+    targetUrl = "/";
+}
+```
 
 
 

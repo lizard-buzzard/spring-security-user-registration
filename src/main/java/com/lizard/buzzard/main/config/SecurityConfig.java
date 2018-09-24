@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    @Autowired
 //    private MyJdbcTokenRepositoryImpl myJdbcTokenRepository;
 
-    @Bean
+    @Bean(value="passwordEncoder")
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(7);
     }
@@ -109,25 +109,43 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
             .authorizeRequests()
-                .antMatchers(
+                .antMatchers("/", "/accessDenied",
                         "/login*"
                         , "/registration*"
                         , "/registrationStatus").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
 //                .anyRequest().authenticated()
-                .anyRequest().hasAuthority("READ_PRIVILEGE")
-            .and().formLogin()
+//                .anyRequest().hasAuthority("READ_PRIVILEGE")
+        ;
+
+        httpSecurity.exceptionHandling().accessDeniedPage("/accessDenied");
+
+
+//        httpSecurity.authorizeRequests()
+//                .antMatchers("/homepage/admin/**").hasRole("ADMIN"); // .access("hasRole('ROLE_ADMIN')");
+//        httpSecurity.authorizeRequests()
+//                .antMatchers("/homepage/user/**", "/redirect").hasRole("USER");  // "ROLE_" adds automatically
+
+        httpSecurity.authorizeRequests()
+                .antMatchers("/homepage/admin/**").hasAuthority("ADMIN_PAGE_PRIVILEGE");
+        httpSecurity.authorizeRequests()
+                .antMatchers("/homepage/user/**", "/redirect").hasAuthority("USER_PAGE_PRIVILEGE");
+
+
+        httpSecurity.formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/homepage.html")
+//                .defaultSuccessUrl("/homepage.html")
                 .failureUrl("/login?badcredentialerror=true")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
-                .permitAll()
-            .and().sessionManagement()
+                .permitAll();
+
+        httpSecurity.sessionManagement()
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).and()
                 .invalidSessionUrl("/invalidSession.html")
-                .sessionFixation().none()                           // .newSession(), .migrateSession()
-            .and().logout()
+                .sessionFixation().none();                           // .newSession(), .migrateSession()
+
+        httpSecurity.logout()
                 .logoutUrl("/mylogout")                             // is not the same as default /logout; triggers logout process
                 // .logoutSuccessUrl("/login?logoutSuccess=true")   // ignored in case when logoutSuccessHandler is specified
                 .logoutSuccessHandler(myLogoutSuccessHandler)

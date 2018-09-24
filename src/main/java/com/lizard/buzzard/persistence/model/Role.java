@@ -96,7 +96,7 @@ public class Role {
                 "id=" + id +
                 ", rolename='" + rolename + '\'' +
 //                ", users=" + users +
-                ", privileges=" + privileges +
+//                ", privileges=" + privileges +
                 '}';
     }
 }

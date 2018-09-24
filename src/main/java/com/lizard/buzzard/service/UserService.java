@@ -13,7 +13,6 @@ public interface UserService {
 
     User saveUserInRepository(ViewFormUser dtoUser, Locale locale);
 
-
     void createUsersToken(User user, String token);
 
     TokenStatus verifyConfirmationToken(String token);

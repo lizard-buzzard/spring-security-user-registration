@@ -32,11 +32,12 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("/login");
         registry.addViewController("/login");
-        registry.addViewController("/registration");
+        registry.addViewController("/registration.html");
         registry.addViewController("/registrationStatus.html");
-        registry.addViewController("/homepage.html");
+        registry.addViewController("/homepage/admin");
+        registry.addViewController("/homepage/user");
         registry.addViewController("/invalidSession.html");
-
+        registry.addViewController("/redirect");
     }
 
     /**
@@ -44,8 +45,8 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/", "/resources/");
-    }
+        registry.addResourceHandler("/resources/**", "/images/**")
+                .addResourceLocations("/", "/resources/", "classpath:/static/images/");    }
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
