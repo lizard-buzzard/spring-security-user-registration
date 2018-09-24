@@ -78,7 +78,7 @@
                         <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
                     </span>
 <!--                     <span class="col-sm-5 alert alert-warning" th:text="#{registration.message.before.confirmation}" th:if="${waitConfirm} != null"></span> -->
-                    <span id="confirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>
+                    <span id="beforeConfirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>
 
                     <span class="col-sm-4"></span>
                 </div>
@@ -102,18 +102,11 @@
         var formData = $('form').serialize();
 
         $.post(serverContext + "registration", formData, function(correctResponse) {
-            console.log("-------------> 1");
             if (correctResponse.indicator == "success") {
-                            console.log("-------------> 2");
-                            console.log(correctResponse);
 
                 $.each(correctResponse.messages, function(key, value) {
-                                console.log("-------------> 3");
-                                console.log(key + " / " + value);
-
                     $("#" + key).show().html(value);
                 });
-
                 // window.location.href = serverContext + "registration.html";
             }
         }).fail(function(erroneousResponse) {

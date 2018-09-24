@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 import static com.lizard.buzzard.persistence.model.TokenStatus.*;
@@ -43,10 +44,10 @@ public class UserServiceImpl implements UserService {
     private Long tokenExpiration;
 
     @Override
-    public User saveUserInRepository(ViewFormUser dtoUser) {
+    public User saveUserInRepository(ViewFormUser dtoUser, Locale locale) {
         if (userRepository.isUserExists(dtoUser.getEmail())) {
             throw new UserAlreadyExistException(
-                    String.format("User with email \"%s\" already exists", dtoUser.getEmail()));
+                    String.format("User with email \"%s\" already exists", dtoUser.getEmail()), locale);
         }
 
         User user = new User();

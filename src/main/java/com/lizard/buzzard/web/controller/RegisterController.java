@@ -47,6 +47,7 @@ public class RegisterController {
     @Autowired
     MessageSource messageSource;
 
+
     @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
     public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
         // an alternative way is: httpServletRequest.getLocale().toString();
@@ -87,34 +88,19 @@ public class RegisterController {
     public ResponseEntity<Object> checkPersonInfo(@RequestBody @Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
                                   BindingResult bindingResult, Model model, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            Map<String, String> map = new HashMap<>();
-            bindingResult.getAllErrors().forEach(
-                    e -> map.put(
-                            ((DefaultMessageSourceResolvable) e.getArguments()[0]).getDefaultMessage(),
-                            e.getDefaultMessage()
-                    )
-            );
-
-            ResponseDetails responseDetailsBody = new ResponseDetails("error", map);
-            return new ResponseEntity<Object>(responseDetailsBody, new HttpHeaders(), HttpStatus.CONFLICT);
+            return getResponseEntity("error", HttpStatus.CONFLICT, bindingResultMsgMap(bindingResult));
         }
 
-        User newRegisteredUser = userService.saveUserInRepository(viewFormUser);
+        User newRegisteredUser = userService.saveUserInRepository(viewFormUser, localeResolver.resolveLocale(request));
 
         ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, /*localeSelected,*/ getAppUri(request));
         applicationEventPublisher.publishEvent(event);
 
-        model.addAttribute("waitConfirm", "ok");
-
-        String confirmMsg = messageSource.getMessage("registration.message.before.confirmation", new Object[]{}, localeResolver.resolveLocale(request));
-        System.out.println(confirmMsg);
-
-        Map<String, String> map = new HashMap<>();
-        map.put("confirmMsg", confirmMsg);
-
-//        return "registration";
-        ResponseDetails responseDetailsBody = new ResponseDetails("success", map);
-        return new ResponseEntity<Object>(responseDetailsBody, new HttpHeaders(), HttpStatus.OK);
+        return getResponseEntity("success", HttpStatus.OK,
+                singleMsgMap("beforeConfirmMsg", messageSource.getMessage("registration.message.before.confirmation",
+                        new Object[]{}, localeResolver.resolveLocale(request))
+                )
+        );
     }
 
     @RequestMapping(value = "/registrationStatus", method = RequestMethod.GET)
@@ -136,7 +122,12 @@ public class RegisterController {
         return "http://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
     }
 
-    private ResponseEntity<Object> getResponseEntity(String indicator, HttpStatus httpStatus, BindingResult bindingResult) {
+    private ResponseEntity<Object> getResponseEntity(String indicator, HttpStatus httpStatus, Map<String, String> msgMap) {
+        ResponseDetails responseDetails = new ResponseDetails(indicator, msgMap);
+        return new ResponseEntity<Object>(responseDetails, new HttpHeaders(), httpStatus);
+    }
+
+    private Map<String, String> bindingResultMsgMap(BindingResult bindingResult) {
         Map<String, String> map = new HashMap<>();
         if(bindingResult != null) {
             bindingResult.getAllErrors().forEach(
@@ -146,9 +137,12 @@ public class RegisterController {
                     )
             );
         }
-        ResponseDetails responseDetailsBody = new ResponseDetails(indicator, map);
-        return new ResponseEntity<Object>(responseDetailsBody, new HttpHeaders(), httpStatus);
+        return map;
     }
 
-
+    private Map<String, String> singleMsgMap(String key, String msg) {
+        Map<String, String> map = new HashMap<>();
+        map.put(key, msg);
+        return map;
+    }
 }

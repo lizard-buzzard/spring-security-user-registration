@@ -23,7 +23,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     @ExceptionHandler(value = {UserAlreadyExistException.class})
     public ResponseEntity<Object> userAlreadyExistsHandler(UserAlreadyExistException ex, WebRequest request) throws JsonProcessingException {
         Map<String, String> map = new HashMap<>();
-        map.put("UserAlreadyExist", messageSource.getMessage("response.entity.exception.handler.user.already.exists", null, request.getLocale()));
+        map.put("email", messageSource.getMessage("response.entity.exception.handler.user.already.exists", null, ex.getLocale()));
+
         ResponseDetails responseDetailsBody = new ResponseDetails("error", map);
 //        ObjectMapper mapper = new ObjectMapper();
 //        String jsonInString = mapper.writeValueAsString(errorDetailsBody);

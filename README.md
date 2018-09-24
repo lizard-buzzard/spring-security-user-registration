@@ -658,3 +658,6 @@ The processing of __ResponseDetails__ is executed in a Javascript in
 
 ```
 tag. This code proccesses Json representation of response body object (__ResponseDetails__ ), extracts messages and shows these messages in errors span tags on the html page.
+
+## --Commit-24-- ##
+The transition to Object @ResponseBody which contains a Map of messages for @RequestMapping("/registration") is finished. @ExceptionHandler(value = {UserAlreadyExistException.class}) returns localized message inside ResponseEntity<Object>
