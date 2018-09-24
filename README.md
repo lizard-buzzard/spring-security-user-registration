@@ -472,6 +472,8 @@ public PasswordEncoder passwordEncoder() {
 ```
 __BCryptPasswordEncoder__'s parameter is a strength - the log rounds to use, between 4 and 31, "strength" (a.k.a. log rounds in BCrypt) and a SecureRandom instance. The larger the strength parameter the more work will have to be done (exponentially) to hash the passwords.
 
+[BCryptPasswordEncoder affects startup time of server](https://stackoverflow.com/questions/43259737/bcryptpasswordencoder-affects-startup-time-of-server)
+
 ## --Commit-17-- ##
 The fix of small bugs.
 
@@ -918,8 +920,8 @@ if(sup.get().anyMatch(a->(((GrantedAuthority) a).getAuthority().equals("ADMIN_PA
 }
 ```
 
-
-
+## --Commit-34-- ##
+This commit did a minor change, homepage.html was renamed to userHomePage.htm.
 
 
 

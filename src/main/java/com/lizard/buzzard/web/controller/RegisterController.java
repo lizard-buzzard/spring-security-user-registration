@@ -141,7 +141,7 @@ public class RegisterController {
             List<UserWithAuthorityRights> userWithAuthorityRights = adminService.getUsersList();
             model.addAttribute("listOfUsers", userWithAuthorityRights);
         }
-        return role.equals("user") ? "homepage" : "adminConsolePage";
+        return role.equals("user") ? "userHomePage" : "adminConsolePage";
     }
 
     @RequestMapping("/accessDenied")
