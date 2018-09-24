@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
-
 public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServices {
 
     @Autowired
@@ -30,8 +29,10 @@ public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServ
     private PersistentTokenRepository tokenRepository;
     private String key;
 
-    public CustomRememberMeServices(String key, UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
+    public CustomRememberMeServices(String key, String rememberMeServicesName, UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
         super(key, userDetailsService, persistentTokenRepository);
+//        String param = super.getParameter();
+        this.setParameter(rememberMeServicesName);
         this.tokenRepository = persistentTokenRepository;
         this.key = key;
     }

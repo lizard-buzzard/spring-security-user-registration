@@ -791,7 +791,7 @@ Added some elements of the session management for security configuration:
 - session.setMaxInactiveInterval() in implementation of AuthenticationSuccessHandler.
 
 ## --Commit-30-- ##
-An intermediate, draft variant of __Remember Me__ configuration.
+An intermediate, draft variant of the __Remember Me__ configuration.
 
 Remember Me configuration is quite straightforward and consists of next steps:
 1. first, all the time we refer to __@Bean DataSource__ which is defined in __PersistenceJPAConfig__ and should be autowired it in SecurityConfig (which )extends WebSecurityConfigurerAdapter).
@@ -817,12 +817,87 @@ protected void initDao() {
 }
 ```
 ## --Commit-31-- ##
-Step by step trails in order to implement __Remember Me__ configuration. The routine procedure for finding the right solution. This trial was not successful. 
+Step by step trails in order to implement the __Remember Me__ configuration. The routine procedure for finding the right solution. This trial was not successful. 
 
 **_IMPORTANT NOTE:_** In order to find the right solution, I had to create a separate small project. This project was successful and after the research I implemented its code in the current project.
 I put the code of this project and detailed description to it in github.com.
 Here is a link to this project: [lizard-buzzard/persistent-token-rememberme-authentication](https://github.com/lizard-buzzard/persistent-token-rememberme-authentication)
 
+## --Commit-32-- ##
+This commit is a continuation of the previous commit and it finishes the sequence of commits for implementation of the __Remember Me__ configuration.
+
+Some interesting (at least for me) remarks:
+
+1. In case of set at the same time
+    ```
+    .rememberMeServices(rememberMeServices)
+    .rememberMeCookieName("my-remember-me-cookie")
+    ```
+    ```
+    2018-09-13 10:31:29.694 ERROR 19528 --- [  restartedMain] o.s.boot.SpringApplication               : Application run failed
+    ...
+    Caused by: java.lang.IllegalArgumentException: Can not set rememberMeCookieName and custom rememberMeServices.
+    ```
+    This IllegalArgumentException is thrown by Spring's __RememberMeConfigurer__
+    ```
+    RememberMeConfigurer<H extends HttpSecurityBuilder<H>> extends AbstractHttpConfigurer<RememberMeConfigurer<H>, H>
+        /**
+         * Validate rememberMeServices and rememberMeCookieName have not been set at
+         * the same time.
+         */
+        private void validateInput() {
+            if (this.rememberMeServices != null && this.rememberMeCookieName != DEFAULT_REMEMBER_ME_NAME) {
+                throw new IllegalArgumentException("Can not set rememberMeCookieName " +
+                        "and custom rememberMeServices.");
+            }
+        }
+        ...
+    }
+    ```
+2. A note on the name of the checkbox in the html form:
+    ```
+    <div class="form-group row">
+        <span class="col-sm-4 offset-4" style="text-align: right;">
+            <label>
+                <input class="checkbox" type="checkbox" name="my-remember-me-checkbox">
+                <span class="checkbox-custom"></span>
+                <span class="label" th:text="#{label.form.rememberMe}">Remember Me</span>
+            </label>
+        </span>
+    </div>
+    ```
+    
+    __name="my-remember-me-checkbox"__ corresponds to __String rememberMeServicesName__ in
+    
+    ```
+    public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServices {
+    
+        public CustomRememberMeServices(String key, String rememberMeServicesName, UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
+            super(key, userDetailsService, persistentTokenRepository);
+            this.setParameter(rememberMeServicesName);
+            this.tokenRepository = persistentTokenRepository;
+            this.key = key;
+        }
+    }
+    ```
+    and its value is __"my-remember-me-checkbox"__ in the configuration class of __CustomRememberMeServices__ in my implementation:
+    ```
+    @Configuration
+    public class RememberMeServiceConfig {
+        @Bean
+        public CustomRememberMeServices rememberMeServices(
+                @Qualifier("userDetailsService") UserDetailsService userDetailsService,
+                @Qualifier("persistentTokenRepository") PersistentTokenRepository persistentTokenRepository) {
+            CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", "my-remember-me-checkbox", userDetailsService, persistentTokenRepository);
+            return rememberMeServices;
+        }
+    }
+    ```
+    So, there is no need to specify __.rememberMeParameter("my-remember-me-checkbox")__ in __HttpSecurity__ configuration in the __SecurityConfig__ class, this chank of code should be commented:
+    ```
+    httpSecurity.rememberMe()
+            .rememberMeParameter("my-remember-me-checkbox")
+    ```
 
 
 

@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -94,13 +93,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    PersistentTokenRepository persistentTokenRepository;// for sake of an experiment, bound to .tokenRepository(persistentTokenRepository)
 
     // NOTE: uncomment two definitions below if one definition above is commented
-    @Bean
-    public RememberMeServices rememberMeServices(
-            @Qualifier("userDetailsService") UserDetailsService userDetailsService,
-            @Qualifier("persistentTokenRepository")PersistentTokenRepository persistentTokenRepository) {
-        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, persistentTokenRepository);
-        return rememberMeServices;
-    }
+//    @Bean
+//    public RememberMeServices rememberMeServices(
+//            @Qualifier("userDetailsService") UserDetailsService userDetailsService,
+//            @Qualifier("persistentTokenRepository")PersistentTokenRepository persistentTokenRepository) {
+//        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("uniqueAndSecret", "my-remember-me-checkbox", userDetailsService, persistentTokenRepository);
+//        return rememberMeServices;
+//    }
+
     @Autowired
     CustomRememberMeServices rememberMeServices;
 
@@ -133,11 +133,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(myLogoutSuccessHandler)
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(false)                        // is the same as default setup
-                .permitAll()
-            .and().rememberMe()
+                .permitAll();
+
+        httpSecurity.rememberMe()
+//                .tokenRepository(persistentTokenRepository)
+//                .rememberMeParameter("my-remember-me-checkbox")
+//                .rememberMeParameter("myRememberMeParameterName")
                 .rememberMeServices(rememberMeServices)
                 .tokenValiditySeconds(rememberMeTokenValidityHours.intValue() * 60 * 60)
-                .key("uniqueAndSecret")
         ;
 
         httpSecurity.csrf().disable();                              // NOTE: it's highly important !!!

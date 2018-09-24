@@ -13,7 +13,7 @@ public class RememberMeServiceConfig {
     public CustomRememberMeServices rememberMeServices(
             @Qualifier("userDetailsService") UserDetailsService userDetailsService,
             @Qualifier("persistentTokenRepository") PersistentTokenRepository persistentTokenRepository) {
-        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", userDetailsService, persistentTokenRepository);
+        CustomRememberMeServices rememberMeServices = new CustomRememberMeServices("theKey", "my-remember-me-checkbox", userDetailsService, persistentTokenRepository);
         return rememberMeServices;
     }
 }

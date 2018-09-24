@@ -46,6 +46,7 @@ public class RegisterController {
     @Autowired
     MessageSource messageSource;
 
+
 //    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
 //    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
 //        // an alternative way is: httpServletRequest.getLocale().toString();
@@ -104,6 +105,9 @@ public class RegisterController {
     @RequestMapping(value = "/registrationStatus", method = RequestMethod.GET)
     public String checkConfirmationToken(@RequestParam("token") String token, Model model) {
         TokenStatus status = userService.verifyConfirmationToken(token);
+
+        // TODO:             authWithoutPassword(user);
+
         if (TOKEN_VALUD.equals(status)) {
             model.addAttribute("tokenValid", "you are successfully registered");
         } else if (TOKEN_EXPIRED.equals(status)) {
