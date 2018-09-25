@@ -22,16 +22,59 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" th:href="@{/home.html}" th:text="#{label.pages.homepage.title}">home</a>
+
+
+<!--<nav class="navbar navbar-default">-->
+    <!--<div class="container-fluid">-->
+        <!--<div class="navbar-header">-->
+            <!--<a class="navbar-brand" th:href="@{/home.html}" th:text="#{label.pages.homepage.title}">home</a>-->
+        <!--</div>-->
+        <!--<ul class="nav navbar-nav navbar-right">-->
+            <!--<li><a th:href="@{/mylogout}" th:text="#{label.pages.homepage.logout}">logout</a></li>-->
+        <!--</ul>-->
+    <!--</div>-->
+<!--</nav>-->
+
+
+
+<!-- navbar and navbar-default are the base menu classes -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4077b1 !important;">
+    <div style="width: 70px; height: 70px; background: #e4f024e6; border-radius: 50%; margin: 5px; float: left; position: relative">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/lizard.png}" width="35" height="35" alt="">
+            <br>
+            <span class="font-weight-bold" style="font-style: italic; font-size: 25px; font-family: Matura MT Script Capitals; color: black;">Lizard</span>
+        </a>
+        <div style="font-style: italic; font-size: 15px; color: yellow; position: absolute; bottom: -7px; left: 120px; height: 2em; width: 600px;">
+            <label th:text="#{label.form.user.logged}">User logged</label>
+            <label th:text="${loggedUserName}"></label>
         </div>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a th:href="@{/mylogout}" th:text="#{label.pages.homepage.logout}">logout</a></li>
+    </div>
+    <!-- menu toggler - hamburger -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- menu's main part -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="javascript:history.back();" th:text="#{label.pages.page.back}">Back</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/homepage/user/}" th:text="#{label.form.user.homepage.title}">User Work Area Page</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/userAccount}" th:text="#{label.pages.homepage.account}">Account Settings</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/mylogout}" th:text="#{label.pages.homepage.logout}">Logout</span></a>
+            </li>
         </ul>
     </div>
 </nav>
+
+
 
 <div class="container" style="margin-top: 3em">
     <div class="row">
@@ -39,22 +82,22 @@
                     <h1 th:text="#{label.form.admin.console.title}">Admin Console Page</h1>
                 </span>
     </div>
-    <div class="row" style="margin-bottom: 1em;">
-        <div class="col-sm-11 offset-1 font-weight-bold" style="text-align: right;">
-            <label th:text="#{label.form.user.logged}">User logged</label>
-            <label th:text="${loggedUserName}"></label>
-            <span> | </span>
-            <a th:href="@{/homepage/user/}" th:text="#{label.form.user.homepage.title}">User Work Area Page</a>
-        </div>
-    </div>
+    <!--<div class="row" style="margin-bottom: 1em;">-->
+        <!--<div class="col-sm-11 offset-1 font-weight-bold" style="text-align: right;">-->
+            <!--<label th:text="#{label.form.user.logged}">User logged</label>-->
+            <!--<label th:text="${loggedUserName}"></label>-->
+            <!--<span> | </span>-->
+            <!--<a th:href="@{/homepage/user/}" th:text="#{label.form.user.homepage.title}">User Work Area Page</a>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <table class="table table-striped">
         <tr>
-            <th>E-mail</th>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Is enabled</th>
-            <th>List of User's Roles and Privileges</th>
+            <th th:text="#{label.form.userEmail}">E-mail</th>
+            <th th:text="#{label.form.lastName}">Last Name</th>
+            <th th:text="#{label.form.firstName}">First Name</th>
+            <th th:text="#{label.form.userIsEnabled}">Is enabled</th>
+            <th th:text="#{label.form.listOfRolesAndPrivileges}">List of User's Roles and Privileges</th>
         </tr>
         <tr th:each="usr : ${listOfUsers}">
             <td th:text="${usr.email}"></td>

@@ -970,6 +970,8 @@ The working draft variant of user's password change scenario.
 ## --Commit-41-- ##
 A layouting of userAccountPage.html and userHomePage.html pages with increasing of the container size on userAccountPage.html and standardization of the "nav-bar" on userAccountPage.html and userHomePage.html.
  
-
+## --Commit-42-- ##
+A layouting of adminConsolePage.html page with standardization of the "nav-bar" on it.
+ 
 
 
