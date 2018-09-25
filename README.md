@@ -960,4 +960,5 @@ Minor bugs fixed. Two errors fixed, in registration.html (order of the __bootstr
 ## --Commit-38-- ##
 minor refinement 
 
-
+## --Commit-39-- ##
+The __userAccountPage.html__ page development, a layout and localization.
