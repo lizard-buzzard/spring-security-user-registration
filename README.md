@@ -973,5 +973,9 @@ A layouting of userAccountPage.html and userHomePage.html pages with increasing 
 ## --Commit-42-- ##
 A layouting of adminConsolePage.html page with standardization of the "nav-bar" on it.
  
+## --Commit-43-- ##
+Further improvement and development of html-pages, "go to" LizardsHomePage from standardized navbar-brand by th:href="@{/LizardsHomePage}"
+
+
 
 

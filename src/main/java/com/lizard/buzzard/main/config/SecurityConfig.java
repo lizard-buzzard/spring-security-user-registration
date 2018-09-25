@@ -113,7 +113,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/login*"
                         , "/registration*"
                         , "/registrationStatus"
-                        , "/replacePassword").permitAll()
+                        , "/replacePassword"
+                        , "/LizardsHomePage").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
 //                .anyRequest().authenticated()
 //                .anyRequest().hasAuthority("READ_PRIVILEGE")
