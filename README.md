@@ -835,7 +835,7 @@ protected void initDao() {
 Step by step trails in order to implement the __Remember Me__ configuration and to find the right solution. 
 
 **_IMPORTANT NOTE:_** In order to find the right solution, I had to create a separate small project. This project was successful and after the research I implemented its code in the current project.
-I put the code of this project and detailed description to it in github.com.
+I put the code of this project and detailed description of it in github.com.
 Here is a link to this project: [lizard-buzzard/persistent-token-rememberme-authentication](https://github.com/lizard-buzzard/persistent-token-rememberme-authentication)
 
 ## --Commit-32-- ##
@@ -950,4 +950,13 @@ An old bug for most of the html pages was fixed, the __bootstrap.min.js__ and __
 </body>
 ```
 Also in this commit I started to develop the menu for User Account Page.
+
+## --Commit-36-- ##
+New menu on Bootstrap’s **navbar** was started.  
+
+
+
+
+
+
 
