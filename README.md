@@ -958,6 +958,6 @@ New menu on Bootstrap’s **navbar** was started.
 Minor bugs fixed. Two errors fixed, in registration.html (order of the __bootstrap.min.js__ and the __jquery.min.js__ script tag) and an odd import clause in AdminServiceImpl.
 
 ## --Commit-38-- ##
-A minor bug fixed  in registration.html (order of the __bootstrap.min.js__ and the __jquery.min.js__ script tag)
+minor refinement 
 
 

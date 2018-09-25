@@ -1,6 +1,6 @@
 package com.lizard.buzzard.persistence.model;
 
-import lombok.EqualsAndHashCode;
+//import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.Duration;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "verification_property")
-@EqualsAndHashCode(exclude="user")
+//@EqualsAndHashCode(exclude="user")
 public class VerificationToken {
 
     @Id
@@ -33,12 +33,6 @@ public class VerificationToken {
     }
 
     /**
-     * In order to inject a value from properties file and use it in annotation, you have to use constructor injection.
-     * Here it's about Long expirationInMinutes property. Direct @Value("${lizard.verivication.token.expiration}") injection doesn't work
-     * A solution is to inject @Value("${lizard.verivication.token.expiration}") in @Service (UserService) and pass it as the parameter in
-     * VerificationToken constructor.
-     * SEE: https://stackoverflow.com/questions/33586968/how-to-import-value-from-properties-file-and-use-it-in-annotation
-     *
      * @param token
      * @param user
      * @param expirationInMinutes

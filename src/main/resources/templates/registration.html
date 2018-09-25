@@ -110,6 +110,13 @@
                 // window.location.href = serverContext + "registration.html";
             }
         }).fail(function(erroneousResponse) {
+            // hide previous message
+            $("#emailError").hide();
+            $("#confirmedPassportError").hide();
+            $("#passwordError").hide();
+            $("#lastnameError").hide();
+            $("#firstnameError").hide();
+
             $.each(erroneousResponse.responseJSON.messages, function(key, value) {
                 if(key) {
                     $("#" + key + "Error").show().html(value);
