@@ -962,3 +962,12 @@ minor refinement
 
 ## --Commit-39-- ##
 The __userAccountPage.html__ page development, a layout and localization.
+
+## --Commit-40-- ##
+A lot of development in connection with the development of the functionality of changing the user's password. For the most part, this development is a repetition of the way that was done in developing classes for registering a new user.
+The working draft variant of user's password change scenario.
+
+
+
+
+

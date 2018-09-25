@@ -1,11 +1,14 @@
 package com.lizard.buzzard.web.controller;
 
+import com.lizard.buzzard.event.AfterUserChangedEvent;
 import com.lizard.buzzard.event.AfterUserRegisteredEvent;
+import com.lizard.buzzard.event.USER_CHANGED;
 import com.lizard.buzzard.persistence.model.TokenStatus;
 import com.lizard.buzzard.persistence.model.User;
 import com.lizard.buzzard.service.AdminServiceImpl;
 import com.lizard.buzzard.service.UserServiceImpl;
 import com.lizard.buzzard.web.dto.UserWithAuthorityRights;
+import com.lizard.buzzard.web.dto.ViewFormChangePassword;
 import com.lizard.buzzard.web.dto.ViewFormUser;
 import com.lizard.buzzard.web.exception.ResponseDetails;
 import org.slf4j.Logger;
@@ -30,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.lizard.buzzard.persistence.model.TokenStatus.*;
@@ -73,22 +77,12 @@ public class RegisterController {
 //        return "redirect:" + redirectUrl;
 //    }
 
-    /**
-     * @param viewFormUser
-     * @param model
-     * @return
-     */
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String showRegistrationForm(ViewFormUser viewFormUser, Model model) {
         model.addAttribute("viewFormUser", new ViewFormUser());
         return "registration";
     }
 
-    /**
-     * @param viewFormUser
-     * @param bindingResult
-     * @return
-     */
     @RequestMapping(value = "/registration", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public ResponseEntity<Object> checkPersonInfo(@RequestBody @Valid @ModelAttribute("viewFormUser") ViewFormUser viewFormUser,
@@ -125,14 +119,6 @@ public class RegisterController {
         return "registrationStatus";
     }
 
-
-    /**
-     * support GET method only unless custom RedirectStrategy is implemented
-     * SEE: https://www.baeldung.com/httpclient-redirect-on-http-post, https://stackoverflow.com/questions/13821020/how-send-redirect-as-post-request-spring-security
-     *
-     * @param model
-     * @return
-     */
     @RequestMapping(value = "/homepage/{role}", method = RequestMethod.GET)
     public String getHomePage(Model model, @PathVariable("role") String role) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -169,8 +155,12 @@ public class RegisterController {
 //        return "adminConsolePage";
 //    }
 
+    // change password block of methods
+
     @RequestMapping(value = "/userAccount", method = RequestMethod.GET)
-    public String getUserAccountPage() {
+    public String getUserAccountPage(ViewFormChangePassword viewFormChangePassword, Model model) {
+        model.addAttribute("viewFormChangePassword", new ViewFormChangePassword());
+        // TODO: add attribute for email form
         return "userAccountPage";
     }
 
@@ -183,6 +173,35 @@ public class RegisterController {
     public String redirectPage() {
         return "redirect:https://www.w3.org/";
     }
+
+
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Object> changePassword(
+            @RequestBody @Valid @ModelAttribute("viewFormChangePassword") ViewFormChangePassword viewFormChangePassword,
+            BindingResult bindingResult, HttpServletRequest request) {
+        if(bindingResult.hasErrors()) {
+            return getResponseEntity("error", HttpStatus.CONFLICT, bindingResultMsgMap(bindingResult));
+        }
+        User user = userService.replaceUserPassword(viewFormChangePassword);
+        AfterUserChangedEvent event = new AfterUserChangedEvent(user, getAppUri(request), USER_CHANGED.PASSWORD);
+        applicationEventPublisher.publishEvent(event);
+
+        return getResponseEntity("success", HttpStatus.OK,
+                singleMsgMap("beforeConfirmMsg", messageSource.getMessage("change.password.message.before.confirmation",
+                        new Object[]{}, localeResolver.resolveLocale(request))
+                )
+        );
+    }
+
+    @RequestMapping(value = "/replacePassword", method = RequestMethod.GET)
+    public String replacePassword(Model model, final Locale locale, @RequestParam("id") final long id, @RequestParam("token") final String token) {
+        model = userService.validateResetTokenAndReplacePassword(id, token, locale, model);
+        return "redirect:/login?lang=" + locale.getLanguage();
+    }
+
+
+
 
     // Auxiliary methods
 

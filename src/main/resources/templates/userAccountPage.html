@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -55,10 +55,13 @@
         </ul>
     </div>
 </nav>
+<!-- Information message container -->
+<div id="beforeConfirmMsg" class="alert alert-warning" style="display:none">mail sent with confirm link</div>
+
 <div class="container" style="margin-left: 0.5em;"> <!-- top-level container -->
     <h3 th:text="#{label.form.useraccount.accountSettings}" style="margin-top: 0.5em; margin-bottom: 1.5em;">Account
         Settings</h3>
-    <div class="row" style="margin-bottom: 2em;"><!-- first row: Email block -->
+    <div class="row flex-row" style="margin-bottom: 2em;"><!-- first row: Email block -->
         <div class="col-sm-5">
             <h5 th:text="#{label.form.useraccount.emailAddress}" style="font-weight: bold; color: #0054ff;">Email Address</h5>
             <div>
@@ -105,28 +108,29 @@
             </div>
         </div>
         <div class="col-sm-6">
-            <form id="passwordForm" action="#" th:action="@{/changePasswd}" method="post"
-                  enctype="utf-8">
+            <form id="passwordForm" action="#" th:action="@{/resetPassword}" method="post"
+                  th:object="${viewFormChangePassword}" enctype="utf-8">
                 <div class="container"> <!-- container of rows of blocks of label and input field -->
-                    <div class="form-group row align-items-start required" style="margin-bottom: 1.5em;">
+                    <div class="row align-items-start required" style="margin-bottom: 1.5em;">
                         <!-- 1st row -->
                         <div class="col-sm-12"><!-- container for input field label -->
                             <div class="container">
                                 <div class="row align-items-start">
                                     <div class="col-sm-9">
-                                        <label th:text="#{label.form.useraccount.oldPassword}" class="control-label">Old password</label>
+                                        <label th:text="#{label.form.useraccount.oldPassword}" class="control-label">Current password</label>
                                     </div>
                                 </div>
-                                <div class="row align-items-start">
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="oldPasswdInput"
-                                               th:placeholder="#{label.form.useraccount.oldPasswordPlaceholder}">
+                                <div class="form-group row align-items-start">
+                                    <div class="col-sm-5">
+                                        <input id="oldPasswdInput" type="text" class="form-control" th:field="*{currentpassword}" value=""
+                                               th:placeholder="#{label.form.useraccount.oldPasswordPlaceholder}" >
                                     </div>
+                                    <div id="currentpasswordError" class="alert alert-danger col-sm-4" style="display:none"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row align-items-start required" style="margin-bottom: 1.5em;">
+                    <div class="row align-items-start required" style="margin-bottom: 1.5em;">
                         <!-- 2nd row -->
                         <div class="col-sm-12"><!-- container for input field label -->
                             <div class="container">
@@ -135,16 +139,17 @@
                                         <label th:text="#{label.form.useraccount.newPassword}" class="control-label">New password</label>
                                     </div>
                                 </div>
-                                <div class="row align-items-start">
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="newPasswdInput"
-                                               th:placeholder="#{label.form.useraccount.newPasswordPlaceholder}" placeholder="Enter new password">
+                                <div class="form-group row align-items-start">
+                                    <div class="col-sm-5">
+                                        <input id="newPasswdInput" type="text" class="form-control" th:field="*{newpassword}" value=""
+                                               th:placeholder="#{label.form.useraccount.newPasswordPlaceholder}" >
                                     </div>
+                                    <div id="newpasswordError" class="alert alert-danger col-sm-4" style="display:none"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row align-items-start required" style="margin-bottom: 1.5em;">
+                    <div class="row align-items-start required" style="margin-bottom: 1.5em;">
                         <!-- 3rd row -->
                         <div class="col-sm-12"><!-- container for input field label -->
                             <div class="container">
@@ -153,11 +158,12 @@
                                         <label th:text="#{label.form.useraccount.confirmPassword}" class="control-label">Confirm password</label>
                                     </div>
                                 </div>
-                                <div class="row align-items-start">
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="confirnPasswdInput"
-                                               th:placeholder="#{label.form.useraccount.confirmPasswordPlaceholder}" placeholder="Confirm new password">
+                                <div class="form-group row align-items-start">
+                                    <div class="col-sm-5">
+                                        <input id="confirnPasswdInput" type="text" class="form-control" th:field="*{confirmedpassword}" value=""
+                                               th:placeholder="#{label.form.useraccount.confirmPasswordPlaceholder}">
                                     </div>
+                                    <div id="confirmedpasswordError" class="alert alert-danger col-sm-4" style="display:none"></div>
                                     <div class="col-sm-3">
                                         <button type="submit" class="btn btn-primary"
                                                 th:text="#{label.form.useraccount.changePassword}">
@@ -175,6 +181,49 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var serverContext = [[@{/}]];
+
+    $(document).ready(function() {
+        $('form#passwordForm').submit(function(event) {
+            errorProcessor(event);
+        });
+    });
+
+    function errorProcessor(event){
+        event.preventDefault();
+        var formData = $('form#passwordForm').serialize();
+
+        $.post(serverContext + "resetPassword", formData, function(correctResponse) {
+            if (correctResponse.indicator == "success") {
+
+                $.each(correctResponse.messages, function(key, value) {
+                    $("#" + key).show().html(value);
+                });
+                // window.location.href = serverContext + "registration.html";
+            }
+        }).fail(function(erroneousResponse) {
+            // hide previous message
+            $("#currentpasswordError").hide();
+            $("#newpasswordError").hide();
+            $("#confirmedpasswordError").hide();
+
+            console.log('==================================================');
+            $.each(erroneousResponse.responseJSON.messages, function(key, value) {
+                console.log('key = ' + key);
+                if(key) {
+                    $("#" + key + "Error").show().html(value);
+                } else {
+                    $("#confirmedpasswordError").show().html(value);
+                }
+            });
+            console.log('==================================================');
+        });
+    }
+    /*]]>*/
+</script>
+
 </body>
 
 </html>

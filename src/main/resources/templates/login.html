@@ -53,9 +53,13 @@
 </head>
 
 <body>
-<div th:if="${param.badcredentialerror != null}" class="alert alert-danger"
-     th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">login bad credentials error
-</div>
+
+<div th:if="${param.changePasswordTokenValid != null}" class="alert alert-info" th:text="${param.changePasswordTokenValid[0]}">change Password Token Valid</div>
+<div th:if="${param.changePasswordTokenInalid != null}" class="alert alert-danger" th:text="${param.changePasswordTokenInalid[0]}">change Password Token Invalid</div>
+<div th:if="${param.changePasswordTokenExpired != null}" class="alert alert-danger" th:text="${param.changePasswordTokenExpired[0]}">change Password Token Expired</div>
+
+<div th:if="${param.badcredentialerror != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">login bad credentials error</div>
+
 <div th:if="${param.logoutSuccess}" class="alert alert-info" th:text="#{message.logout.success}">logout success</div>
 <div class="container">
     <div class="row wrapper">

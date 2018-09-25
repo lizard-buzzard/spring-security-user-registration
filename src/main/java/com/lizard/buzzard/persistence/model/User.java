@@ -18,10 +18,6 @@ public class User {
     @NotNull
     private String lastname;
 
-    /**
-     * be aware that the BCrypt algorithm generates a String of length 60, so we need to make sure that the password will
-     * be stored in a column that can accommodate it
-     */
     @NotNull
     @Column(length = 60)
     private String password;
@@ -29,12 +25,12 @@ public class User {
     @Transient
     private String passwordconfirmed;
 
+    @Column(length = 60)
+    private String newPassword;
+
     @NotNull
     private String email;
 
-    /**
-     * Initially is set to false. During the account verification process it will become true.
-     */
     @Column
     private boolean enabled;
 
@@ -118,6 +114,14 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 
     @Override

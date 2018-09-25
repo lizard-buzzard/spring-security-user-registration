@@ -112,7 +112,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/accessDenied",
                         "/login*"
                         , "/registration*"
-                        , "/registrationStatus").permitAll()
+                        , "/registrationStatus"
+                        , "/replacePassword").permitAll()
                 .antMatchers("/invalidSession*").anonymous()
 //                .anyRequest().authenticated()
 //                .anyRequest().hasAuthority("READ_PRIVILEGE")
