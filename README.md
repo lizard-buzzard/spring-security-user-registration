@@ -1,7 +1,7 @@
 # spring-security-user-registration
 
 ## Project development notes ##
-The README.md of the project will be in a form of __log of notes__ (see [this chapter](#development-log).), made to remember some important features and to avoid and fix errors met on the project progress.
+The README.md of the project will be in a form of __log of notes__ (see [this chapter](#development-log)), made to remember some important features and to avoid and fix errors met on the project progress.
 The log will progress from commit to commit.
 
 ## How to run the Application ##
@@ -738,6 +738,7 @@ and is probably the most commonly used provider in the framework.
 Like most of the other authentication providers, the __DaoAuthenticationProvider__ leverages a __UserDetailsService__ in order to lookup the __username__, __password__ and __GrantedAuthority__. 
 Unlike most of the other authentication providers that leverage __UserDetailsService__, this authentication provider actually requires the password to be presented, and the provider will actually evaluate the validity or otherwise of the password presented in an authentication request object [DAO Authentication Provider](https://docs.spring.io/spring-security/site/docs/2.0.x/reference/html/dao-provider.html).
 
+In this commit:
 * The security configuration for __/login__ page was developed; 
 * @RequestMapping(value = {"/login", "/"}... for RequestMethod.GET/POST removed and replaced by __WebSecurityConfigurerAdapter__'s configuration, in particular by __protected void configure(HttpSecurity httpSecurity)__ method; 
 * This changes caused __login.html__ changes and development of a whole bunch of classes which extends or implements: 
@@ -747,6 +748,18 @@ Unlike most of the other authentication providers that leverage __UserDetailsSer
   - Converter<User, UserDetails>;
 * Be aware of implementing of the __httpSecurity.csrf().disable();__ configuration both in __login.html__ and in the class which extends __WebSecurityConfigurerAdapter__.
 
+**NOTE:** Personally, I was surprised and pleased with the fact that the security configuration for __/login__ page replaces two methods (with GET and POST) for __@RequestMapping(value = {"/login", "/"})__:
+```
+//    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
+//    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
+//      ...
+//    }
+
+//    @RequestMapping(value = "/login", method = RequestMethod.POST)
+//    public String processLoginPage(@Valid @ModelAttribute("viewFormLogin") ViewFormLogin viewFormLogin, BindingResult bindingResult) {
+//      ...
+//    }
+```
 ## --Commit-27-- ##
 The development of __SecurityConfig__, __MyCustomAuthenticationFailureHandler__ and __MyCustomAuthenticationSuccessHandler__ classes, "badcredentialerror" parameter of login page was done.
 
@@ -819,7 +832,7 @@ protected void initDao() {
 }
 ```
 ## --Commit-31-- ##
-Step by step trails in order to implement the __Remember Me__ configuration. The routine procedure for finding the right solution. This trial was not successful. 
+Step by step trails in order to implement the __Remember Me__ configuration and to find the right solution. 
 
 **_IMPORTANT NOTE:_** In order to find the right solution, I had to create a separate small project. This project was successful and after the research I implemented its code in the current project.
 I put the code of this project and detailed description to it in github.com.
@@ -921,7 +934,20 @@ if(sup.get().anyMatch(a->(((GrantedAuthority) a).getAuthority().equals("ADMIN_PA
 ```
 
 ## --Commit-34-- ##
+Most of the principal and basic features were implemented before this commit. From now there will be improvements on the html pages and some of new functions will be developed.
+
 This commit did a minor change, homepage.html was renamed to userHomePage.htm.
 
+## --Commit-35-- ##
+Two new html pages were added, and the changes in the controller were made in order to support the new added pages:
+- templates/userAccountPage.html
+- templates/userServicesPage.html
 
+An old bug for most of the html pages was fixed, the __bootstrap.min.js__ and __jquery.min.js__ script tags should be on the bottom of the page, just before the body tag:
+```html
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</body>
+```
+Also in this commit I started to develop the menu for User Account Page.
 

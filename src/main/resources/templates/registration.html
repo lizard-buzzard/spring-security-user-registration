@@ -2,92 +2,90 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <!-- <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"> -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Registration</title>
 </head>
 
 <body>
-    <div class="container">
-        <div>
-            <h1 th:text="#{label.form.registrationTitle}">title</h1>
-            <br/>
-            <form id="myFormId" action="#" th:action="@{/registration}" th:object="${viewFormUser}" method="post" enctype="utf-8">
-                <!-- first name group-->
-                <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.firstName}">userFirstName</label>
-                    <span class="col-sm-5">
+<div class="container">
+    <div>
+        <h1 th:text="#{label.form.registrationTitle}">title</h1>
+        <br/>
+        <form id="myFormId" action="#" th:action="@{/registration}" th:object="${viewFormUser}" method="post"
+              enctype="utf-8">
+            <!-- first name group-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.firstName}">userFirstName</label>
+                <span class="col-sm-5">
                         <!-- https://www.tutorialspoint.com/html/html_input_tag.htm-->
                         <input type="text" class="form-control" th:field="*{firstname}" value=""/>
                     </span>
-                    <!-- <span id="firstNameError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">first name error</span> -->
+                <!-- <span id="firstNameError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">first name error</span> -->
 
-                    <span id="firstnameError" class="alert alert-danger col-sm-4" style="display:none"></span>
-                </div>
-                <!-- last name group-->
-                <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.lastName}">userFirstName</label>
-                    <span class="col-sm-5">
+                <span id="firstnameError" class="alert alert-danger col-sm-4" style="display:none"></span>
+            </div>
+            <!-- last name group-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.lastName}">userFirstName</label>
+                <span class="col-sm-5">
                         <input type="text" class="form-control" th:field="*{lastname}" value=""/>
                     </span>
-                    <!-- <span id="lastNameError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">last name error</span> -->
+                <!-- <span id="lastNameError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">last name error</span> -->
 
-                    <span id="lastnameError" class="alert alert-danger col-sm-4" style="display:none"></span>                    
-                </div>
-                <!-- user's password-->
-                <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.userPassword}">user password</label>
-                    <span class="col-sm-5">
+                <span id="lastnameError" class="alert alert-danger col-sm-4" style="display:none"></span>
+            </div>
+            <!-- user's password-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.userPassword}">user password</label>
+                <span class="col-sm-5">
                          <input id="mainPassword" type="text" class="form-control" th:field="*{password}" value=""/>
                     </span>
-                    <!-- <span id="passwordError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span> -->
+                <!-- <span id="passwordError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</span> -->
 
-                    <span id="passwordError" class="alert alert-danger col-sm-4" style="display:none"></span>
-                </div>
-                <!-- user's password confirmation-->
-                <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.userPasswordConfirmation}">user passport confirmed</label>
-                    <span class="col-sm-5">
-                        <input id="matchPassword" type="text" class="form-control" th:field="*{passwordconfirmed}" value=""/>
+                <span id="passwordError" class="alert alert-danger col-sm-4" style="display:none"></span>
+            </div>
+            <!-- user's password confirmation-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.userPasswordConfirmation}">user passport confirmed</label>
+                <span class="col-sm-5">
+                        <input id="matchPassword" type="text" class="form-control" th:field="*{passwordconfirmed}"
+                               value=""/>
                     </span>
-                    <!-- SEE: https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors -->
-                    <!-- <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span> -->
+                <!-- SEE: https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors -->
+                <!-- <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span> -->
 
-                    <span id="confirmedPassportError" class="alert alert-danger col-sm-4" style="display:none"></span>  
-                </div>
-                <!-- user's email-->
-                <div class="form-group row">
-                    <label class="col-sm-3" th:text="#{label.form.userEmail}">user email</label>
-                    <span class="col-sm-5">
+                <span id="confirmedPassportError" class="alert alert-danger col-sm-4" style="display:none"></span>
+            </div>
+            <!-- user's email-->
+            <div class="form-group row">
+                <label class="col-sm-3" th:text="#{label.form.userEmail}">user email</label>
+                <span class="col-sm-5">
                         <input type="text" class="form-control" th:field="*{email}" value=""/>
                     </span>
-                    <!-- <span id="emailError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span> -->
+                <!-- <span id="emailError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email error</span> -->
 
-                    <span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>                    
-                </div>
-                <br/>
-                <!-- <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button> -->
-                <div class="container row">
+                <span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>
+            </div>
+            <br/>
+            <!-- <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button> -->
+            <div class="container row">
                     <span class="col-sm-3">
-                        <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
+                        <button type="submit" class="btn btn-primary"
+                                th:text="#{label.form.submitNewUser}">submitButton</button>
                     </span>
-<!--                     <span class="col-sm-5 alert alert-warning" th:text="#{registration.message.before.confirmation}" th:if="${waitConfirm} != null"></span> -->
-                    <span id="beforeConfirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>
+                <!--                     <span class="col-sm-5 alert alert-warning" th:text="#{registration.message.before.confirmation}" th:if="${waitConfirm} != null"></span> -->
+                <span id="beforeConfirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>
 
-                    <span class="col-sm-4"></span>
-                </div>
-            </form>
-            <br />
-            <a th:href="@{/login}" th:text="#{label.form.goBackToLogin}">goToLoginPage</a>
-        </div>
+                <span class="col-sm-4"></span>
+            </div>
+        </form>
+        <br/>
+        <a th:href="@{/login}" th:text="#{label.form.goBackToLogin}">goToLoginPage</a>
     </div>
-    <script th:inline="javascript">
+</div>
+<script th:inline="javascript">
     /*<![CDATA[*/
     var serverContext = [[@{/}]];
 
@@ -138,7 +136,10 @@
         // });
     }
     /*]]>*/
-    </script>
+
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </body>
 
 </html>

@@ -127,6 +127,9 @@ public class RegisterController {
 
 
     /**
+     * support GET method only unless custom RedirectStrategy is implemented
+     * SEE: https://www.baeldung.com/httpclient-redirect-on-http-post, https://stackoverflow.com/questions/13821020/how-send-redirect-as-post-request-spring-security
+     *
      * @param model
      * @return
      */
@@ -166,9 +169,15 @@ public class RegisterController {
 //        return "adminConsolePage";
 //    }
 
+    @RequestMapping(value = "/userAccount", method = RequestMethod.GET)
+    public String getUserAccountPage() {
+        return "userAccountPage";
+    }
 
-
-
+    @RequestMapping(value = "/userServices", method = RequestMethod.GET)
+    public String getUserServicesPage() {
+        return "userServicesPage";
+    }
 
     @RequestMapping("/redirect")
     public String redirectPage() {
