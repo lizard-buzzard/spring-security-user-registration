@@ -23,31 +23,53 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" th:href="@{/home.html}" th:text="#{label.pages.homepage.title}">home</a>
+<!-- navbar and navbar-default are the base menu classes -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4077b1 !important;">
+    <div style="width: 70px; height: 70px; background: #e4f024e6; border-radius: 50%; margin: 5px; float: left; position: relative">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/lizard.png}" width="35" height="35" alt="">
+            <br>
+            <span class="font-weight-bold" style="font-style: italic; font-size: 25px; font-family: Matura MT Script Capitals; color: black;">Lizard</span>
+        </a>
+        <div style="font-style: italic; font-size: 15px; color: yellow; position: absolute; bottom: -7px; left: 120px; height: 2em; width: 600px;">
+            <label th:text="#{label.form.user.logged}">User logged</label>
+            <label th:text="${loggedUserName}"></label>
         </div>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a th:href="@{/userAccount}" th:text="#{label.pages.homepage.account}">Account Settings</a></li>
-            <li><a th:href="@{/userServices}" th:text="#{label.pages.homepage.services}">List of Services</a></li>
-            <li><a th:href="@{/mylogout}" th:text="#{label.pages.homepage.logout}">logout</a></li>
+    </div>
+    <!--</div>-->
+    <!-- menu toggler - hamburger -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- menu's main part -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="javascript:history.back();" th:text="#{label.pages.page.back}">Back</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/userAccount}" th:text="#{label.pages.homepage.account}">Account Settings</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/mylogout}" th:text="#{label.pages.homepage.logout}">Logout</span></a>
+            </li>
         </ul>
     </div>
 </nav>
-<div class="container">
 
+<div class="container">
     <div class="row">
             <span class="col-sm-9 offset-3" style="text-align: left; margin-bottom: 2em;">
                 <h1 th:text="#{label.form.user.homepage.title}">User Work Area Page</h1>
             </span>
     </div>
-    <div class="row" style="margin-bottom: 1em;">
-        <div class="col-sm-5 offset-7 font-weight-bold" style="text-align: right;">
-            <label th:text="#{label.form.user.logged}">User logged</label>
-            <label th:text="${loggedUserName}"></label>
-        </div>
-    </div>
+    <!--<div class="row" style="margin-bottom: 1em;">-->
+        <!--<div class="col-sm-5 offset-7 font-weight-bold" style="text-align: right;">-->
+            <!--<label th:text="#{label.form.user.logged}">User logged</label>-->
+            <!--<label th:text="${loggedUserName}"></label>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div class="row">
         <div class="col-sm-3">

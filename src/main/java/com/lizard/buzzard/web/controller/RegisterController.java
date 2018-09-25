@@ -160,7 +160,10 @@ public class RegisterController {
     @RequestMapping(value = "/userAccount", method = RequestMethod.GET)
     public String getUserAccountPage(ViewFormChangePassword viewFormChangePassword, Model model) {
         model.addAttribute("viewFormChangePassword", new ViewFormChangePassword());
-        // TODO: add attribute for email form
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
+
         return "userAccountPage";
     }
 
