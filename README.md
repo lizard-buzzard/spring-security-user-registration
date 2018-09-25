@@ -943,7 +943,7 @@ Two new html pages were added, and the changes in the controller were made in or
 - templates/userAccountPage.html
 - templates/userServicesPage.html
 
-An old bug for most of the html pages was fixed, the __bootstrap.min.js__ and __jquery.min.js__ script tags should be on the bottom of the page, just before the body tag:
+An old bug for most of the html pages was fixed, the __bootstrap.min.js__ and the __jquery.min.js__ script tags should be on the bottom of the page, just before the body tag:
 ```html
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -954,9 +954,10 @@ Also in this commit I started to develop the menu for User Account Page.
 ## --Commit-36-- ##
 New menu on Bootstrap’s **navbar** was started.  
 
+## --Commit-37-- ##
+Minor bugs fixed. Two errors fixed, in registration.html (order of the __bootstrap.min.js__ and the __jquery.min.js__ script tag) and an odd import clause in AdminServiceImpl.
 
-
-
-
+## --Commit-38-- ##
+A minor bug fixed  in registration.html (order of the __bootstrap.min.js__ and the __jquery.min.js__ script tag)
 
 
