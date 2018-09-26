@@ -2,8 +2,11 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="utf-8">
+    <title>User Home Page</title>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <title th:text="#{label.pages.home.title}">home</title>
+    <!--<title th:text="#{label.pages.home.title}">home</title>-->
     <style type="text/css">
     .wrapper {
         width: 500px;
@@ -15,10 +18,10 @@
         padding-left: 10 !important
     }
 
-    body, html {width: 100%; height: 100%; margin: 0; padding: 0}
-    .row-container {display: flex; width: 100%; height: 100%; flex-direction: column; overflow: hidden;}
-    .first-row {background-color: lime; }
-    .second-row { flex-grow: 1; border: none; margin: 0; padding: 0; }
+    <!--body, html {width: 100%; height: 100%; margin: 0; padding: 0}-->
+    <!--.row-container {display: flex; width: 100%; height: 100%; flex-direction: column; overflow: hidden;}-->
+    <!--.first-row {background-color: lime; }-->
+    <!--.second-row { flex-grow: 1; border: none; margin: 0; padding: 0; }-->
     </style>
 </head>
 
@@ -36,7 +39,6 @@
             <label th:text="${loggedUserName}"></label>
         </div>
     </div>
-    <!--</div>-->
     <!-- menu toggler - hamburger -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,17 +62,12 @@
 
 <div class="container">
     <div class="row">
+        <div class="col-sm-12">
             <span class="col-sm-9 offset-3" style="text-align: left; margin-bottom: 2em;">
                 <h1 th:text="#{label.form.user.homepage.title}">User Work Area Page</h1>
             </span>
+        </div>
     </div>
-    <!--<div class="row" style="margin-bottom: 1em;">-->
-        <!--<div class="col-sm-5 offset-7 font-weight-bold" style="text-align: right;">-->
-            <!--<label th:text="#{label.form.user.logged}">User logged</label>-->
-            <!--<label th:text="${loggedUserName}"></label>-->
-        <!--</div>-->
-    <!--</div>-->
-
     <div class="row">
         <div class="col-sm-3">
             <img th:src="@{/images/funnycat.png}">
@@ -82,8 +79,8 @@
     </div>
 </div>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </body>
 
 </html>

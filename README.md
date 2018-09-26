@@ -978,3 +978,17 @@ Further improvement and development of html-pages, "go to" LizardsHomePage from 
 
 ## --Commit-44-- ##
 Further improvement and development of html-pages, the LizardsHomePage.html and login.html pages navbar menue standardisation.
+
+## --Commit-45-- ##
+A bug with the order of __jquery.min.js__ and __bootstrap.min.js__ was fixed. 
+In order the <button class="navbar-toggler"> to work, the __jquery.min.js__ script tag should be before the __bootstrap.min.js__ script tag; 
+```html
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+```
+The email of the logged use was added on userAccountPage.html.
+ 
+An issue have been found which bounds with the fact that __<iframe>__ prevents __"navbar-toggler"__ to work.
+
+
+

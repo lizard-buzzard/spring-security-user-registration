@@ -43,7 +43,6 @@
     </div>
 
 
-    <!--</div>-->
     <!-- menu toggler - hamburger -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,7 +110,7 @@
                 </div>
                 <div class="flex-row d-flex flex-column" style="height: 2em; margin-bottom: 2em;">
                     <div class="col-sm-9 h-100">
-                        <label style="font-style: italic; font-weight: bold;">gdrobyazko@gmail.com</label>
+                        <label th:text="${loggedUserEmail}" style="font-style: italic; font-weight: bold;">gdrobyazko@gmail.com</label>
                     </div>
                 </div>
             </div>

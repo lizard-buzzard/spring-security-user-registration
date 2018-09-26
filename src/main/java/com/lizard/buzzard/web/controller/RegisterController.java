@@ -164,6 +164,9 @@ public class RegisterController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
 
+        // TODO: add attribute for email form
+        model.addAttribute("loggedUserEmail", user.getEmail());
+
         return "userAccountPage";
     }
 
