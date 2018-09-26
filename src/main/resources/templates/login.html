@@ -2,10 +2,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Login and Registration</title>
     <style type="text/css">
@@ -53,6 +51,34 @@
 </head>
 
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4077b1 !important;">
+    <div style="width: 70px; height: 70px; background: #e4f024e6; border-radius: 50%; margin: 5px; float: left; position: relative">
+        <a class="navbar-brand" th:href="@{/LizardsHomePage}">
+            <img th:src="@{/images/lizard.png}" width="35" height="35" alt="">
+            <br>
+            <span class="font-weight-bold" style="font-style: italic; font-size: 25px; font-family: Matura MT Script Capitals; color: black;">Lizard</span>
+        </a>
+    </div>
+    <!-- menu toggler - hamburger -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- menu's main part -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="?lang_choosed=en" th:text="#{label.form.loginEnglish}" style="color: yellow; font-weight: bold;">English</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}" style="color: yellow; font-weight: bold;">Russian</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
 <div th:if="${param.changePasswordTokenValid != null}" class="alert alert-info" th:text="${param.changePasswordTokenValid[0]}">change Password Token Valid</div>
 <div th:if="${param.changePasswordTokenInalid != null}" class="alert alert-danger" th:text="${param.changePasswordTokenInalid[0]}">change Password Token Invalid</div>
@@ -64,8 +90,8 @@
 <div class="container">
     <div class="row wrapper">
         <h1 th:text="#{label.form.loginTitle}">Header</h1>
-        <a href="?lang_choosed=en" th:text="#{label.form.loginEnglish}">login</a> |
-        <a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>
+        <!--<a href="?lang_choosed=en" th:text="#{label.form.loginEnglish}">login</a> |-->
+        <!--<a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>-->
     </div>
     <br/>
     <!-- <form name='myform' action="#" th:action="@{/login}" th:object="${viewFormLogin}" method="POST"> -->
@@ -113,14 +139,20 @@
             <!--<label class="col-sm-5" th:text="#{label.form.rememberMe}">remember me</label>-->
         </div>
 
+        <!--<div class="form-group row">-->
+            <!--<button type="submit" class="btn btn-primary" th:text="#{label.form.login}">submitButton</button>-->
+        <!--</div>-->
+
         <div class="form-group row">
-            <button type="submit" class="btn btn-primary" th:text="#{label.form.login}">submitButton</button>
+            <span class="col-sm-8" style="text-align: right;">
+                <button type="submit" class="btn btn-primary" th:text="#{label.form.login}">Submit</button>
+            </span>
         </div>
         <!-- <input class="btn btn-primary" name="submit" type="submit" th:value="#{label.form.login}" /> -->
 
     </form>
     <!-- /registration or /registration.html ? -->
-    <a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>
+    <!--<a class="btn btn-default" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>-->
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -141,7 +173,6 @@
         return true;
     }
     /*]]>*/
-
 </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

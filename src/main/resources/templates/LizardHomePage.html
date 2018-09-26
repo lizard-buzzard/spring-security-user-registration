@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,54 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Lizard's site Home Page<br>It's Home Page of Lizard Users</h1>
+<!-- navbar and navbar-default are the base menu classes -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4077b1 !important;">
+    <div style="width: 70px; height: 70px; background: #e4f024e6; border-radius: 50%; margin: 5px; float: left; position: relative">
+        <a class="navbar-brand" href="#">
+            <img th:src="@{/images/lizard.png}" width="35" height="35" alt="">
+            <br>
+            <span class="font-weight-bold" style="font-style: italic; font-size: 25px; font-family: Matura MT Script Capitals; color: black;">Lizard</span>
+        </a>
+        <div style="font-style: italic; font-size: 15px; color: yellow; position: absolute; bottom: -7px; left: 120px; height: 2em; width: 600px;">
+            <label th:text="#{label.form.user.logged}">User logged</label>
+            <label th:text="${loggedUserName}"></label>
+        </div>
+    </div>
+    <!--</div>-->
+    <!-- menu toggler - hamburger -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- menu's main part -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="javascript:history.back();" th:text="#{label.pages.page.back}">Back</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/mylogout}" th:text="#{label.pages.homepage.logout}">Logout</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h1>Lizard's site Home Page</h1>
+    <br>
+    <div>
+        It's Home Page of Lizard Users
+    </div>
+    <br>
+    <div>
+        <ul>
+            <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Natus ipsam, doloribus quas illo earum! Culpa totam repellendus, accusamus rerum saepe, deleniti eum praesentium tenetur maiores quam odio quo a recusandae?</li>
+            <li>Perferendis obcaecati dolorem culpa assumenda ratione molestias similique repellendus temporibus aspernatur commodi quasi, maiores quibusdam. Eius, delectus. Alias dolores iste sint iure reiciendis qui, dolorum aut fugit! Accusamus, soluta. Consectetur.</li>
+            <li>Adipisci doloribus optio, libero magnam quam, at repellendus aut vero laudantium ex, non eligendi nisi accusamus perspiciatis qui! Qui reiciendis optio sequi ratione minus voluptate eius expedita eum commodi iure.</li>
+            <li>Mollitia, ipsam voluptatem consequatur saepe nihil possimus, laudantium ipsum officia assumenda! Adipisci molestiae aut amet illo corrupti voluptatem, nobis, at vitae provident consequuntur fugiat ducimus hic harum sit! Maiores, rem.</li>
+        </ul>
+    </div>
+</div>
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

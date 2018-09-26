@@ -976,6 +976,5 @@ A layouting of adminConsolePage.html page with standardization of the "nav-bar" 
 ## --Commit-43-- ##
 Further improvement and development of html-pages, "go to" LizardsHomePage from standardized navbar-brand by th:href="@{/LizardsHomePage}"
 
-
-
-
+## --Commit-44-- ##
+Further improvement and development of html-pages, the LizardsHomePage.html and login.html pages navbar menue standardisation.
