@@ -990,5 +990,5 @@ The email of the logged use was added on userAccountPage.html.
  
 An issue have been found which bounds with the fact that __<iframe>__ prevents __"navbar-toggler"__ to work.
 
-
-
+## --Commit-46-- ##
+Some bugs fixed.

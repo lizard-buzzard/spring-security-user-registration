@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -208,10 +209,17 @@ public class RegisterController {
 
     @RequestMapping(value = "/LizardsHomePage", method = RequestMethod.GET)
     public String getLizardHomepage(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user != null) {
-            model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
+        Object princilal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String loggedUserNameValue;
+        if("anonymousUser".equals(princilal)) {
+            loggedUserNameValue = "anonymousUser";
+        } else {
+            User user = (User)princilal;
+            loggedUserNameValue = String.format(" %s %s", user.getFirstname(), user.getLastname());
         }
+        model.addAttribute("loggedUserName", loggedUserNameValue);
+
         return "LizardHomePage";
     }
 
