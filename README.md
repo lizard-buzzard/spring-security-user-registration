@@ -1002,4 +1002,6 @@ The "stars" after the labels on templates/registration.html were added.
 ## --Commit-49-- ##
 Some improvements on the html pages.
 
+## --Commit-50-- ##
+On the login.html page the language selector made in the form of the dropdown list (class="nav-item dropdown").
 
