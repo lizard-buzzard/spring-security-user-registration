@@ -974,10 +974,10 @@ A layouting of userAccountPage.html and userHomePage.html pages with increasing 
 A layouting of adminConsolePage.html page with standardization of the "nav-bar" on it.
  
 ## --Commit-43-- ##
-Further improvement and development of html-pages, "go to" LizardsHomePage from standardized navbar-brand by th:href="@{/LizardsHomePage}"
+Further improvement and development of html-pages, "go to" LizardsInfoPage from standardized navbar-brand by th:href="@{/LizardsInfoPage}"
 
 ## --Commit-44-- ##
-Further improvement and development of html-pages, the LizardsHomePage.html and login.html pages navbar menue standardisation.
+Further improvement and development of html-pages, the LizardsInfoPage.html and login.html pages navbar menue standardisation.
 
 ## --Commit-45-- ##
 A bug with the order of __jquery.min.js__ and __bootstrap.min.js__ was fixed. 
@@ -998,3 +998,8 @@ Few bugs were fixed. Improvements on html pages regarding the user's transition 
 
 ## --Commit-48-- ##
 The "stars" after the labels on templates/registration.html were added.
+
+## --Commit-49-- ##
+Some improvements on the html pages.
+
+

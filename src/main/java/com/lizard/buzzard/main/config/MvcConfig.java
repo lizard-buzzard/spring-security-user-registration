@@ -39,7 +39,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/invalidSession.html");
         registry.addViewController("/redirect");
         registry.addViewController("/replacePassword");
-        registry.addViewController("/LizardsHomePage");
+        registry.addViewController("/LizardsInfoPage");
 
     }
 

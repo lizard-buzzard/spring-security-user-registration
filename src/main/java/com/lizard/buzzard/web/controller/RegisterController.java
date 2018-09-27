@@ -173,7 +173,7 @@ public class RegisterController {
         return "redirect:/login?lang=" + locale.getLanguage();
     }
 
-    @RequestMapping(value = "/LizardsHomePage", method = RequestMethod.GET)
+    @RequestMapping(value = "/LizardsInfoPage", method = RequestMethod.GET)
     public String getLizardHomepage(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -186,7 +186,7 @@ public class RegisterController {
         }
         model.addAttribute("loggedUserName", loggedUserNameValue);
 
-        return "LizardHomePage";
+        return "LizardsInfoPage";
     }
 
     // Auxiliary methods
