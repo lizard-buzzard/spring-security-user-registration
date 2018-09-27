@@ -18,7 +18,7 @@ command, which builds target/spring-security-registration-1.0-SNAPSHOT.jar, and 
 java -jar target/spring-security-registration-1.0-SNAPSHOT.jar
 
 ```
-Both the ways make Spring to start and to run the application:
+Both of the ways make Spring to start and to run the application:
 ```text
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -29,23 +29,27 @@ Both the ways make Spring to start and to run the application:
  :: Spring Boot ::        (v2.0.4.RELEASE)
 
 ```
-After the server starts, you can enter in the browser's address bar __http://localhost:8761/login__ and the applicaion should show its first __login page__. It will start on __server.port=8761__.
+The server starts on __server.port=8761__.
+After the server starts, the user can start its work either from the __login__ page or from the __info__ page.
+In order to start from __login__ page, the user can enter the browser's address bar either
+__http://localhost:8761/login__ or __http://localhost:8761__.
+In order to start from __info__ page, the user enters __http://localhost:8761/LizardsInfoPage__. 
 
 ## Application's landscape ##
-The application is developed on __Java__, it's web pages are developed on __HTML__ with tiny inclusions of __CSS__ and __Javascript__ fragments. 
-For the HTML pages CDN __Bootstrap__ v.4.1.3 stylesheets and __Thymeleaf-4__ templates are used. 
+The application is developed on __Java__, __Spring Boot__ version 2.0.4.RELEAS, it's web pages are developed on __HTML__ with tiny inclusions of __CSS__ and __Javascript__ fragments. 
+For the HTML pages CDN __Bootstrap__ v.4.1.3 stylesheets, __jQuery__ v.3.3.1 and __Thymeleaf-4__ templates are used. 
 
 ### Environement ###
 An environment, used for the development, includes:
 * Ubuntu 18.04.1 LTS
 * java version "1.8.0_181"
 * Apache Maven 3.5.2
-* mysql  Ver 8.0.12 for Linux on x86_64 (MySQL Community Server - GPL)
+* mysql Ver 8.0.12 for Linux on x86_64 (MySQL Community Server - GPL)
 * Google Chrome Version 68.0.3440.106 (Official Build) (64-bit)
 * FireFox Quantrum 62.0 (64-bit)
 
 ### Spring Boot Maven Project ### 
-Maven pom.xml refers to Spring Boot parent project version 2.0.4.RELEAS:
+Maven pom.xml refers to __Spring Boot__ parent project version 2.0.4.RELEAS:
 ```xml
 <parent>
     <groupId>org.springframework.boot</groupId>
@@ -54,15 +58,15 @@ Maven pom.xml refers to Spring Boot parent project version 2.0.4.RELEAS:
     <relativePath/> <!-- lookup parent from repository -->
 </parent>
 ```
-And then it uses following org.springframework.boot dependencies: __spring-boot-starter-web__, __spring-boot-starter-data-jpa__, __spring-boot-starter-security__. 
+And then it uses the following org.springframework.boot dependencies: __spring-boot-starter-web__, __spring-boot-starter-data-jpa__, __spring-boot-starter-security__. 
 
 This project uses [Thymeleaf](https://www.thymeleaf.org/) as a HTML pages template engine and includes __spring-boot-starter-thymeleaf__ in the dependencies.
 
-Also the project dependencies include mysql:mysql-connector-java:5.1.46 dependency.
+Also the project dependencies include __mysql:mysql-connector-java:5.1.46__ dependency.
 
 
 ## The Database configuration and creation ##
-To run the code you should have MySQL server installed. In order to install it please refer, for example, to [How To Install MySQL on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-14-04) and [B.5.3.2 How to Reset the Root Password](https://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html). After the server is installed you need to create a user to connect to the database:
+To run the code you should have MySQL server installed. In order to install it pleas refer, for example, to [How To Install MySQL on Ubuntu 14.04](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-14-04) and [B.5.3.2 How to Reset the Root Password](https://dev.mysql.com/doc/refman/5.7/en/resetting-permissions.html). After the server is installed you need to create a user to connect to the database:
 ```sql
 mysql -u root -p 
 > CREATE USER 'user1'@'localhost' IDENTIFIED BY 'user123';
@@ -83,8 +87,8 @@ hibernate.hbm2ddl.auto=update
 
 hibernate.id.new_generator_mappings = false
 ```
-The database __'lizard_users_db'__ created (spring.jpa.hibernate.ddl-auto=update property) if it not yet exists and __'user1'__ has access to the database (see [81. Database Initialization](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html) and [Spring boot ddl auto generator](https://stackoverflow.com/questions/21113154/spring-boot-ddl-auto-generator)). 
-The property spring.jpa.properties.hibernate.dialect refers to CustomMySQLDialect class.
+The database __'lizard_users_db'__ is created (spring.jpa.hibernate.ddl-auto=update property) if it not yet exists and the __'user1'__ user has access to the database (see [81. Database Initialization](https://docs.spring.io/spring-boot/docs/current/reference/html/howto-database-initialization.html) and [Spring boot ddl auto generator](https://stackoverflow.com/questions/21113154/spring-boot-ddl-auto-generator)). 
+The property __spring.jpa.properties.hibernate.dialect__ refers to __CustomMySQLDialect__ class.
 ```java
 public class CustomMySQLDialect extends MySQL57Dialect {
     @Override
@@ -100,7 +104,7 @@ It's important to have this class corresponds to the dialect of the database you
 ## --Commit-1-- ##
 
 ### Thymleaf templates ###
-__Thymleaf__ will be used as html pages template engine and for internationalization support. To use __thymeleaf__ you need
+__Thymeleaf__ will be used as the HTML pages template engine and for internationalization support. To use __thymeleaf__ you need
 * to include dependency in pom.xml
 ```
 <dependency>
@@ -108,40 +112,39 @@ __Thymleaf__ will be used as html pages template engine and for internationaliza
     <artifactId>spring-boot-starter-thymeleaf</artifactId>
 </dependency>
 ```
-* to define __th:__ namespace on *.html pages as follows:
+* to define __th:__ namespace on the *.html pages as follows:
 ```
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 ```
-An example see in templates/login.html
 
 ### JpaRepository ###
-There is a base repository (BaseRepository) which extends JpaRepository.
- * Spring Data JPA contains some built-in Repository implemented some common functions to work with database: findOne, findAll, save, etc.
- * should be annotated win @NoRepositoryBean, otherwise gives an BeanCreationException (Error creating bean with name 'baseRepository')
+There is a base repository (BaseRepository) which extends __JpaRepository__.
+ * Spring Data JPA contains the built-in Repository which implements some common functions to work with database: findOne, findAll, save, etc.
+ * should be annotated win @NoRepositoryBean, otherwise gives an __BeanCreationException__ (Error creating bean with name 'baseRepository')
  
 ### MVC Configuration ###
-If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc should be set ([27. Developing Web Applications](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html)).
+If you want to take complete control of Spring MVC, you can add your own @Configuration class, annotated with @EnableWebMvc ([27. Developing Web Applications](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html)).
 ```
 public class MvcConfig implements WebMvcConfigurer
 ``` 
-Do not use the src/main/webapp directory if your application is packaged as a jar.
+__Do not use the src/main/webapp__ directory if your application is packaged as a __jar__.
 Although this directory is a common standard, it works only with war packaging, and it is silently ignored by most build tools if you generate a jar ([Chapter: 27.1.5 Static Content](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html)).
 ```
 @Override
 public void addResourceHandlers(ResourceHandlerRegistry registry)
 ```
-Next bean helped me to show messages in different languages depending on language choosed: 
+Next bean helps to show messages for different languages depending on the language chose: 
 ```
 @Bean
 public MessageSource messageSource()
 ```
-It's a strategy interface for resolving messages, with support for the parameterization and internationalization of such messages:
+It's a strategy interface for resolving messages, with support for the parameterization and the internationalization of such messages:
 * [Internationalization in Spring](https://www.logicbig.com/tutorials/spring-framework/spring-core/message-sources.html)
 * [Interface MessageSource](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/MessageSource.html)
 
 ### PersistenceJPAConfig ###
-The  source for @Bean's definition used in Persistence JPA Repository
+The source for @Bean's definition used in __Persistence JPA Repository__
 * Path to BaseRepository, UserRepository, RoleRepository
 ```
 @EnableJpaRepositories(basePackages = "com.lizard.buzzard.persistence.dao")
@@ -170,7 +173,7 @@ public JpaTransactionManager transactionManager()
 protected Properties additionalProperties()
 ```
 ### MySQLDialect ###
-Should be set for correct working with MySql version currently installed. Otherwise gives an error.
+__MySQLDialect__ should be set for correct working with MySql version currently installed. Otherwise gives an error.
 It works together with __persistence.properties__'s __hibernate.dialect__=CustomMySQLDialect
 ```
 public class CustomMySQLDialect extends MySQL57Dialect
@@ -180,18 +183,18 @@ public class CustomMySQLDialect extends MySQL57Dialect
 Commit-2 just fixes some inaccuracies in description of Commit-1.
 
 ## --Commit-3-- ##
-Internationalization. Pay attention at the link between 'lang_choosed' in html form and in LocaleChangeInterceptor, it's the same.
+Internationalization. Pay attention at the link between __lang_choosed__ in HTML form and in the __LocaleChangeInterceptor__, it's the same.
 
 ## --Commit-4-- ##
-Commit-4: an initial _fake_ __registration.html__ addad; Apps moved to highest package to be reached from any test class; attention to two ways of tests: integration and local
+An initial _fake_ __registration.html__ added. The class __Apps__ moved to higher package to be reached from any of the test classes. Attention to two ways of tests: integration and local
 
 ## --Commit-5-- ##
-The registration form shows three fields, internationalized messages added in resource files. Remember @Controller vs. @RestController difference
-* __@Controller__ vs. __@RestController__ difference
+The registration form shows three fields, internationalized messages added in the resource files.
+Remember __@Controller__ vs. __@RestController__ difference.
 
-    NOTE: [Spring rest controller not returning html](https://stackoverflow.com/questions/43263667/spring-rest-controller-not-returning-html/43371228).
+NOTE: [Spring rest controller not returning html](https://stackoverflow.com/questions/43263667/spring-rest-controller-not-returning-html/43371228).
 
-    __RestController__ annotation returns the json from the method, not HTML or JSP. It is the combination of __@Controller__ and __@ResponseBody__ in one. The main purpose of __@RestController__ is to create __RESTful__ web services. For returning html or jsp, simply annotated the controller class with __@Controller__.
+__RestController__ annotation returns the json from the method, not HTML or JSP. It is the combination of __@Controller__ and __@ResponseBody__ in one. The main purpose of __@RestController__ is to create __RESTful__ web services. For returning html or jsp, simply annotated the controller class with __@Controller__.
 
 ## --Commit-6-- ##
 A preparation for registration of a new user: 
@@ -199,21 +202,23 @@ A preparation for registration of a new user:
 - utility methods in BaseRepository for finding objects; 
 - new RolesPrivilege @Entity joined with Role @Entity; 
 - User @Entity extended by email field; 
-- first not working draft of UserService; 
-- separation of @Entity and DTO for User, ViewFormUser introduced for server-side fields check
+- first, not working draft of UserService; 
+- separation of @Entity and DTO for User, ViewFormUser introduced for the server-side fields check.
 
 ### ApplicationListener<ContextRefreshedEvent> ###
- * ContextRefreshedEvent. This event is published when the ApplicationContext is either initialized or refreshed ([Event Handling in Spring](https://www.tutorialspoint.com/spring/event_handling_in_spring.htm)).
- * We use this to create and populate DB tables
+ * __ContextRefreshedEvent__. This event is published when the ApplicationContext is either initialized or refreshed ([Event Handling in Spring](https://www.tutorialspoint.com/spring/event_handling_in_spring.htm)).
+ * We use this to create and populate DB tables.
 
 ### DTO User class ViewFormUser ###
-Entity is class mapped to table. Dto is class mapped to "view" layer mostly. What needed to store is entity & which needed to 'show' on web page is DTO ([JAVA: Difference between Entity and DTO](https://stackoverflow.com/questions/39397147/java-difference-between-entity-and-dto)).
+__Entity__ is the class mapped to table. DTO is the class mapped to the "view" layer mostly. What served to store is an entity, 
+and which needed to 'show' on the web page is DTO. ([JAVA: Difference between Entity and DTO](https://stackoverflow.com/questions/39397147/java-difference-between-entity-and-dto)).
  
 ## --Commit-7-- ##
-New fields and buttons on registration form were added
+New fields and buttons on the registration form were added.
 
 ## --Commit-8-- ##
-The commit works with the simple Hibernate Validator-JSR 380 and Thymeleaf template engine for internationalizing HTML forms' fields names and error messaging. __Neither BindingResult nor plain target object for bean name ‘mybean’ available as request attribute.__ error resolved.
+This commit works with the simple Hibernate Validator-JSR 380 and Thymeleaf template engine for internationalizing HTML forms' fields names and error messaging. 
+__Neither BindingResult nor plain target object for bean name ‘mybean’ available as request attribute.__ error resolved.
 
 ### Thymeleaf Java library ###
 __Thymeleaf__ is a Java library. It is an __XML/XHTML/HTML5 template engine__ able to apply a set of transformations to template files in order to display data and/or text produced by your applications.
@@ -226,7 +231,7 @@ __Thymeleaf__ is a Java library. It is an __XML/XHTML/HTML5 template engine__ ab
 ### JSR 380 specification, the validation-api dependency ###
 JSR 380 specification, the validation-api dependency
 * [java bean validation 2.0 vs hibernate validator](https://stackoverflow.com/questions/49606316/java-bean-validation-2-0-vs-hibernate-validator)
-* For html forms validation we use Thymeleaf views - see: <artifactId>spring-boot-starter-thymeleaf</artifactId>
+* For HTML forms validation we use Thymeleaf views - see: <artifactId>spring-boot-starter-thymeleaf</artifactId>
 
 Hibernate Validator requires an implementation of the Unified Expression Language (JSR 341) for evaluating dynamic expressions in constraint violation messages (see Section 4.1, “Default message interpolation”).
 When your application runs in a Java EE container such as JBoss AS, an EL implementation is already provided by the container. In a Java SE environment, however, you have to add an implementation as dependency to your POM file.
@@ -267,8 +272,7 @@ The annotation __@Valid__ used on instance or parameter marks it to be validated
 [Hibernate Validator 6.0.12.Final - JSR 380 Reference Implementation: Reference Guide](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#preface)
 
 ### No mapping found for HTTP request with URI in DispatcherServlet with name 'dispatcherServlet' ###
-If __o.s.web.servlet.PageNotFound : No mapping found for HTTP request with URI in DispatcherServlet with name 'dispatcherServlet'__ message appears in the Spring log then
-
+An explanation of the error __o.s.web.servlet.PageNotFound : No mapping found for HTTP request with URI in DispatcherServlet with name 'dispatcherServlet'__ message appears in the Spring log see in:
 * [Why does Spring MVC respond with a 404 and report “No mapping found for HTTP request with URI […] in DispatcherServlet”?](https://stackoverflow.com/questions/41577234/why-does-spring-mvc-respond-with-a-404-and-report-no-mapping-found-for-http-req/42785538)
 * [Annotation Configuration Replacement for mvc:resources - Spring](https://stackoverflow.com/questions/14861720/annotation-configuration-replacement-for-mvcresources-spring)
 
@@ -276,17 +280,19 @@ If __o.s.web.servlet.PageNotFound : No mapping found for HTTP request with URI i
 The login form got new fields with Hibernate Validator-JSR 380 and test Thymeleaf messaging.
 
 ## --Commit-10-- ##
-Spring MVC Custom Validation of User's DTO Email field: on basis of ConstraintValidator interface implementation, Hibernate Validator-JSR 380, Thymeleaf for internationalized error messaging.
+Spring MVC Custom Validation of User's DTO Email field implemented on basis of the __ConstraintValidator__ interface implementation, Hibernate Validator-JSR 380, Thymeleaf for internationalized error messaging.
 
-Added dependency for e-mail sending (see [Guide to Spring Email](https://www.baeldung.com/spring-email) how to send emails from a Spring Boot application):
+Added dependency for an e-mail sending:
 ```
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-mail</artifactId>
 </dependency>
 ```
+On how to send emails from a Spring Boot application please see [Guide to Spring Email](https://www.baeldung.com/spring-email) 
+
 ### Spring MVC Custom Validation ###
-An examlpe of custom validation annotation is the __EmailConstraintValidator__ interface: 
+An example of the custom validation annotation is the __EmailConstraintValidator__ interface: 
 ```
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
@@ -316,15 +322,15 @@ Include this dependency in your pom.xml:
 </dependency>
 ```
 
-For implementation of __public void initialize(PasswordConstraintValidator constraintAnnotation)__ method of __PasswordConstraintValidatorImpl__ I recommend to refer to [Custom Password Constraint Validator Annotation Example](https://memorynotfound.com/custom-password-constraint-validator-annotation/).
-And for implementation of __public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext)__ method refer to [passay/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java](https://github.com/vt-middleware/passay/blob/master/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java).
+For the implementation of __public void initialize(PasswordConstraintValidator constraintAnnotation)__ method of __PasswordConstraintValidatorImpl__ I recommend to refer to [Custom Password Constraint Validator Annotation Example](https://memorynotfound.com/custom-password-constraint-validator-annotation/).
+And for implementation of __public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext)__ method please refer to [passay/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java](https://github.com/vt-middleware/passay/blob/master/src/test/java/org/passay/CharacterCharacteristicsRuleTest.java).
 
 ## --Commit-13-- ##
-The commit supports Spring MVC Custom Validation of User's DTO 'password' field: passay.org library's custom Message Resolver for different languages, depending on __'lang_choosed'__ login.html HttpRequest parameter.
+This commit supports Spring MVC Custom Validation of User's DTO 'password' field. It uses __passay.org__ library's custom Message Resolver for different languages, depending on __'lang_choosed'__ login.html HttpRequest parameter.
 
 In order to understand how it works, please refers to [Guide to Internationalization in Spring Boot](https://www.baeldung.com/spring-boot-internationalization)
 
-Pay attention to next pair of methods of the __MvcConfig__ class which implements __WebMvcConfigurer__ interface. The __addInterceptors()__ method adds the interceptor which will switch to a new locale based on the value of the __lang_choosed__ parameter appended to a request:
+Pay attention to next pair of methods of the __MvcConfig__ class which implements __WebMvcConfigurer__ interface. The __addInterceptors()__ method adds the interceptor which switches to a new locale based on the value of the __lang_choosed__ parameter appended of a request:
 ```
 @Override
 public void addInterceptors(final InterceptorRegistry registry) {
@@ -333,7 +339,7 @@ public void addInterceptors(final InterceptorRegistry registry) {
     registry.addInterceptor(localeChangeInterceptor);
 }
 ```
-In order for our application to be able to determine which locale is currently being used, we need to add a __LocaleResolver__ bean:
+In order the application to be able to determine which locale is currently being used, we need to add the __LocaleResolver__ bean:
 ```
 @Bean
 public LocaleResolver localeResolver() {
@@ -347,13 +353,13 @@ The __@Autowired LocaleResolver__
 @Autowired
 LocaleResolver localeResolver;
 ```
-is used in __RegisterController__ class to print the Locale selected on login.html
+is used in __RegisterController__ class to print the Locale selected on login.html.
 ```
 @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
 public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
     LOGGER.debug("Locale selected on login.html ==>  " + localeResolver.resolveLocale(httpServletRequest).toString());
 ```
-and it is used in __PasswordConstraintValidatorImpl__ class which implements __ConstraintValidator<PasswordConstraintValidator, String>__, in __MessageResolver getMessageResolver()__ method to get the name of a file with password's error messages:
+and it is used in __PasswordConstraintValidatorImpl__ class which implements __ConstraintValidator<PasswordConstraintValidator, String>__, in the __MessageResolver getMessageResolver()__ method to get the name of a file with password's error messages:
 ```
 String pattern = "loc-pass-messages/password_messages_%s.properties";
 HttpServletRequest httpServletRequest =
@@ -400,39 +406,39 @@ if(confirmedPasswordErrMsg != null) {
     model.addAttribute("confirmedPasswordError", confirmedPasswordErrMsg.getDefaultMessage());
 }
 ```
-This code is not used, it's an alternative to __Thymeleaf__'s global-errors prosessing (see [Thymeleaf: 7.3 Global errors](https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors)).
+This code is not used, it's an alternative to __Thymeleaf__'s global-errors processing (see [Thymeleaf: 7.3 Global errors](https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html#global-errors)).
 
-In html "form" of templates/registration.html this  __Thymeleaf__'s code checks for the global error and shows it in __<span id="confirmedPassportError" ...>__
+In HTML "form" of templates/registration.html this  __Thymeleaf__'s code checks for the global error and shows it in __<span id="confirmedPassportError" ...>__
 
 ```html
 <span id="confirmedPassportError" class="alert alert-danger col-sm-4" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">confirmed password error</span>
 
 ```
 ## --Commit-16-- ##
-An intermediate, not finished transition toward Spring security. The dependency is added:
+An intermediate, not finished transition toward Spring's security. The dependency is added:
 ```
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
 ```
-The main code changes are in:
+The main code changes are:
 - RegisterController: 
     - call UserServiceImpl.saveUserInRepository(), 
     - publish ApplicationEvent (AfterUserRegisteredEvent.class); 
 - SecurityConfig adds two methods for PasswordEncoder and configure(HttpSecurity http) to allow anonymous access to login.html; 
 - User class adds @Column private boolean enabled; 
 - VerificationToken @Entity joined @OneToOne to User.class holds Date expirationDate field; 
-- UserServiceImpl.class with saveUserInRepository(ViewFormUser dtoUser); 
-- class UserAlreadyExistException extends RuntimeException.
+- UserServiceImpl.class with saveUserInRepository (ViewFormUser dtoUser); 
+- the class UserAlreadyExistException extends RuntimeException.
 
-Custom property __lizard.config.properties__ added.
+The __lizard.config.properties__ custom properties file was added.
 __UserAlreadyExistException extends RuntimeException__ added.
 
-On this step a development of a verification procedure with help of the link in the e-mail, which includes the verification token, started.
+On this step a development of the verification procedure with help of the link in the e-mail, which includes the verification token, started.
 Please refer to [Registration – Activate a New Account by Email](https://www.baeldung.com/registration-verify-user-by-email) for additional reading. 
 
-In the controller's __@RequestMapping(value = "/registration", method = RequestMethod.POST)__ method has the code for generating the event on basis of which an e-mail with verification token will be send:
+In the controller's __@RequestMapping(value = "/registration", method = RequestMethod.POST)__ method has the code for generating the event on basis of which an e-mail with verification token is sent:
 ```
 User newRegisteredUser = userService.saveUserInRepository(viewFormUser);
 ApplicationEvent event = new AfterUserRegisteredEvent(newRegisteredUser, request.getLocale(), getAppUri(request));
@@ -440,7 +446,7 @@ applicationEventPublisher.publishEvent(event);
 ```
 This code includes [Spring Events](https://www.baeldung.com/spring-events) (additional reading is [Better application events in Spring Framework 4.2](https://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2))
 
-The new entity which is intended to store a verification token in the database is added. The verification token is a key artifact through which a user is verified ([Registration – Activate a New Account by Email](https://www.baeldung.com/registration-verify-user-by-email))
+The new entity which is intended to store the verification token in the database is added. The verification token is a key artifact through which a user is verified ([Registration – Activate a New Account by Email](https://www.baeldung.com/registration-verify-user-by-email))
 ```
 @Entity
 @Table(name = "verification_property")
@@ -478,19 +484,19 @@ __BCryptPasswordEncoder__'s parameter is a strength - the log rounds to use, bet
 The fix of small bugs.
 
 ## --Commit-18-- ##
-The implementation of ApplicationListener<AfterUserRegisteredEvent> and onApplicationEvent method. Created a method in UserService which calls TokenRepository to save new token for the user. 'java.lang.StackOverflowError exception. Cannot evaluate model object toString()' issue: solved by excluding mutual reference objects.
+The implementation of __ApplicationListener<AfterUserRegisteredEvent>__ and __onApplicationEvent__ method. Created a method in UserService which calls TokenRepository to save new token for the user. The 'java.lang.StackOverflowError exception. Cannot evaluate model object toString()' issue solved by excluding mutual reference objects.
 Also I have solved an issue of '@Value from custom.property file isn't initialised'.
 
-In __public class Role__, __public String toString()__ I ought to comment the reference to __private Set<User> users;__
+In the __public class Role__ class, in the __public String toString()__ method I ought to comment the reference to __private Set<User> users;__
 ```
 //                ", users=" + users +
 
 ```
-The same issue is for __public class User__, __public String toString()__ method because of a cyclic structure, references to __private List<Role> roles;__:
+The same issue is for the __public class User__ class, for the __public String toString()__ method because of a cyclic structure, references to __private List<Role> roles;__:
 ```html
 //                ", roles=" + roles +
 ```
-And also for __public class VerificationToken__:
+And also it is for __public class VerificationToken__:
 ```
 //                ", user=" + user +
 ```
@@ -557,7 +563,7 @@ spring.mail.properties.mail.smtps.auth=false
 spring.mail.properties.mail.smtps.starttls.enable=false
 spring.mail.properties.mail.smtps.timeout=8000
 ```
-Main work on how to send email is concentrated in
+Main work on how to send an email is concentrated in
 ```
 @Component
 public class NewUserRegisteredListener implements ApplicationListener<AfterUserRegisteredEvent> { ... }
@@ -613,7 +619,7 @@ An explanation of this trick I found in
 * [Spring Property Injection in a final attribute @Value - Java](https://stackoverflow.com/questions/7130425/spring-property-injection-in-a-final-attribute-value-java)
 
 ## --Commit-22-- ##
-An intermediate commit, transitional to replace the "html page with "form"'s with attributes" returned by the controller's method by response body object, which is processed by Javascript in the "form".
+An intermediate commit, transitional to replace __the model's attributes__ on the HTML page with a "form" tag, returned by the controller's method, by __response body object, which is processed by JavaScript__ embedded in the HTML page.
 
 In this try we replace
 ```
@@ -634,38 +640,39 @@ by
             return new ErrorDetails("errors");
         }
 ```
-An object passed to "form" is an instance of __public class ErrorDetails__ and will contain all the errors found by server validation process.
+An object passed to "form" is an instance of __public class ErrorDetails__ and it contains all the errors found by the server validation process.
 
 In this commit (because of the development is not complete), in place of registration.html page we get some JSON data in the browser.
 
 ## --Commit-23-- ##
-On a way to replace the html-page name with Object @ResponseBody which contains Map of messages for <span id="xxxError"...> tags of html-form.
-ErrorDetails class is replaced by __ResponseDetails__ class. This class contains next two fields:
+On a way to replace the HTML-page name with Object @ResponseBody which contains Map of messages for <span id="xxxError"...> tags of HTML form.
+The ErrorDetails class is replaced by the __ResponseDetails__ class. This class contains next two fields:
 ``` 
 private String indicator;
 private Map<String, String> messages; 
 ```    
-The first one serves for carrying over the result of server validation process, and it can be either "error" or "success".
+The first one serves for carrying over the result of the server validation process, and it can be either "error" or "success".
 The second one is a map of
-* key - id (without suffix 'Error') of an attribute in "errors" tags like 'email' in
-```
-<span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>                    
-```
-on the registration.html page
-* value - message which should be displayed in these tags in case of error or other information event detected
+* __key__ - is the value of the __id__ attribute in "errors" apan tags, like 'email' (but without the 'Error' suffix) in
+    ```
+    <span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>                    
+    ```
+    on the registration.html page;
 
-The processing of __ResponseDetails__ is executed in a Javascript in
+* __value__ - is the message which should be displayed in these span tags in case of the error or other event (any important information event) is detected.
+
+The processing of __ResponseDetails__ is executed in the JavaScript in
 ```
 <script th:inline="javascript">
 
 ```
-tag. This code proccesses Json representation of response body object (__ResponseDetails__ ), extracts messages and shows these messages in errors span tags on the html page.
+tag. This code processes Json representation of the response body object (__ResponseDetails__ ), extracts messages and shows these messages in errors span tags on the HTML page.
 
 ## --Commit-24-- ##
 The transition to Object @ResponseBody which contains a Map of messages for @RequestMapping("/registration") is finished. @ExceptionHandler(value = {UserAlreadyExistException.class}) returns localized message inside ResponseEntity<Object>
 
 ## --Commit-25-- ##
-A customization of TomCat in order to solve __'Invalid character found in the request target'__ issue. 
+A customization of __TomCat__ in order to solve the __'Invalid character found in the request target'__ issue. 
 
 The Server throws an error stack because of inappropriate characters in the request's link. 
 This issue and the way of how to fix it described, for example, in
@@ -701,7 +708,7 @@ Implemented by __UserDetailsServiceImpl__. We need to provide an implementation 
 that the __findByUsername()__ method of our __UserService__ returns a __User__ entity, while **_Spring Security expects_** a
 __UserDetails__ object from the __loadUserByUsername()__ method. We will create a converter for this to convert __User__ to __UserDetails__ implementation. 
 
-The user's email serves as the user name in this example:  
+The __user's email__ serves as the user name in our example:  
 ```
 @Override
 public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
@@ -714,10 +721,10 @@ public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundE
 ```
 
 ### UserDetails implementation ###
-__public class UserSecurityDetailsImpl__ implements __UserDetails__. [Interface UserDetails](https://docs.spring.io/autorepo/docs/spring-security/4.2.x-SNAPSHOT/apidocs/org/springframework/security/core/userdetails/UserDetails.html)
-Provides core user information. Implementations are not used directly by Spring Security for security purposes. They simply store user information which is later encapsulated into Authentication objects. This allows non-security related user information (such as email addresses, telephone numbers etc) to be stored in a convenient location.
+The __public class UserSecurityDetailsImpl__ class implements __UserDetails__ interface. [Interface UserDetails](https://docs.spring.io/autorepo/docs/spring-security/4.2.x-SNAPSHOT/apidocs/org/springframework/security/core/userdetails/UserDetails.html)
+It provides core user information. The implementations are not used directly by Spring Security for security purposes. They simply store user information which is later encapsulated into Authentication objects. This allows non-security related user information (such as email addresses, telephone numbers etc) to be stored in a convenient location.
 
-In my case the __username__ field of __UserSecurityDetailsImpl__ keeps user's email (and serves as user identifier field):
+In our case the __username__ field of __UserSecurityDetailsImpl__ keeps the user's email (and serves as user identifier field):
 ```
 private String username; // email serves as a username
 ```
@@ -729,7 +736,7 @@ public class UserToUserDetailsConverter implements Converter<User, UserDetails>
 ```
 
 ### DaoAuthenticationProvider ###
-__public class DaoAuthenticationProviderExtended__ extends __DaoAuthenticationProvider__.
+The __public class DaoAuthenticationProviderExtended__ class extends the __DaoAuthenticationProvider__ class.
 
 __Spring Security__ includes a production-quality __AuthenticationProvider__ implementation called __DaoAuthenticationProvider__. 
 This authentication provider is compatible with all of the authentication mechanisms that generate a __UsernamePasswordAuthenticationToken__, 
@@ -748,7 +755,7 @@ In this commit:
   - Converter<User, UserDetails>;
 * Be aware of implementing of the __httpSecurity.csrf().disable();__ configuration both in __login.html__ and in the class which extends __WebSecurityConfigurerAdapter__.
 
-**NOTE:** Personally, I was surprised and pleased with the fact that the security configuration for __/login__ page replaces two methods (with GET and POST) for __@RequestMapping(value = {"/login", "/"})__:
+**NOTE:** Personally, I was pleased with the fact that the security configuration for __/login__ page replaces two methods (with GET and POST) for __@RequestMapping(value = {"/login", "/"})__. Below these methods are commented:
 ```
 //    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
 //    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
@@ -763,13 +770,13 @@ In this commit:
 ## --Commit-27-- ##
 The development of __SecurityConfig__, __MyCustomAuthenticationFailureHandler__ and __MyCustomAuthenticationSuccessHandler__ classes, "badcredentialerror" parameter of login page was done.
 
-My implementation was in the development of __MyCustomAuthenticationFailureHandler__ @Component("authenticationFailureHandler"):
+The implementation was in the development of the __MyCustomAuthenticationFailureHandler__, annotated with @Component("authenticationFailureHandler"):
 ```
 @Component("authenticationFailureHandler")
 public class MyCustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 }
 ```
-It uses __SimpleUrlAuthenticationFailureHandler.setDefaultFailureUrl()__ method to set up redirection page in case of an authentication error:
+It uses the __SimpleUrlAuthenticationFailureHandler.setDefaultFailureUrl()__ method to set up this redirection page in case of an authentication error:
 ```
 setDefaultFailureUrl("/login?badcredentialerror=true");
 ```     
@@ -783,7 +790,7 @@ is processed on /login.html page as follows:
 ```
 <div th:if="${param.badcredentialerror != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">login bad credentials error</div>
 ```
-And then we develop __MyCustomAuthenticationSuccessHandler__ class which implements __AuthenticationSuccessHandler__:
+And then we need to develop __MyCustomAuthenticationSuccessHandler__ class which implements the __AuthenticationSuccessHandler__ interface:
 ```
 @Component("authenticationSuccessHandler")
 public class MyCustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -793,27 +800,79 @@ The main purpose of the __onAuthenticationSuccess()__ method is to set up an URL
 String targetUrl = "/homepage.html?user=" + authentication.getName();
 redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
 ```
-Until I haven't implemented __AuthenticationSuccessHandler__ I experienced with a __"login twice"__ issue/ The similar issue discussed on
+Until I haven't implemented __AuthenticationSuccessHandler__ I experienced with a __"login twice"__ issue. The similar issue is discussed in these materials:
 * [Login twice ?](http://forum.spring.io/forum/spring-projects/security/90069-login-twice)
 * [ProviderManager.authenticate called twice for BadCredentialsException](https://stackoverflow.com/questions/33788120/providermanager-authenticate-called-twice-for-badcredentialsexception)
 
 ## --Commit-28-- ##
-The parameter __.logoutUrl("/mylogout")__ for HttpSecurity security configuration which triggers logout process set up. The message shows on top of "/login" page by analysing of __"?logoutSuccess=true"__ parameter.
+The parameter __.logoutUrl("/mylogout")__ for the __HttpSecurity__ security configuration which triggers logout process set up. The message shows on top of "/login" page by analysing of __"?logoutSuccess=true"__ parameter.
 
 ## --Commit-29-- ##
 Added some elements of the session management for security configuration: 
 - 'invalidSession.html', 
-- session.setMaxInactiveInterval() in implementation of AuthenticationSuccessHandler.
+- session.setMaxInactiveInterval() in implementation of __AuthenticationSuccessHandler__.
 
 ## --Commit-30-- ##
-An intermediate, draft variant of the __Remember Me__ configuration.
+An intermediate, draft variant of the __Remember Me__ configuration implemented.
 
 Remember Me configuration is quite straightforward and consists of next steps:
-1. first, all the time we refer to __@Bean DataSource__ which is defined in __PersistenceJPAConfig__ and should be autowired it in SecurityConfig (which )extends WebSecurityConfigurerAdapter).
-2. define Token Repository based on DataSource as follows
-3. in __HttpSecurity config()__ add code concerning of remember me configuration
+1.  first, we refer to __@Bean DataSource__ which is defined in the __PersistenceJPAConfig__ class and should be autowired in __SecurityConfig__ which extends __WebSecurityConfigurerAdapter__:
+    ```
+    @Bean
+    public  DataSource dataSource() {
+        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(Preconditions.checkNotNull(env.getProperty("jdbc.driverClassName")));
+        dataSource.setUrl(Preconditions.checkNotNull(env.getProperty("jdbc.url")));
+        dataSource.setUsername(Preconditions.checkNotNull(env.getProperty("jdbc.user")));
+        dataSource.setPassword(Preconditions.checkNotNull(env.getProperty("jdbc.pass")));
+        return dataSource;
+    }
+    ```
+2.  to configire __@Bean PersistentTokenRepository__ based on DataSource as follows
+    ```
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {
+        MyJdbcTokenRepositoryImpl repo = new MyJdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        repo.setCreateTableOnStartup(true);
+        return repo;
+    }
+    ```
+3.  to add the code concerning of remember me configuration for the __HttpSecurity__ object in the __config()__ method:
+    ```
+    httpSecurity.rememberMe()
+            .rememberMeServices(rememberMeServices)
+            .tokenValiditySeconds(rememberMeTokenValidityHours.intValue() * 60 * 60)
+    ```
+4.  to inject in the __SecurityConfig__ class the __@Autowired CustomRememberMeServices__ class. 
+    The __CustomRememberMeServices__ class overrides methods, which define behavior of the program while the successful login,  
+    in particular, how to save new __PersistentRememberMeToken__ in the __PersistentTokenRepository__. 
+    And how to remove this  token from the __PersistentTokenRepository__ while the logout process.
+    ```
+    @Override
+    public void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
+        String username = ((User) successfulAuthentication.getPrincipal()).getEmail();
+        PersistentRememberMeToken persistentToken = new PersistentRememberMeToken(username, generateSeriesData(), generateTokenData(), new Date());
+        try {
+            tokenRepository.createNewToken(persistentToken);
+            ...
+        } catch (Exception e) {
+            ...
+        }
+    }
 
-The class __MyJdbcTokenRepositoryImpl__ which extends __JdbcTokenRepositoryImpl__ is developed.  It overrides __initDao()__ method to be able to create __persistent_logins__ table which keeps security tokens.
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        super.logout(request, response, authentication);
+        if (authentication != null) {
+            String username = ((User) authentication.getPrincipal()).getEmail();
+            this.tokenRepository.removeUserTokens(username);
+        }
+    }
+    ```
+The __MyJdbcTokenRepositoryImpl__ class, which extends __JdbcTokenRepositoryImpl__ is developed.  
+The __JdbcTokenRepositoryImpl__ class, in its turn, implements the __PersistentTokenRepository__ interface.
+The __MyJdbcTokenRepositoryImpl__ class overrides __initDao()__ method to be able to create __persistent_logins__ table which keeps security tokens.
 ```
 public static final String CREATE_TABLE_SQL =
         "create table persistent_logins (" +
@@ -834,7 +893,7 @@ protected void initDao() {
 ## --Commit-31-- ##
 Step by step trails in order to implement the __Remember Me__ configuration and to find the right solution. 
 
-**_IMPORTANT NOTE:_** In order to find the right solution, I had to create a separate small project. This project was successful and after the research I implemented its code in the current project.
+**_IMPORTANT NOTE:_** In order to find the right solution, I had to create a separate small project. This project was successful, and after the research I have used its code in the current project.
 I put the code of this project and detailed description of it in github.com.
 Here is a link to this project: [lizard-buzzard/persistent-token-rememberme-authentication](https://github.com/lizard-buzzard/persistent-token-rememberme-authentication)
 
@@ -843,11 +902,12 @@ This commit is a continuation of the previous commit and it finishes the sequenc
 
 Some interesting (at least for me) remarks:
 
-1. In case of if to set at the same time
+1.  In case of if to set at the same time
     ```
     .rememberMeServices(rememberMeServices)
     .rememberMeCookieName("my-remember-me-cookie")
     ```
+    it causes the error:
     ```
     2018-09-13 10:31:29.694 ERROR 19528 --- [  restartedMain] o.s.boot.SpringApplication               : Application run failed
     ...
@@ -855,7 +915,8 @@ Some interesting (at least for me) remarks:
     ```
     This IllegalArgumentException is thrown by Spring's __RememberMeConfigurer__
     ```
-    RememberMeConfigurer<H extends HttpSecurityBuilder<H>> extends AbstractHttpConfigurer<RememberMeConfigurer<H>, H>
+    public final class RememberMeConfigurer<H extends HttpSecurityBuilder<H>> extends AbstractHttpConfigurer<RememberMeConfigurer<H>, H> {
+        ... 
         /**
          * Validate rememberMeServices and rememberMeCookieName have not been set at
          * the same time.
@@ -869,7 +930,7 @@ Some interesting (at least for me) remarks:
         ...
     }
     ```
-2. A note on the name of the checkbox in the html form:
+2. A note on the name of the checkbox in the HTML form:
     ```
     <div class="form-group row">
         <span class="col-sm-4 offset-4" style="text-align: right;">
@@ -882,17 +943,18 @@ Some interesting (at least for me) remarks:
     </div>
     ```
     
-    __name="my-remember-me-checkbox"__ corresponds to __String rememberMeServicesName__ in
+    The __name="my-remember-me-checkbox"__ corresponds to __String rememberMeServicesName__ in
     
     ```
     public class CustomRememberMeServices extends PersistentTokenBasedRememberMeServices {
-    
+        ...
         public CustomRememberMeServices(String key, String rememberMeServicesName, UserDetailsService userDetailsService, PersistentTokenRepository persistentTokenRepository) {
             super(key, userDetailsService, persistentTokenRepository);
             this.setParameter(rememberMeServicesName);
             this.tokenRepository = persistentTokenRepository;
             this.key = key;
         }
+        ...
     }
     ```
     and its value is __"my-remember-me-checkbox"__ in the configuration class of __CustomRememberMeServices__ in my implementation:
@@ -908,7 +970,7 @@ Some interesting (at least for me) remarks:
         }
     }
     ```
-    So, there is no need to specify __.rememberMeParameter("my-remember-me-checkbox")__ in __HttpSecurity__ configuration in the __SecurityConfig__ class, this chank of code should be commented:
+    So, there is no need to specify __.rememberMeParameter("my-remember-me-checkbox")__ in __HttpSecurity__ configuration in the __SecurityConfig__ class, this chunk of code should be commented out:
     ```
     httpSecurity.rememberMe()
             .rememberMeParameter("my-remember-me-checkbox")
@@ -922,7 +984,7 @@ In this commit a redirection depending on the role of the user who logged in is 
 - __AdminService__ class is developed to prepare users' list information for administrator's page;
 - __ResourceHandlerRegistry__: "classpath:/static/images/" is added. 
 
-The redirection depending on the role of the user works according to the next code fragment. The logged users with __ADMIN_PAGE_PRIVILEGE__ are redirected to __/homepage/admin__ path and the users with __USER_PAGE_PRIVILEGE__ are redirected to __/homepage/user__ path:
+The redirection depending on the role of the user is defined by the next code fragment. The logged users with __ADMIN_PAGE_PRIVILEGE__ are redirected to __/homepage/admin__ path and the users with __USER_PAGE_PRIVILEGE__ are redirected to __/homepage/user__ path:
 ```
 if(sup.get().anyMatch(a->(((GrantedAuthority) a).getAuthority().equals("ADMIN_PAGE_PRIVILEGE")))) {
     targetUrl = "/homepage/admin?user=" + auth.getName();
@@ -934,12 +996,12 @@ if(sup.get().anyMatch(a->(((GrantedAuthority) a).getAuthority().equals("ADMIN_PA
 ```
 
 ## --Commit-34-- ##
-Most of the principal and basic features were implemented before this commit. From now there will be improvements on the html pages and some of new functions will be developed.
+Most of the principal and basic features were implemented before this commit. From now there will be improvements of the HTML pages and some of new functions will be developed.
 
 This commit did a minor change, homepage.html was renamed to userHomePage.htm.
 
 ## --Commit-35-- ##
-Two new html pages were added, and the changes in the controller were made in order to support the new added pages:
+Two new HTML pages were added, and the changes in the controller were made in order to support the new added pages:
 - templates/userAccountPage.html
 - templates/userServicesPage.html
 
@@ -958,7 +1020,7 @@ New menu on Bootstrap’s **navbar** was started.
 Minor bugs fixed. Two errors fixed, in registration.html (order of the __bootstrap.min.js__ and the __jquery.min.js__ script tag) and an odd import clause in AdminServiceImpl.
 
 ## --Commit-38-- ##
-minor refinement 
+A minor refinement. 
 
 ## --Commit-39-- ##
 The __userAccountPage.html__ page development, a layout and localization.
@@ -968,16 +1030,16 @@ A lot of development in connection with the development of the functionality of 
 The working draft variant of user's password change scenario.
 
 ## --Commit-41-- ##
-A layouting of userAccountPage.html and userHomePage.html pages with increasing of the container size on userAccountPage.html and standardization of the "nav-bar" on userAccountPage.html and userHomePage.html.
+A layouting of userAccountPage.html and userHomePage.html pages with increasing of the container size on the userAccountPage.html page and standardization of the "nav-bar" on the userAccountPage.html and userHomePage.html pages.
  
 ## --Commit-42-- ##
 A layouting of adminConsolePage.html page with standardization of the "nav-bar" on it.
  
 ## --Commit-43-- ##
-Further improvement and development of html-pages, "go to" LizardsInfoPage from standardized navbar-brand by th:href="@{/LizardsInfoPage}"
+Further improvement and development of the HTML pages, "go to" LizardsInfoPage from standardized navbar-brand by th:href="@{/LizardsInfoPage}"
 
 ## --Commit-44-- ##
-Further improvement and development of html-pages, the LizardsInfoPage.html and login.html pages navbar menue standardisation.
+Further improvement and development of the HTML pages, the LizardsInfoPage.html and login.html pages navbar menue standardisation.
 
 ## --Commit-45-- ##
 A bug with the order of __jquery.min.js__ and __bootstrap.min.js__ was fixed. 
@@ -994,13 +1056,13 @@ An issue have been found which bounds with the fact that __<iframe>__ prevents _
 Some bugs fixed.
 
 ## --Commit-47-- ##
-Few bugs were fixed. Improvements on html pages regarding the user's transition scenarios between pages and the html pages layout were done.
+Few bugs were fixed. Improvements on the HTML pages regarding the user's navigation scenarios between pages. Also the HTML pages layout were done.
 
 ## --Commit-48-- ##
 The "stars" after the labels on templates/registration.html were added.
 
 ## --Commit-49-- ##
-Some improvements on the html pages.
+Some improvements on the HTML pages were made.
 
 ## --Commit-50-- ##
 On the login.html page the language selector made in the form of the dropdown list (class="nav-item dropdown").
