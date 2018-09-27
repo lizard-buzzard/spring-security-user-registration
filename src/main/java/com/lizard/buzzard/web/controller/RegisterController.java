@@ -22,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,25 +57,6 @@ public class RegisterController {
 
     @Autowired
     private AdminServiceImpl adminService;
-
-//    @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
-//    public String getLoginPage(ViewFormLogin viewFormLogin, Model model, HttpServletRequest httpServletRequest) {
-//        // an alternative way is: httpServletRequest.getLocale().toString();
-//        LOGGER.debug("Locale selected on login.html ==>  " + localeResolver.resolveLocale(httpServletRequest).toString());
-//
-//        model.addAttribute("viewFormLogin", new ViewFormLogin());
-//        return "login";
-//    }
-
-//    @RequestMapping(value = "/login", method = RequestMethod.POST)
-//    public String processLoginPage(@Valid @ModelAttribute("viewFormLogin") ViewFormLogin viewFormLogin, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "login";
-//        }
-//        // TODO: replace by real http://... page of AVIDA APPLICATION START PAGE
-//        String redirectUrl = "https://www.yandex.ru/";
-//        return "redirect:" + redirectUrl;
-//    }
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String showRegistrationForm(ViewFormUser viewFormUser, Model model) {
@@ -139,33 +119,20 @@ public class RegisterController {
         return "authorizationError";
     }
 
-
-//    @RequestMapping(value = "/homepage/user", method = RequestMethod.GET)
-//    public String getUserHomePage(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//        model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
-//        return "homepage";
-//    }
-//
-//    @RequestMapping(value = "/homepage/admin", method = RequestMethod.GET)
-//    public String getAdminHomePage(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//        model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
-//        return "adminConsolePage";
-//    }
-
     // change password block of methods
 
     @RequestMapping(value = "/userAccount", method = RequestMethod.GET)
     public String getUserAccountPage(ViewFormChangePassword viewFormChangePassword, Model model) {
         model.addAttribute("viewFormChangePassword", new ViewFormChangePassword());
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if("anonymousUser".equals(principal)) {
+            return "redirect:/accessDenied";
+        }
+
+        User user = (User)principal;
         model.addAttribute("loggedUserName", String.format(" %s %s", user.getFirstname(), user.getLastname()));
 
-        // TODO: add attribute for email form
         model.addAttribute("loggedUserEmail", user.getEmail());
 
         return "userAccountPage";
@@ -180,7 +147,6 @@ public class RegisterController {
     public String redirectPage() {
         return "redirect:https://www.w3.org/";
     }
-
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
@@ -209,13 +175,13 @@ public class RegisterController {
 
     @RequestMapping(value = "/LizardsHomePage", method = RequestMethod.GET)
     public String getLizardHomepage(Model model) {
-        Object princilal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String loggedUserNameValue;
-        if("anonymousUser".equals(princilal)) {
+        if("anonymousUser".equals(principal)) {
             loggedUserNameValue = "anonymousUser";
         } else {
-            User user = (User)princilal;
+            User user = (User)principal;
             loggedUserNameValue = String.format(" %s %s", user.getFirstname(), user.getLastname());
         }
         model.addAttribute("loggedUserName", loggedUserNameValue);

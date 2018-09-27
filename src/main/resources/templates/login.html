@@ -71,9 +71,6 @@
                 <a class="nav-link" th:href="@{/registration}" th:text="#{label.form.signUp}">signup</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/homepage/user/}" th:text="#{label.form.user.homepage.title}">User Work Area Page</a>
-            </li>
-            <li class="nav-item active">
                 <a class="nav-link" href="?lang_choosed=en" th:text="#{label.form.loginEnglish}" style="color: yellow; font-weight: bold;">English</a>
             </li>
             <li class="nav-item active">
@@ -90,9 +87,9 @@
 <div th:if="${param.badcredentialerror != null}" class="alert alert-danger" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">login bad credentials error</div>
 
 <div th:if="${param.logoutSuccess}" class="alert alert-info" th:text="#{message.logout.success}">logout success</div>
-<div class="container">
+<div class="container" style="margin-top: 1em;">
     <div class="row wrapper">
-        <h1 th:text="#{label.form.loginTitle}">Header</h1>
+        <h3 th:text="#{label.form.loginTitle}">Login Page title</h3>
         <!--<a href="?lang_choosed=en" th:text="#{label.form.loginEnglish}">login</a> |-->
         <!--<a href="?lang_choosed=ru_RU" th:text="#{label.form.loginRussian}">login</a>-->
     </div>

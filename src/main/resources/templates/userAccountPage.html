@@ -75,9 +75,9 @@
         </ul>
     </div>
 </nav>
-<!-- Information message container -->
 <div id="beforeConfirmMsg" class="alert alert-warning" style="display:none">mail sent with confirm link</div>
 
+<!-- Information message container -->
 <div class="container" style="margin-left: 0.5em;"> <!-- top-level container -->
     <h3 th:text="#{label.form.useraccount.accountSettings}" style="margin-top: 0.5em; margin-bottom: 1.5em;">Account
         Settings</h3>
@@ -219,6 +219,11 @@
 
         $.post(serverContext + "resetPassword", formData, function(correctResponse) {
             if (correctResponse.indicator == "success") {
+
+                // hide previous message
+                $("#currentpasswordError").hide();
+                $("#newpasswordError").hide();
+                $("#confirmedpasswordError").hide();
 
                 $.each(correctResponse.messages, function(key, value) {
                     $("#" + key).show().html(value);

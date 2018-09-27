@@ -9,9 +9,43 @@
 </head>
 
 <body>
-<div class="container">
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #4077b1 !important;">
+    <div style="width: 70px; height: 70px; background: #e4f024e6; border-radius: 50%; margin: 5px; float: left; position: relative">
+        <a class="navbar-brand" th:href="@{/LizardsHomePage}">
+            <img th:src="@{/images/lizard.png}" width="35" height="35" alt="">
+            <br>
+            <span class="font-weight-bold" style="font-style: italic; font-size: 25px; font-family: Matura MT Script Capitals; color: black;">Lizard</span>
+        </a>
+    </div>
+    <!-- menu toggler - hamburger -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- menu's main part -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/login}" th:text="#{label.form.signIn}">Sign In Page</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div id="beforeConfirmMsg" class="alert alert-warning" style="display:none">confirmation email sent</div>
+
+
+<!--<span id="beforeConfirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>-->
+
+
+
+
+
+
+<div class="container" style="margin-top: 1em;">
     <div>
-        <h1 th:text="#{label.form.registrationTitle}">title</h1>
+        <h3 th:text="#{label.form.registrationTitle}">title</h3>
         <br/>
         <form id="myFormId" action="#" th:action="@{/registration}" th:object="${viewFormUser}" method="post"
               enctype="utf-8">
@@ -69,17 +103,29 @@
                 <span id="emailError" class="alert alert-danger col-sm-4" style="display:none"></span>
             </div>
             <br/>
-            <!-- <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button> -->
-            <div class="container row">
-                    <span class="col-sm-3">
-                        <button type="submit" class="btn btn-primary"
-                                th:text="#{label.form.submitNewUser}">submitButton</button>
-                    </span>
-                <!--                     <span class="col-sm-5 alert alert-warning" th:text="#{registration.message.before.confirmation}" th:if="${waitConfirm} != null"></span> -->
-                <span id="beforeConfirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>
 
-                <span class="col-sm-4"></span>
+
+            <!-- <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button> -->
+            <!--<div class="container row">-->
+                    <!--<span class="col-sm-3">-->
+                        <!--<button type="submit" class="btn btn-primary"-->
+                                <!--th:text="#{label.form.submitNewUser}">submitButton</button>-->
+                    <!--</span>-->
+                <!--&lt;!&ndash;                     <span class="col-sm-5 alert alert-warning" th:text="#{registration.message.before.confirmation}" th:if="${waitConfirm} != null"></span> &ndash;&gt;-->
+                <!--&lt;!&ndash;<span id="beforeConfirmMsg" class="col-sm-5 alert alert-warning" style="display:none"></span>&ndash;&gt;-->
+
+                <!--<span class="col-sm-4"></span>-->
+            <!--</div>-->
+
+
+
+            <div class="form-group row">
+            <span class="col-sm-8" style="text-align: right;">
+                <button type="submit" class="btn btn-primary" th:text="#{label.form.submitNewUser}">submitButton</button>
+            </span>
             </div>
+
+
         </form>
         <br/>
         <a th:href="@{/login}" th:text="#{label.form.goBackToLogin}">goToLoginPage</a>
@@ -103,6 +149,13 @@
 
         $.post(serverContext + "registration", formData, function(correctResponse) {
             if (correctResponse.indicator == "success") {
+
+                // hide previous message
+                $("#emailError").hide();
+                $("#confirmedPassportError").hide();
+                $("#passwordError").hide();
+                $("#lastnameError").hide();
+                $("#firstnameError").hide();
 
                 $.each(correctResponse.messages, function(key, value) {
                     $("#" + key).show().html(value);

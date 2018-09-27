@@ -992,3 +992,6 @@ An issue have been found which bounds with the fact that __<iframe>__ prevents _
 
 ## --Commit-46-- ##
 Some bugs fixed.
+
+## --Commit-47-- ##
+Few bugs were fixed. Improvements on html pages regarding the user's transition scenarios between pages and the html pages layout were done.
