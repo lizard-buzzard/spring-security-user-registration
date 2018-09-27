@@ -995,3 +995,6 @@ Some bugs fixed.
 
 ## --Commit-47-- ##
 Few bugs were fixed. Improvements on html pages regarding the user's transition scenarios between pages and the html pages layout were done.
+
+## --Commit-48-- ##
+The "stars" after the labels on templates/registration.html were added.
