@@ -1050,7 +1050,7 @@ In order the <button class="navbar-toggler"> to work, the __jquery.min.js__ scri
 ```
 The email of the logged use was added on userAccountPage.html.
  
-An issue have been found which bounds with the fact that __<iframe>__ prevents __"navbar-toggler"__ to work.
+An issue have been found which bounds with the fact that __iframe__ prevents __"navbar-toggler"__ to work.
 
 ## --Commit-46-- ##
 Some bugs fixed.
@@ -1067,3 +1067,15 @@ Some improvements on the HTML pages were made.
 ## --Commit-50-- ##
 On the login.html page the language selector made in the form of the dropdown list (class="nav-item dropdown").
 
+## --Commit-51-- ##
+README.md is verified.
+
+## --Commit-52-- ##
+The ssue found and described in [--Commit-45--](#--commit-45--) was fixed. The matter is that in [--Commit-45--](#--commit-45--) I use "self-ending" tag closing
+```html
+<iframe src="https://www.w3.org/" style="width: 100%; height: 500px;" frameborder="no"/>
+```
+but for HTML5 __iframe__ tag should be closed explicitly:
+```html
+<iframe src="https://www.w3.org/" style="width: 100%; height: 500px;" frameborder="no"></iframe>
+```
